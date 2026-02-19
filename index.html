@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<title>KW Happy Hour</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ocean:#0a5e6b;--ocean-dark:#073d45;--sand:#f5efe6;--coral:#e8634a;--sunset:#f4a940;--white:#fff;--text:#1a2a2d;--text-light:#5a6a6d;--card-bg:#fff;--border:#dde5e6;--shadow:rgba(10,94,107,.12);--radius:14px;--nearby:#9b59b6}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.header{background:linear-gradient(135deg,var(--ocean),var(--ocean-dark));color:#fff;padding:20px 16px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px var(--shadow)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
+.header h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
+.header h1 span{color:var(--sunset)}
+.hdr-toggles{display:flex;gap:14px;align-items:center}
+.toggle-wrap{display:flex;align-items:center;gap:6px;cursor:pointer}
+.toggle-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.toggle-label.on{color:#fff}
+.toggle-track{width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.25);position:relative;transition:background .25s}
+.toggle-track.on{background:var(--ocean-dark);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.toggle-track.on.t-near{background:#7d3c98}
+.toggle-track.on.t-now{background:var(--coral)}
+.toggle-thumb{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle-track.on .toggle-thumb{left:20px}
+.toggle-wrap.loading{opacity:.5;pointer-events:none}
+.current-info{font-size:13px;opacity:.8;margin-bottom:14px;font-weight:500}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filter-select{flex:1;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px 12px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+.filter-select option{color:var(--text);background:#fff}
+.filter-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px 14px;border-radius:10px;cursor:pointer;transition:background .15s;white-space:nowrap}
+.filter-btn:hover{background:rgba(255,255,255,.25)}
+.filter-btn.active{background:var(--coral);border-color:var(--coral)}
+.content{padding:16px;padding-bottom:100px}
+.section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-light);margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.section-label .count{background:var(--ocean);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px}
+.section-label .count-nearby{background:var(--nearby)}
+.no-results{text-align:center;padding:60px 20px;color:var(--text-light)}
+.no-results .emoji{font-size:48px;margin-bottom:12px}
+.no-results p{font-size:15px;line-height:1.5}
+.venue-card{background:var(--card-bg);border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:0 2px 8px var(--shadow);display:grid;grid-template-columns:70px 1fr;gap:12px;cursor:pointer;transition:transform .12s,box-shadow .12s;border-left:4px solid var(--ocean)}
+.venue-card:active{transform:scale(.985);box-shadow:0 1px 4px var(--shadow)}
+.venue-card.happening-now{border-left-color:var(--coral)}
+.venue-card.coming-soon{border-left-color:var(--sunset)}
+.venue-card.is-nearby{border-left-color:var(--nearby)}
+.venue-card.is-ended{border-left-color:#bbb;opacity:.55}
+.venue-card.is-ended .time-range{color:#999}
+.venue-time{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.venue-time .time-range{font-size:13px;font-weight:700;color:var(--ocean);line-height:1.3}
+.venue-card.happening-now .time-range{color:var(--coral)}
+.venue-card.coming-soon .time-range{color:var(--sunset)}
+.venue-card.is-nearby .time-range{color:var(--nearby)}
+.venue-time .status-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:4px;margin-top:4px}
+.status-now{background:#fde8e4;color:var(--coral)}
+.status-soon{background:#fef3e0;color:#c47f1a}
+.status-later{background:#e0f0f3;color:var(--ocean)}
+.status-nearby{background:#f0e6f6;color:var(--nearby)}
+.status-ended{background:#eee;color:#999}
+.dist-badge{font-size:10px;font-weight:600;color:var(--nearby);margin-top:2px}
+.venue-info{min-width:0}
+.venue-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.venue-name .day-badge{font-size:9px;font-weight:700;background:#e8edf0;color:var(--text-light);padding:1px 5px;border-radius:3px;white-space:nowrap}
+.venue-address{font-size:12px;color:var(--text-light);margin-bottom:6px}
+.venue-address a{color:var(--ocean);text-decoration:none;font-weight:500}
+.deal-line{font-size:12px;color:var(--text);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deal-line+.deal-line{margin-top:2px}
+.deal-icon{margin-right:3px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.active{opacity:1;pointer-events:all}
+.modal{background:#fff;width:100%;max-height:85vh;border-radius:20px 20px 0 0;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);-webkit-overflow-scrolling:touch}
+.modal-overlay.active .modal{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:#d0d5d6;border-radius:2px;margin:10px auto}
+.modal-header{padding:8px 20px 16px;border-bottom:1px solid var(--border)}
+.modal-header h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text);margin-bottom:4px}
+.modal-header .modal-time{font-size:14px;font-weight:600;color:var(--coral)}
+.modal-header .modal-days{font-size:13px;color:var(--text-light);margin-top:2px}
+.modal-header .modal-address{margin-top:8px}
+.modal-header .modal-address a{display:inline-flex;align-items:center;gap:6px;color:var(--ocean);text-decoration:none;font-size:14px;font-weight:600;padding:6px 12px;background:#e6f3f5;border-radius:8px}
+.modal-body{padding:20px}
+.modal-section{margin-bottom:20px}
+.modal-section h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:8px}
+.modal-section .detail-text{font-size:15px;line-height:1.6;color:var(--text)}
+.drink-deals,.food-deals{padding:14px;border-radius:12px;font-size:14px;line-height:1.6}
+.drink-deals{background:linear-gradient(135deg,#e6f3f5,#d4ecef);border:1px solid #c0dfe3}
+.food-deals{background:linear-gradient(135deg,#fef3e0,#fdecd0);border:1px solid #f5dbb0}
+.modal-close{display:block;width:calc(100% - 40px);margin:0 20px 24px;padding:14px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer}
+.places-modal{max-height:80vh}
+.places-list{padding:16px 20px;max-height:55vh;overflow-y:auto}
+.place-check{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:14px;font-weight:500}
+.place-check:last-child{border-bottom:none}
+.place-check input[type="checkbox"]{width:20px;height:20px;accent-color:var(--ocean);cursor:pointer}
+.places-actions{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--border)}
+.places-actions button{flex:1;padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.btn-secondary{background:#e8edf0;color:var(--text)}
+.btn-primary{background:var(--ocean);color:#fff}
+.scroll-top{position:fixed;bottom:20px;right:16px;width:44px;height:44px;border-radius:50%;background:var(--ocean);color:#fff;border:none;font-size:20px;box-shadow:0 4px 12px var(--shadow);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.scroll-top.visible{opacity:1;pointer-events:all}
+@media(min-width:600px){.content{max-width:600px;margin:0 auto}.header>*{max-width:600px;margin-left:auto;margin-right:auto}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <h1>🌴 KW <span>Happy Hour</span></h1>
+    <div class="hdr-toggles">
+      <div class="toggle-wrap" id="nearWrap" onclick="toggleNearby()">
+        <span class="toggle-label" id="nearLabel">📍 Nearby</span>
+        <div class="toggle-track t-near" id="nearTrack"><div class="toggle-thumb"></div></div>
+      </div>
+      <div class="toggle-wrap" id="nowWrap" onclick="toggleNow()">
+        <span class="toggle-label" id="nowLabel">⏱ Now</span>
+        <div class="toggle-track t-now" id="nowTrack"><div class="toggle-thumb"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="current-info" id="currentInfo"></div>
+  <div class="filters">
+    <select class="filter-select" id="dayFilter" onchange="render()"></select>
+    <select class="filter-select" id="timeFilter" onchange="render()">
+      <option value="all">All Times</option>
+      <option value="morning">☀️ Morning 7a–11a</option>
+      <option value="afternoon">🌤 Afternoon 11a–4p</option>
+      <option value="evening">🌅 Evening 4p–8p</option>
+      <option value="late">🌙 Late 8p–3a+</option>
+    </select>
+    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()">⚙ Places</button>
+  </div>
+</div>
+<div class="content" id="content"></div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
+<div class="modal-overlay" id="placesModal" onclick="closePlaces(event)"><div class="modal places-modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header"><h2>Filter Places</h2></div><div class="places-list" id="placesList"></div><div class="places-actions"><button class="btn-secondary" onclick="toggleAllPlaces()">Toggle All</button><button class="btn-primary" onclick="applyPlacesFilter()">Apply</button></div></div></div>
+<script>
+const V=[
+{n:"The Alamo",a:"4 Charles St",fa:"4 Charles Street, Key West, FL",p:"(305) 741-7486",h:[{s:15,e:18,d:"daily"},{s:23,e:26,d:"daily"}],dr:"$4 domestics, $5 wells, $6 drafts, $7 wine/sangria, $8 specials",fo:"$7 sliders & quesadillas, $11 select appetizers",desc:"Two happy hours daily with music. Drinks $4-$8, food $7-$11.",url:"https://thealamo-keywest.com/",lat:24.5595,lng:-81.8063},
+{n:"Alonzo's Oyster Bar",a:"700 Front St",fa:"700 Front Street, Key West, FL",p:"(305) 615-7699",h:[{s:16,e:18,d:"daily"}],dr:"Half price well drinks, beer, wines by the glass",fo:"Happy hour food menu and oyster of the day",desc:"Tapas-style bites, fresh seafood, cold drinks along the harbor walk.",url:"https://alonzosoysterbar.com/menus/happy-hour/",lat:24.5592,lng:-81.8065},
+{n:"Atlas Izakaya",a:"500 Truman Ave #7",fa:"500 Truman Avenue #7, Key West, FL",p:"(305) 998-4189",h:[{s:16,e:17,d:"daily"}],dr:"$7 wine, $10.50 sake cocktails",fo:"Bao, tempura, meatballs from happy hour menu",desc:"Power Hour with discounts on wine, sake cocktails, Japanese-inspired bites.",url:"https://atlasizakaya.com/",lat:24.5576,lng:-81.7991},
+{n:"Bagatelle",a:"115 Duval St",fa:"115 Duval Street, Key West, FL",p:"(305) 296-6609",h:[{s:9,e:11.5,d:"daily"},{s:16,e:18,d:"daily"}],dr:"Afternoon: half off select cocktails, beer, wine, espresso martinis",fo:"AM: hangover HH. PM: $7-$10 plates (Lobster Mac, tuna poke)",desc:"Two happy hours! Breakfast 9-11:30am and afternoon 4-6pm on lower Duval.",url:"https://www.bagatellekeywest.com/",lat:24.5585,lng:-81.8042},
+{n:"Bar 1",a:"291 Front St #207",fa:"291 Front Street Suite 207, Key West, FL",p:"(305) 294-2665",h:[{s:16,e:18,d:"mon-sat"}],dr:"$6 select cocktails, beers, well drinks",fo:"$4-$6 Bar 1 Bites",desc:"At the Key West Cooking School. Mon-Sat only.",url:"https://www.keywestcookingschool.com/bar-one-key-west",lat:24.5590,lng:-81.8078},
+{n:"Better Than Sex",a:"926 Simonton St",fa:"926 Simonton Street, Key West, FL",p:"(305) 296-8102",h:[{s:18,e:23,d:"thu"}],dr:"Select cocktails from $9.69, $10.69 off wine bottles",fo:"Featured dessert & drink pairings",desc:"Thursdays only 6-11pm. Dessert pairings. Reservations suggested.",url:"https://www.betterthansexdesserts.com/hersday/",lat:24.5514,lng:-81.7988},
+{n:"Blue Mojito Bar & Grill",a:"601 Front St",fa:"601 Front Street, Key West, FL",p:"(305) 809-1234",h:[{s:16,e:18,d:"daily"}],dr:"$4 drafts, $6 wines & well cocktails",fo:"25% off select appetizers",desc:"At the Hyatt Centric. Open-air lounge.",url:"https://www.hyatt.com/hyatt-centric/kwest-hyatt-centric-key-west-resort-and-spa/dining",lat:24.5593,lng:-81.8053},
+{n:"Boat House Bar & Grill",a:"220 Margaret St",fa:"220 Margaret Street, Key West, FL",p:"(305) 294-1269",h:[{s:16,e:18.5,d:"daily"}],dr:"50% off well drinks, house wine, draft/craft beer",fo:"50% off all small plates (skirt steak, lamb chops, filet kabobs)",desc:"Everything under Small Plates is half off. Great steak & lamb.",url:"https://www.facebook.com/boathousekeywest",lat:24.5580,lng:-81.8068},
+{n:"Bruschetta Francesca",a:"112 Fitzpatrick St",fa:"112 Fitzpatrick Street, Key West, FL",p:"(305) 440-2845",h:[{s:16,e:18.5,d:"daily"}],dr:"$3 beer, $5.25 chianti, $6-$8 cocktails",fo:"50% off all bruschetta & appetizers",desc:"Half off bruschetta and appetizers. Locals til 9pm.",url:"https://bruschetta-francesca.com/",lat:24.5582,lng:-81.8048},
+{n:"The Cafe",a:"509 Southard St",fa:"509 Southard Street, Key West, FL",p:"(305) 296-5515",h:[{s:16,e:18,d:"daily"}],dr:"$6 beer, $7 sangria, $8 wine",fo:"$5-$8 select appetizers",desc:"Local favorite for vegan/vegetarian/pescatarian.",url:"https://www.thecafekw.com/",lat:24.5555,lng:-81.8020},
+{n:"Cafe Marquesa",a:"600 Fleming St",fa:"600 Fleming Street, Key West, FL",p:"(305) 292-1919",h:[{s:17.5,e:18.5,d:"daily"}],dr:"30% off wine by the glass and signature cocktails",fo:"Food bites $14-$17",desc:"Southern Happy Hour. 30% off wines & cocktails.",url:"https://marquesa.com/key-west-restaurant-happy-hour/",lat:24.5548,lng:-81.8008},
+{n:"Celtic Conch",a:"528 Front St",fa:"528 Front Street, Key West, FL",p:"(305) 517-6219",h:[{s:16,e:19,d:"mon-fri"}],dr:"50% off domestic beers, select liquors",fo:"50% off appetizers, $12 flatbreads",desc:"Philly Sports Bar & Irish Pub. M-F only.",url:"https://celticconch.godaddysites.com/",lat:24.5588,lng:-81.8055},
+{n:"Dante's Key West",a:"955 Caroline St",fa:"955 Caroline Street, Key West, FL",p:"(305) 293-5123",h:[{s:16.5,e:19.5,d:"mon-fri"}],dr:"BOGO domestic beer, wells, wine & specialty drinks",fo:"$6 appetizers, raw bar deals",desc:"Pool bar. $6 apps, raw bar deals, BOGO drinks. M-F.",url:"https://danteskeywest.com/",lat:24.5529,lng:-81.8037},
+{n:"Dive Bar Shirt Club",a:"320 Grinnell St",fa:"320 Grinnell Street, Key West, FL",p:"(305) 517-6898",h:[{s:16,e:18,d:"daily"}],dr:"BOGO drinks (beer, wine, canned cocktails, seltzers)",fo:"Brisket, tacos, burritos, chips w/ salsa or queso",desc:"Divey retro fun. BOGO drinks. Tacos, brisket, burritos.",url:"https://divebarshirtclub.com/pages/bars",lat:24.5565,lng:-81.8040},
+{n:"Doc's on Duval",a:"708 Duval St",fa:"708 Duval Street, Key West, FL",p:"(305) 304-8870",h:[{s:16,e:18,d:"daily"}],dr:"Half off wells, wines, drafts",fo:"Half off appetizers",desc:"Newly opened on Duval. Half off everything.",url:"https://www.facebook.com/profile.php?id=61586271668903",lat:24.5542,lng:-81.8003},
+{n:"First Flight Brewery",a:"301 Whitehead St",fa:"301 Whitehead Street, Key West, FL",p:"(305) 293-8484",h:[{s:16,e:18,d:"daily"}],dr:"$4 pints, $6 select cocktails & wine",fo:"Food specials $6-$9",desc:"Birthplace of Pan Am! Craft brews, $4 pints.",url:"https://firstflightkw.com/happy-hour",lat:24.5582,lng:-81.8060},
+{n:"The Flaming Buoy",a:"424 Eaton St",fa:"424 Eaton Street, Key West, FL",p:"(305) 295-7970",h:[{s:16,e:18,d:"wed-mon"}],dr:"Discounts on wines by the glass and bottles",fo:"Discounted soups, salads, sandwiches, small plates",desc:"Closed Tuesdays. Wine discounts + food specials.",url:"https://www.theflamingbuoy.com/",lat:24.5568,lng:-81.8030},
+{n:"Four Flamingos",a:"601 Front St",fa:"601 Front Street, Key West, FL",p:"(305) 809-4000",h:[{s:17,e:18,d:"daily"}],dr:"$4 beer, $6 wine, $10 margarita & martini",fo:"Food items $10-$15",desc:"Richard Blais kitchen. Waterfront sunsets. Free parking. 5-6pm only.",url:"https://fourflamingoskeywest.com/",lat:24.5594,lng:-81.8052},
+{n:"Four Marlins @ The Reach",a:"1435 Simonton St",fa:"1435 Simonton Street, Key West, FL",p:"(305) 296-5000",h:[{s:16,e:17.5,d:"daily"}],dr:"$5 drafts & sangria, $6 wells, $7 house wines",fo:"Half off select appetizers",desc:"Oceanfront. $5 drafts, half off apps.",url:"https://reachresort.com/",lat:24.5465,lng:-81.7960},
+{n:"Garbo's Grill",a:"409 Caroline St",fa:"409 Caroline Street, Key West, FL",p:"(305) 304-3004",h:[{s:16,e:18,d:"daily"},{s:22,e:24,d:"daily"}],dr:"Drink specials from Hank's next door",fo:"Umami sliders 2/$11, Taco Trio 3/$11",desc:"Famous food truck (Guy Fieri). Two HHs. Killer slider & taco deals.",url:"https://garbosgrillkw.com/",lat:24.5573,lng:-81.8058},
+{n:"Grand Cafe",a:"314 Duval St",fa:"314 Duval Street, Key West, FL",p:"(305) 292-4740",h:[{s:16,e:18,d:"daily"}],dr:"50% off beer, wine, cocktails, martinis",fo:"50% off appetizers (cheese plate, steamed clams)",desc:"Half off drinks AND appetizers. Try the cheese plate.",url:"https://www.grandcafekw.com/lunch-2",lat:24.5572,lng:-81.8028},
+{n:"Half Shell Raw Bar",a:"231 Margaret St",fa:"231 Margaret Street, Key West, FL",p:"(305) 294-7496",h:[{s:16.5,e:18.5,d:"daily"}],dr:"50% off well liquors, house wine, all beer",fo:"Oysters & appetizers 30-50% off",desc:"Local favorite seafood HH. Oysters 30-50% off.",url:"https://www.halfshellrawbar.com/menus/#happy-hour",lat:24.5583,lng:-81.8070},
+{n:"Hank's Hair of the Dog",a:"409 Caroline St",fa:"409 Caroline Street, Key West, FL",p:"(305) 509-7758",h:[{s:11,e:13,d:"daily"},{s:16,e:18,d:"daily"},{s:22,e:26,d:"daily"}],dr:"AM: half price drinks/mimosas/bloody mary. PM: $5 wells, $8 sangria, $5 drafts",fo:"Garbo's specials: sliders 2/$11, taco trio 3/$11 (4-6pm)",desc:"Three happy hours! Morning 11-1, afternoon 4-6, late 10pm-2am.",url:"https://www.hankskeywest.com/food/",lat:24.5573,lng:-81.8058},
+{n:"Hard Rock Cafe",a:"313 Duval St",fa:"313 Duval Street, Key West, FL",p:"(305) 293-0230",h:[{s:17,e:19,d:"mon"}],dr:"$5 domestic drafts, $6 imports/wells, $7 wines & cocktails",fo:"$8-$10 appetizers",desc:"Mondays only, inside only.",url:"https://cafe.hardrock.com/key-west/",lat:24.5572,lng:-81.8026},
+{n:"Harpoon Harry's",a:"832 Caroline St",fa:"832 Caroline Street, Key West, FL",p:"(305) 294-8744",h:[{s:16,e:18,d:"daily"}],dr:"Buy one get one half off",fo:"$5 appetizers: fritters, wings, crabcakes",desc:"BOGO half off drinks + $5 apps.",url:"https://harpoonharryskeywest.com/",lat:24.5541,lng:-81.8040},
+{n:"Island Dogs Bar",a:"505 Front St",fa:"505 Front Street, Key West, FL",p:"(305) 509-7136",h:[{s:16.5,e:18.5,d:"daily"}],dr:"$3 domestics, $4 wells/house wine/pina coladas",fo:"$5-$6 bar bites: wings, egg rolls, shrimp, tenders",desc:"Cheap drinks $3-$4, $5-$6 bites. HH during NFL games too.",url:"https://www.islanddogsbar.com/",lat:24.5588,lng:-81.8058},
+{n:"Kaya Island Eats",a:"618 Duval St (Rear)",fa:"618 Duval Street Rear, Key West, FL",p:"(305) 395-0213",h:[{s:16,e:18,d:"daily"}],dr:"Half off wells, drafts, wines",fo:"Half off Happytizer menu",desc:"Half off drinks and Happytizer menu. All dietary options.",url:"http://www.kayakeywest.com/menu.pdf",lat:24.5546,lng:-81.8006},
+{n:"Key West Poke House",a:"500 Truman Ave #1",fa:"500 Truman Avenue Unit 1, Key West, FL",p:"(305) 340-1430",h:[{s:16,e:18,d:"daily"}],dr:"$7 beers, $10 wine/sake (BOGO)",fo:"Select appetizers $5-$9",desc:"Corner of Truman & Duval. BOGO drinks, apps $5-$9.",url:"https://www.keywestpokehouse.com/",lat:24.5576,lng:-81.7992},
+{n:"Mangoes",a:"700 Duval St",fa:"700 Duval Street, Key West, FL",p:"(305) 294-8002",h:[{s:16,e:18,d:"daily"}],dr:"$5 beers/high noons, $7 wines & wells",fo:"Deviled eggs, sliders, tacos, shrimp, fries $10-$12",desc:"Right on Duval. Caribbean flair.",url:"https://www.facebook.com/mangoeskeywest/",lat:24.5542,lng:-81.8005},
+{n:"Martin's",a:"917 Duval St",fa:"917 Duval Street, Key West, FL",p:"(305) 295-0111",h:[{s:16,e:17,d:"daily"}],dr:"50% off signature martinis, wells, discounted wines",fo:"Half price tapas menu",desc:"Elegant European. Half off martinis & tapas. 4-5pm only, not holidays.",url:"https://www.martinskeywest.com/dinner/",lat:24.5517,lng:-81.7985},
+{n:"Mary Ellen's",a:"420 Applerouth Ln",fa:"420 Applerouth Lane, Key West, FL",p:"(305) 294-7750",h:[{s:15.5,e:17.5,d:"mon,tue,wed,fri"},{s:15.5,e:17,d:"thu"}],dr:"$5 Deep Eddy Vodka (all flavors), $3 draft PBR & Crazy Lady",fo:"25% off food",desc:"M/T/W/F 3:30-5:30, Thu 3:30-5.",url:"https://maryellensbar.com/",lat:24.5562,lng:-81.8020},
+{n:"Milagro",a:"821 Duval St",fa:"821 Duval Street, Key West, FL",p:"(305) 440-3534",h:[{s:17,e:18.5,d:"tue-sun"}],dr:"BOGO martinis, liquor, margaritas, wine, beer",fo:"20% off small plates",desc:"BOGO all drinks. 20% off small plates. Tue-Sun.",url:"https://www.milagrorestaurant.net/",lat:24.5525,lng:-81.7993},
+{n:"Moondog Cafe",a:"823 Whitehead St",fa:"823 Whitehead Street, Key West, FL",p:"(305) 741-7699",h:[{s:16.5,e:18.5,d:"daily"}],dr:"Half price beer/wine, $5 sangria (red, white, rose)",fo:"Specials on small plates",desc:"$5 sangrias, half price beer/wine, small plates every day.",url:"https://moondogcafe.com/",lat:24.5528,lng:-81.8050},
+{n:"Ocean Grill",a:"1075 Duval St",fa:"1075 Duval Street, Key West, FL",p:"(305) 296-4300",h:[{s:16.5,e:18.5,d:"daily"}],dr:"$5 martinis, half off drafts, $14.95 bottomless wines/sangria",fo:"$5 select appetizers",desc:"Duval Square. $5 martinis & apps, bottomless wine $14.95. Free parking.",url:"https://www.oceangrillandbar.com/",lat:24.5500,lng:-81.7975},
+{n:"Old Town Mexican Cafe",a:"609 Duval St",fa:"609 Duval Street, Key West, FL",p:"(305) 296-7500",h:[{s:16,e:18,d:"daily"}],dr:"50% off wells/wines/beers, $2 off drafts, frozen specials",fo:"Half off appetizers. Taco Tuesdays $4",desc:"Half off drinks & apps. Taco Tuesdays $4.",url:"https://oldtownmexicancafe.com/",lat:24.5548,lng:-81.8010},
+{n:"Old Town Tavern",a:"900 Duval St",fa:"900 Duval Street, Key West, FL",p:"(305) 296-0637",h:[{s:16,e:19,d:"daily"},{s:23,e:25,d:"daily"}],dr:"50% off wine & house liquors, 25% off beer. Whiskey Wed 50% off 9pm-close",fo:"50% off share plates & flatbreads. Food til 1am",desc:"Two HHs! 4-7 & 11pm-1am. Half off wine, share plates. Whiskey Wed.",url:"https://www.oldtowntavernkw.com/specials",lat:24.5519,lng:-81.7985},
+{n:"Onlywood Duval",a:"613 1/2 Duval St",fa:"613 Duval Street, Key West, FL",p:"(305) 735-4412",h:[{s:15.5,e:17,d:"daily"}],dr:"$3 Bud Light, $4 sangria/margaritas/house wines",fo:"$6 bruschetta, $7 wings, $8 calamari/caprese, $9 pizza",desc:"Nov-Apr: 3:30-5pm. May-Oct: 5:30-7pm.",note:"Hours shift seasonally",url:"https://www.onlywoodkw.com/#happyhour",lat:24.5548,lng:-81.8008},
+{n:"Onlywood Grill",a:"725 Caroline St",fa:"725 Caroline Street, Key West, FL",p:"(305) 998-4540",h:[{s:16.5,e:18,d:"daily"}],dr:"50% off signature/well/call drinks, beers, wines",fo:"$7-$10: mozzarella, wings, bruschetta, pizzas",desc:"Half price drinks. $7-$10 food.",url:"https://www.onlywoodgrill.com/",lat:24.5550,lng:-81.8040},
+{n:"Pepe's Cafe",a:"806 Caroline St",fa:"806 Caroline Street, Key West, FL",p:"(305) 294-7192",h:[{s:16,e:18,d:"daily"}],dr:"$1.50 Yuengling, $6 margarita, $5 wines, discounted wells",fo:"Half off raw oysters, peel-and-eat shrimp, smoked fish dip",desc:"Oldest restaurant in KW! $1.50 Yuengling, half off seafood.",url:"https://pepeskeywest.com/",lat:24.5542,lng:-81.8042},
+{n:"Pickles Pub Sandbar",a:"511 Greene St",fa:"511 Greene Street, Key West, FL",p:"(305) 916-5530",h:[{s:14,e:17,d:"mon-fri"}],dr:"$3 Busch Light/domestic drafts, $4 rails/wine, $6 orange crushes",fo:"Half off wings, burgers, tacos, shrimp (bar only)",desc:"Bar only. 2-5pm M-F. Cheap drinks, half off food.",url:"https://www.facebook.com/picklespubkeywest/",lat:24.5580,lng:-81.8048},
+{n:"Ram's Head Southernmost",a:"840 Whitehead St",fa:"840 Whitehead Street, Key West, FL",p:"(305) 440-3196",h:[{s:16,e:18,d:"daily"}],dr:"$4 domestic/$5 draft, $2 off wine & liquor",fo:"50% off appetizers. All-day Bloody Mary bar!",desc:"$4-$5 beers, half off apps. All-day Bloody Mary bar.",url:"https://ramsheadsouthernmost.com/",lat:24.5526,lng:-81.8055},
+{n:"The Roost",a:"508 Fleming St",fa:"508 Fleming Street, Key West, FL",p:"(305) 294-2600",h:[{s:12,e:18,d:"daily"}],dr:"$10 Stoli Martinis/Cosmos, $9 Roost Mule, specials",fo:"Half priced caviar",desc:"All-day HH noon-6pm! Half price caviar, $10 Stoli martinis.",url:"https://theroostkw.com/",lat:24.5553,lng:-81.8015},
+{n:"The Saint Hotel",a:"417 Eaton St",fa:"417 Eaton Street, Key West, FL",p:"(305) 294-3200",h:[{s:16.28,e:19.23,d:"daily"}],dr:"30% off craft cocktails, beer, wine",fo:"$12 small plates",desc:"Quirky hours: 4:17-7:14pm. 30% off drinks.",url:"https://www.marriott.com/en-us/hotels/eywak-the-saint-hotel-key-west-autograph-collection/dining/",lat:24.5570,lng:-81.8032},
+{n:"Salty Frog's",a:"407 Front St",fa:"407 Front Street, Key West, FL",p:"(305) 741-7809",h:[{s:15,e:18,d:"mon-fri"}],dr:"$4 wells, $1 off beer, $5 too turnt tea",fo:"50% off apps: frog legs, Nashville hot tenders, cheese curds",desc:"Mallory Square area. M-F. Try the frog legs!",url:"https://saltyfrogskeywest.com/",lat:24.5595,lng:-81.8075},
+{n:"Santiago's Bodega",a:"207 Petronia St",fa:"207 Petronia Street, Key West, FL",p:"(305) 296-7691",h:[{s:15,e:18,d:"daily"}],dr:"Half off beer/wine/sangria, $10 off pitchers/bottles",fo:"$7 daily-changing tapas specials",desc:"Bahama Village gem. Starts 3pm. Great sangria. Reservations recommended.",url:"https://santiagosbodega.com/santiagos-bodega-key-west",lat:24.5568,lng:-81.8045},
+{n:"Sarabeth's",a:"530 Simonton St",fa:"530 Simonton Street, Key West, FL",p:"(305) 293-8181",h:[{s:17.5,e:18.5,d:"tue-sat"}],dr:"Half off all wines by the glass",fo:"Half off small plates: calamari, bruschetta, fried goat cheese",desc:"Tue-Sat 5:30-6:30. Half off wines and small plates.",url:"https://www.sarabethskw.com/",lat:24.5556,lng:-81.7998},
+{n:"Seaside Cafe Bar",a:"Seaside Cafe",fa:"Seaside Cafe Bar, Key West, FL",p:"",h:[{s:16,e:18,d:"daily"}],dr:"$5 off margs/mojitos, $4 off wells, $3 off wine, $2 off beer, free sunset shot",fo:"$5 off pizza, $3 off appetizers",desc:"Countdown pricing! Free sunset shot.",url:"https://www.theseasidecafekw.com/",lat:24.5560,lng:-81.8030},
+{n:"Southernmost Beach Cafe",a:"1405 Duval St",fa:"1405 Duval Street, Key West, FL",p:"(305) 295-6550",h:[{s:16,e:18,d:"daily"}],dr:"$6 20oz drafts, house wines, well drinks",fo:"$6-$13 small bites",desc:"Panoramic ocean view, 90 miles from Cuba.",url:"https://www.southernmostbeachresort.com/dine/southernmost-beach-cafe/menu/happy-hour/",lat:24.5462,lng:-81.7958},
+{n:"Southernmost Pint Brewpub",a:"522 Front St",fa:"522 Front Street, Key West, FL",p:"(305) 647-7147",h:[{s:16,e:18,d:"daily"}],dr:"25% off all drinks (all day for locals & military)",fo:"Free gourmet popcorn & discounted appetizers",desc:"18 taps of Blast Beer. 25% off drinks, free popcorn.",url:"https://www.facebook.com/southernmostpintbrewpub",lat:24.5588,lng:-81.8056},
+{n:"Square Grouper",a:"920 Caroline St",fa:"920 Caroline Street, Key West, FL",p:"(305) 292-1975",h:[{s:11,e:14.5,d:"thu-mon"}],dr:"20% off cocktails (locals)",fo:"20% off all food (locals). Takeout avail, brunch included",desc:"Locals Lunch HH Thu-Mon 11am-2:30pm.",url:"https://squaregrouperkeywest.com/",lat:24.5533,lng:-81.8038},
+{n:"Stinkin' Crawfish",a:"217 Duval St",fa:"217 Duval Street, Key West, FL",p:"(305) 440-2436",h:[{s:11.5,e:18,d:"daily"}],dr:"$2 off all beers, $3 off all cocktails",fo:"$1 oysters & wings (min 6), $3 off starters",desc:"Massive HH 11:30am-6pm! $1 oysters & wings.",url:"https://www.stinkincrawfishkeywest.com/happy-hours",lat:24.5582,lng:-81.8038},
+{n:"Sunset Watersports",a:"201 William St",fa:"201 William Street, Key West, FL",p:"(305) 296-2554",h:[{s:15.5,e:19,d:"daily"}],dr:"Unlimited draft beer, wine, mimosas",fo:"Cuban sandwiches, veggie wraps, cheese & crackers",desc:"Happy hour ON THE WATER at the sandbar! Unlimited drinks.",url:"https://sunsetwatersportskeywest.com/tours-activities/happy-hour-sandbar-charter/",lat:24.5598,lng:-81.8085},
+{n:"Thirsty Mermaid",a:"521 Fleming St",fa:"521 Fleming Street, Key West, FL",p:"(305) 204-4828",h:[{s:16,e:18,d:"daily"}],dr:"$3 mermaid lager pint",fo:"$8 small plates: wings, mussels, mac & cheese, ceviche, oysters",desc:"$3 mermaid lager + all small plates $8.",url:"https://www.thirstymermaidkeywest.com/",lat:24.5553,lng:-81.8018},
+{n:"Two Friends Patio",a:"512 Front St",fa:"512 Front Street, Key West, FL",p:"(305) 296-3124",h:[{s:16,e:18,d:"daily"}],dr:"$2.95 domestic, $3.95 wells/wines, $5.95 margs/rum runners",fo:"$6.45-$11.95 apps: steamed shrimp, fritters, wings, fish dip",desc:"Best HH values in KW. Legendary steamed shrimp.",url:"https://twofriends.com/",lat:24.5588,lng:-81.8056},
+{n:"Viva Argentinian",a:"903 Duval St",fa:"903 Duval Street, Key West, FL",p:"(305) 741-7666",h:[{s:14,e:17,d:"daily"}],dr:"$4 domestic, $6 wells, $7 wines/sangria, $8 specialty",fo:"$7 small plates, $11+ select appetizers",desc:"Early start 2-5pm! Argentinian favorites. New tiki bar.",url:"https://vivaargentiniansteakhouse.com/happy-hour",lat:24.5518,lng:-81.7985},
+{n:"White Street Pizza",a:"1110 White St",fa:"1110 White Street, Key West, FL",p:"(305) 735-4449",h:[{s:16,e:18,d:"mon-fri"},{s:17,e:18,d:"sat,sun"}],dr:"Half off draft beer, $7 house wines",fo:"Bar bites from $5",desc:"M-F 4-6pm, Sat-Sun 5-6pm.",url:"https://www.whitestreetpizza.com/",lat:24.5510,lng:-81.7920},
+{n:"White Tarpon",a:"700 Front St",fa:"700 Front Street, Key West, FL",p:"(305) 851-2388",h:[{s:15,e:17.5,d:"daily"}],dr:"Half off domestic beers, drafts, wells, wines",fo:"Select items 20% off",desc:"Historic seaport harbor walk. Half off drinks, 20% off food.",url:"https://whitetarponkeywest.com/",lat:24.5592,lng:-81.8065},
+];
+
+let hiddenPlaces=new Set(),nearbyActive=false,nowActive=false,userLat=null,userLng=null,savedDay=null,savedTime=null;
+// TEST MODE - fake GPS at Duval & Fleming
+const TEST_GPS=true;if(TEST_GPS){userLat=24.5555;userLng=-81.8015;nearbyActive=true}
+const NEARBY_MI=0.3,DAYS=['sun','mon','tue','wed','thu','fri','sat'],DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+function tStr(t){if(t>=24)t-=24;let h=Math.floor(t),m=Math.round((t-h)*60),ap=h>=12?'pm':'am';if(!h)h=12;else if(h>12)h-=12;return m>0?h+':'+String(m).padStart(2,'0')+ap:h+ap}
+function matchDay(ds,di){const d=DAYS[di];if(ds==='daily')return true;if(ds.includes('-')&&!ds.includes(',')){const p=ds.split('-'),si=DAYS.indexOf(p[0]),ei=DAYS.indexOf(p[1]);return si<=ei?(di>=si&&di<=ei):(di>=si||di<=ei)}if(ds.includes(','))return ds.split(',').map(s=>s.trim()).includes(d);return ds===d}
+function matchTime(s,e,slot){const R={morning:[7,11],afternoon:[11,16],evening:[16,20],late:[20,27]};if(slot==='all')return true;const[rs,re]=R[slot];return s<re&&e>rs}
+function getStatus(s,e){const now=new Date();let ch=now.getHours()+now.getMinutes()/60;if(e>24){if(ch>=s||ch<e-24)return'now'}else{if(ch>=s&&ch<e)return'now'}let diff=s-ch;if(diff<0)diff+=24;if(diff<=2&&diff>0)return'soon';if(e<=24&&ch>=e)return'ended';if(e>24&&ch>=e-24&&ch<s&&ch<12)return'ended';return'later'}
+function autoSlot(){const h=new Date().getHours();if(h>=7&&h<11)return'morning';if(h>=11&&h<16)return'afternoon';if(h>=16&&h<20)return'evening';return'late'}
+function distMi(a,b,c,d){const R=3959,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180;const x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+
+function init(){const df=document.getElementById('dayFilter');df.innerHTML='<option value="all">All Days</option>';DN.forEach((n,i)=>{df.innerHTML+=`<option value="${i}">${n}</option>`});try{const s=localStorage.getItem('kw_hidden');if(s)hiddenPlaces=new Set(JSON.parse(s))}catch(e){}if(nearbyActive){document.getElementById('nearTrack').classList.add('on');document.getElementById('nearLabel').classList.add('on')}render();updatePlacesBtn()}
+
+function toggleNow(){nowActive=!nowActive;document.getElementById('nowTrack').classList.toggle('on',nowActive);document.getElementById('nowLabel').classList.toggle('on',nowActive);if(nowActive){savedDay=document.getElementById('dayFilter').value;savedTime=document.getElementById('timeFilter').value;document.getElementById('dayFilter').value=new Date().getDay();document.getElementById('timeFilter').value=autoSlot()}else{document.getElementById('dayFilter').value=savedDay;document.getElementById('timeFilter').value=savedTime}render()}
+
+function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=document.getElementById('nearTrack'),label=document.getElementById('nearLabel');if(nearbyActive){nearbyActive=false;userLat=null;userLng=null;track.classList.remove('on');label.classList.remove('on');render();return}if(!navigator.geolocation){alert('Geolocation not supported');return}wrap.classList.add('loading');navigator.geolocation.getCurrentPosition(pos=>{userLat=pos.coords.latitude;userLng=pos.coords.longitude;nearbyActive=true;wrap.classList.remove('loading');track.classList.add('on');label.classList.add('on');render()},err=>{wrap.classList.remove('loading');alert('Location access denied. Enable location in browser settings.')},{enableHighAccuracy:true,timeout:10000})}
+
+function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let info=DN[now.getDay()]+' \u2022 '+ts;if(nearbyActive&&userLat)info+=' \u2022 \uD83D\uDCCD GPS Active';document.getElementById('currentInfo').textContent=info}
+
+function render(){updateInfo();const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value;let results=[];
+V.forEach((v,vi)=>{if(hiddenPlaces.has(v.n))return;v.h.forEach(hh=>{if((dayVal==='all'||matchDay(hh.d,parseInt(dayVal)))&&(nowActive||matchTime(hh.s,hh.e,timeVal))){const st=getStatus(hh.s,hh.e);if(nowActive&&st!=='now'&&st!=='soon')return;let dist=null,isNear=false;if(nearbyActive&&userLat&&v.lat){dist=distMi(userLat,userLng,v.lat,v.lng);isNear=dist<=NEARBY_MI}results.push({vi,v,s:hh.s,e:hh.e,days:hh.d,status:st,dist,isNear})}})});
+results.sort((a,b)=>{const so={now:0,soon:1,later:2,ended:3};if(so[a.status]!==so[b.status])return so[a.status]-so[b.status];return a.s-b.s});
+const C=document.getElementById('content');
+if(!results.length){C.innerHTML='<div class="no-results"><div class="emoji">\uD83C\uDF19</div><p>No happy hours match your filters.<br>Try a different time or day!</p></div>';return}
+const nearbyNow=results.filter(r=>r.isNear&&r.status==='now').sort((a,b)=>a.dist-b.dist);
+const nearbySoon=results.filter(r=>r.isNear&&r.status==='soon').sort((a,b)=>a.dist-b.dist);
+const nowItems=results.filter(r=>r.status==='now'&&!r.isNear);
+const soonItems=results.filter(r=>r.status==='soon'&&!r.isNear);
+const laterItems=results.filter(r=>r.status==='later');
+let html='';
+if(nearbyNow.length){html+=`<div class="section-label">\uD83D\uDCCD Happening Nearby <span class="count count-nearby">${nearbyNow.length}</span></div>`;nearbyNow.forEach(r=>html+=card(r,true))}
+if(nearbySoon.length){html+=`<div class="section-label">\uD83D\uDCCD Starting Nearby Soon <span class="count count-nearby">${nearbySoon.length}</span></div>`;nearbySoon.forEach(r=>html+=card(r,true))}
+if(nowItems.length){html+=`<div class="section-label">\uD83D\uDD34 Happening Now <span class="count">${nowItems.length}</span></div>`;nowItems.forEach(r=>html+=card(r))}
+if(soonItems.length){html+=`<div class="section-label">\uD83D\uDFE1 Starting Soon <span class="count">${soonItems.length}</span></div>`;soonItems.forEach(r=>html+=card(r))}
+if(laterItems.length){html+=`<div class="section-label">\uD83D\uDD35 Later <span class="count">${laterItems.length}</span></div>`;laterItems.forEach(r=>html+=card(r))}
+C.innerHTML=html}
+
+function card(r,nearby){const v=r.v,cls=nearby?'is-nearby':r.status==='now'?'happening-now':r.status==='soon'?'coming-soon':r.status==='ended'?'is-ended':'';
+const tag=nearby?'<span class="status-tag status-nearby">NEARBY</span>':r.status==='now'?'<span class="status-tag status-now">NOW</span>':r.status==='soon'?'<span class="status-tag status-soon">SOON</span>':r.status==='ended'?'<span class="status-tag status-ended">ENDED</span>':'<span class="status-tag status-later">LATER</span>';
+const distB=r.dist!==null?`<div class="dist-badge">${r.dist<0.1?'< 0.1':r.dist.toFixed(1)} mi</div>`:'';
+const dayB=r.days!=='daily'?`<span class="day-badge">${r.days.toUpperCase()}</span>`:'';
+const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.fa)}`;
+return`<div class="venue-card ${cls}" onclick="openDetail(${r.vi},${r.s},${r.e},'${r.days}')"><div class="venue-time"><div class="time-range">${tStr(r.s)}<br>\u2013<br>${tStr(r.e)}</div>${tag}${distB}</div><div class="venue-info"><div class="venue-name">${v.n} ${dayB}</div><div class="venue-address"><a href="${mu}" onclick="event.stopPropagation()" target="_blank">\uD83D\uDCCD ${v.a}</a></div><div class="deal-line"><span class="deal-icon">\uD83C\uDF7D</span>${v.fo}</div><div class="deal-line"><span class="deal-icon">\uD83C\uDF79</span>${v.dr}</div></div></div>`}
+
+function openDetail(vi,start,end,days){const v=V[vi],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.fa)}`,dd=days==='daily'?'Every Day':days.toUpperCase();
+let di='';if(nearbyActive&&userLat&&v.lat){const d=distMi(userLat,userLng,v.lat,v.lng);di=` \u2022 ${d.toFixed(2)} mi away`}
+document.getElementById('modalHeader').innerHTML=`<h2>${v.n}</h2><div class="modal-time">\uD83D\uDD50 ${tStr(start)} \u2013 ${tStr(end)}${di}</div><div class="modal-days">\uD83D\uDCC5 ${dd}</div><div class="modal-address"><a href="${mu}" target="_blank">\uD83D\uDCCD ${v.a} \u2014 Open in Maps</a></div>`;
+let b='';if(v.desc)b+=`<div class="modal-section"><h3>About</h3><div class="detail-text">${v.desc}</div></div>`;
+if(v.dr)b+=`<div class="modal-section"><h3>\uD83C\uDF79 Drink Deals</h3><div class="drink-deals">${v.dr}</div></div>`;
+if(v.fo)b+=`<div class="modal-section"><h3>\uD83C\uDF7D Food Deals</h3><div class="food-deals">${v.fo}</div></div>`;
+if(v.note)b+=`<div class="modal-section"><h3>\uD83D\uDCDD Note</h3><div class="detail-text">${v.note}</div></div>`;
+if(v.p)b+=`<div class="modal-section"><h3>\uD83D\uDCDE Phone</h3><div class="detail-text"><a href="tel:${v.p.replace(/[^\d+]/g,'')}" style="color:var(--ocean);text-decoration:none;font-weight:600">${v.p}</a></div></div>`;
+if(v.url)b+=`<div class="modal-section"><h3>\uD83C\uDF10 Website</h3><div class="detail-text"><a href="${v.url}" target="_blank" style="color:var(--ocean);text-decoration:none;font-weight:600">Visit Website \u2192</a></div></div>`;
+if(v.h.length>1){b+=`<div class="modal-section"><h3>\u23F0 All Happy Hours</h3><div class="detail-text">`;v.h.forEach(hh=>{b+=`${tStr(hh.s)} \u2013 ${tStr(hh.e)} (${hh.d==='daily'?'Every Day':hh.d.toUpperCase()})<br>`});b+=`</div></div>`}
+document.getElementById('modalBody').innerHTML=b;document.getElementById('detailModal').classList.add('active');document.body.style.overflow='hidden'}
+
+function closeDetail(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('detailModal').classList.remove('active');document.body.style.overflow=''}
+function openPlacesFilter(){const l=document.getElementById('placesList');[...V].sort((a,b)=>a.n.localeCompare(b.n)).forEach(v=>{l.innerHTML+=`<label class="place-check"><input type="checkbox" ${hiddenPlaces.has(v.n)?'':'checked'} data-name="${v.n}">${v.n}</label>`});document.getElementById('placesModal').classList.add('active');document.body.style.overflow='hidden'}
+function closePlaces(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placesModal').classList.remove('active');document.body.style.overflow=''}
+function toggleAllPlaces(){const c=document.querySelectorAll('#placesList input[type="checkbox"]'),all=[...c].every(x=>x.checked);c.forEach(x=>x.checked=!all)}
+function applyPlacesFilter(){hiddenPlaces=new Set();document.querySelectorAll('#placesList input[type="checkbox"]').forEach(c=>{if(!c.checked)hiddenPlaces.add(c.dataset.name)});try{localStorage.setItem('kw_hidden',JSON.stringify([...hiddenPlaces]))}catch(e){}updatePlacesBtn();closePlaces();render()}
+function updatePlacesBtn(){const b=document.getElementById('placesBtn');if(hiddenPlaces.size>0){b.classList.add('active');b.textContent=`\u2699 Places (${V.length-hiddenPlaces.size})`}else{b.classList.remove('active');b.textContent='\u2699 Places'}}
+window.addEventListener('scroll',()=>{document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
+setInterval(render,60000);init();
+</script>
+</body>
+</html>

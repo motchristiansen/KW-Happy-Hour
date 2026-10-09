@@ -135,10 +135,10 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
     <select class="filter-select" id="dayFilter" onchange="render()"></select>
     <select class="filter-select" id="timeFilter" onchange="render()">
       <option value="all">All Times</option>
-      <option value="morning">☀️ Morning 7a–11a</option>
+      <option value="morning">☀️ Morning 4a–11a</option>
       <option value="afternoon">🌤 Afternoon 11a–4p</option>
-      <option value="evening">🌅 Evening 4p–8p</option>
-      <option value="late">🌙 Late 8p–3a+</option>
+      <option value="evening">🌅 Evening 4p–9p</option>
+      <option value="late">🌙 Late 9p–4a</option>
     </select>
     <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()">⚙ Places</button>
   </div>
@@ -273,11 +273,11 @@ const NEARBY_MI=0.3,DAYS=['sun','mon','tue','wed','thu','fri','sat'],DN=['Sunday
 
 function tStr(t){if(t>=24)t-=24;let h=Math.floor(t),m=Math.round((t-h)*60),ap=h>=12?'pm':'am';if(!h)h=12;else if(h>12)h-=12;return m>0?h+':'+String(m).padStart(2,'0')+ap:h+ap}
 function matchDay(ds,di){const d=DAYS[di];if(ds==='daily')return true;if(ds.includes('-')&&!ds.includes(',')){const p=ds.split('-'),si=DAYS.indexOf(p[0]),ei=DAYS.indexOf(p[1]);return si<=ei?(di>=si&&di<=ei):(di>=si||di<=ei)}if(ds.includes(','))return ds.split(',').map(s=>s.trim()).includes(d);return ds===d}
-function matchTime(s,e,slot){const R={morning:[7,11],afternoon:[11,16],evening:[16,20],late:[20,27]};if(slot==='all')return true;const[rs,re]=R[slot];return s<re&&e>rs}
+function matchTime(s,e,slot){const R={morning:[4,11],afternoon:[11,16],evening:[16,21],late:[21,28]};if(slot==='all')return true;const[rs,re]=R[slot];return s<re&&e>rs}
 function appNow(){return new Date(Date.now()-4*3600000)}
 function hourNow(){const n=new Date();let h=n.getHours()+n.getMinutes()/60;return h<4?h+24:h}
 function getStatus(s,e){const ch=hourNow();if(ch>=s&&ch<e)return'now';if(s>ch&&s-ch<=2)return'soon';if(ch>=e)return'ended';return'later'}
-function autoSlot(){const h=new Date().getHours();if(h>=7&&h<11)return'morning';if(h>=11&&h<16)return'afternoon';if(h>=16&&h<20)return'evening';return'late'}
+function autoSlot(){const h=new Date().getHours();if(h>=4&&h<11)return'morning';if(h>=11&&h<16)return'afternoon';if(h>=16&&h<21)return'evening';return'late'}
 function distMi(a,b,c,d){const R=3959,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180;const x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 
 function init(){const df=document.getElementById('dayFilter');df.innerHTML='<option value="all">All Days</option>';DN.forEach((n,i)=>{df.innerHTML+=`<option value="${i}">${n}</option>`});try{const s=localStorage.getItem('kw_hidden');if(s)hiddenPlaces=new Set(JSON.parse(s))}catch(e){}df.value=appNow().getDay();document.getElementById('ffTrack').classList.toggle('on',showFF);document.getElementById('musicTrack').classList.toggle('on',showMusic);document.getElementById('adTrack').classList.toggle('on',showAdult);document.getElementById('menTrack').classList.toggle('on',showMen);render();updatePlacesBtn()}

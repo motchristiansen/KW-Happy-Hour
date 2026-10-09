@@ -12,7 +12,7 @@
 body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 .header{background:linear-gradient(135deg,var(--ocean),var(--ocean-dark));color:#fff;padding:20px 16px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px var(--shadow)}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
-.header h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(24px,7.4vw,30px);font-weight:900;letter-spacing:-.5px;line-height:1.02}
 .header h1 span{color:var(--sunset)}
 .hdr-toggles{display:flex;gap:14px;align-items:center}
 .toggle-wrap{display:flex;align-items:center;gap:6px;cursor:pointer}
@@ -26,12 +26,14 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .toggle-track.on .toggle-thumb{left:20px}
 .toggle-track.on.t-ad{background:var(--coral)}
 .tgrid{display:flex;gap:6px;margin-top:10px}
-.bpw{flex:1;min-width:0}
-.pill.bp{width:100%;background:rgba(255,255,255,.22)}
+.bpw{flex:0 0 auto}
+.pill.bp{width:auto;min-width:72px;padding-left:30px;padding-right:10px;background:rgba(255,255,255,.22)}
+.pill.bp.on{padding-left:10px;padding-right:30px}
 .pill.on.p-ff,.pill.on.p-ad,.pill.on.p-men{background:var(--coral)}
 .header h1 span{white-space:nowrap}
 .filter-select{padding:10px 26px 10px 10px;font-size:13px;background-position:right 9px center}
-.filter-btn{padding:10px 13px;font-size:15px;flex:0 0 auto}
+.filter-btn{padding:10px 12px;font-size:13px;flex:0 0 auto}
+@media(max-width:379px){.plt{display:none}.filter-btn{font-size:15px;padding:10px 13px}}
 .hgrid{display:grid;grid-template-columns:auto auto;gap:6px;flex-shrink:0}
 .pw{cursor:pointer}.pw.loading{opacity:.5;pointer-events:none}
 .pill{position:relative;width:72px;height:28px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding-left:24px;font-size:12px;font-weight:700;letter-spacing:.3px;color:rgba(255,255,255,.75);transition:background .25s,padding .25s;user-select:none}
@@ -134,7 +136,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <body>
 <div class="header">
   <div class="header-top">
-    <h1>🌴 KW <span>Happy Hour</span></h1>
+    <h1>🌴 KW<br><span>Happy Hour</span></h1>
     <div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍹</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe">🎸</span></span></div></div></div>
   </div>
   <div class="current-info" id="currentInfo"></div>
@@ -147,7 +149,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
       <option value="evening">🌅 Evening 4p–9p</option>
       <option value="late">🌙 Late 9p–4a</option>
     </select>
-    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places">⚙</button>
+    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places">⚙<span class="plt"> Places</span></button>
   </div>
 </div>
 <div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="pw bpw" onclick="toggleFF()"><div class="pill bp p-ff" id="ffTrack"><span class="th"></span><span class="pl">🎭 Fest</span></div></div><div class="pw bpw" onclick="toggleAdult()"><div class="pill bp p-ad" id="adTrack"><span class="th"></span><span class="pl">🔞 Adult</span></div></div><div class="pw bpw" onclick="toggleMen()"><div class="pill bp p-men" id="menTrack"><span class="th"></span><span class="pl">👬👭</span></div></div></div></div>
@@ -339,7 +341,7 @@ function openPlacesFilter(){const l=document.getElementById('placesList');[...V]
 function closePlaces(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placesModal').classList.remove('active');document.body.style.overflow=''}
 function toggleAllPlaces(){const c=document.querySelectorAll('#placesList input[type="checkbox"]'),all=[...c].every(x=>x.checked);c.forEach(x=>x.checked=!all)}
 function applyPlacesFilter(){hiddenPlaces=new Set();document.querySelectorAll('#placesList input[type="checkbox"]').forEach(c=>{if(!c.checked)hiddenPlaces.add(c.dataset.name)});try{localStorage.setItem('kw_hidden',JSON.stringify([...hiddenPlaces]))}catch(e){}updatePlacesBtn();closePlaces();render()}
-function updatePlacesBtn(){const b=document.getElementById('placesBtn');if(hiddenPlaces.size>0){b.classList.add('active');b.textContent=`\u2699 ${V.length-hiddenPlaces.size}`}else{b.classList.remove('active');b.textContent='\u2699'}}
+function updatePlacesBtn(){const b=document.getElementById('placesBtn');if(hiddenPlaces.size>0){b.classList.add('active');b.innerHTML=`\u2699<span class="plt"> Places</span> (${V.length-hiddenPlaces.size})`}else{b.classList.remove('active');b.innerHTML='\u2699<span class="plt"> Places</span>'}}
 window.addEventListener('scroll',()=>{document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
 (function(){const s=document.getElementById('timeFilter');[...s.options].forEach(o=>{o.dataset.l=o.textContent;o.dataset.s=o.textContent.replace(/\s+\d.*$/,'')});const sh=()=>[...s.options].forEach(o=>o.textContent=o.dataset.s),lg=()=>[...s.options].forEach(o=>o.textContent=o.dataset.l);s.addEventListener('focus',lg);s.addEventListener('mousedown',lg);s.addEventListener('touchstart',lg,{passive:true});s.addEventListener('change',()=>{sh();s.blur()});s.addEventListener('blur',sh);sh()})();
 setInterval(render,60000);init();loadMusic();setInterval(loadMusic,3600000);

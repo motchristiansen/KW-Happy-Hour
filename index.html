@@ -135,7 +135,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
     <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()">⚙ Places</button>
   </div>
 </div>
-<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="toggle-wrap" style="margin-top:8px" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">🔞 Adult events</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" style="margin-top:6px" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">👬 Men-only events</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div>
+<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="toggle-wrap" style="margin-top:8px" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">🔞 Only adult events</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" style="margin-top:6px" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">👬 Only men's events</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
@@ -215,7 +215,7 @@ function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMo
 function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;return dv==='all'?null:TRIP[dv]}
 function ffTime(x){return tStr(x.s)+(x.e!==null?'<br>\u2013<br>'+tStr(x.e):'')}
 function evStatus(x){if(x.dt!==todayStr())return'later';return getStatus(x.s,x.e===null?x.s+3:x.e)}
-function ffHtml(){const dt=ffDate();if(!dt)return'';let ev=FF.map((x,i)=>Object.assign({i},x)).filter(x=>x.dt===dt&&(!x.ad||(x.ad===1&&showAdult)||(x.ad===2&&showMen)));
+function ffHtml(){const dt=ffDate();if(!dt)return'';let ev=FF.map((x,i)=>Object.assign({i},x)).filter(x=>x.dt===dt&&((showAdult||showMen)?((x.ad===1&&showAdult)||(x.ad===2&&showMen)):!x.ad));
 ev.forEach(x=>{x.st=evStatus(x);x.dist=null;x.near=false;if(nearbyActive&&userLat){x.dist=distMi(userLat,userLng,x.lat,x.lng);x.near=x.dist<=NEARBY_MI}});
 ev=ev.filter(x=>x.st!=='ended'&&(!nowActive||x.st==='now'||x.st==='soon'));if(!ev.length)return'';
 const so={now:0,soon:1,later:2};ev.sort((a,b)=>(b.near-a.near)||(so[a.st]-so[b.st])||(a.s-b.s));

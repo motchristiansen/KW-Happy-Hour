@@ -25,9 +25,22 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .toggle-thumb{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .toggle-track.on .toggle-thumb{left:20px}
 .toggle-track.on.t-ad{background:var(--coral)}
-.tgrid{display:flex;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap}
-.hgrid{display:grid!important;grid-template-columns:auto auto;gap:8px 14px}
-.hgrid .toggle-wrap{justify-content:space-between}
+.tgrid{display:flex;gap:6px;margin-top:10px}
+.bpw{flex:1;min-width:0}
+.pill.bp{width:100%;background:rgba(255,255,255,.22)}
+.pill.on.p-ff,.pill.on.p-ad,.pill.on.p-men{background:var(--coral)}
+.header h1 span{white-space:nowrap}
+.filter-select{padding:10px 26px 10px 10px;font-size:13px;background-position:right 9px center}
+.filter-btn{padding:10px 13px;font-size:15px;flex:0 0 auto}
+.hgrid{display:grid;grid-template-columns:auto auto;gap:6px;flex-shrink:0}
+.pw{cursor:pointer}.pw.loading{opacity:.5;pointer-events:none}
+.pill{position:relative;width:72px;height:28px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding-left:24px;font-size:12px;font-weight:700;letter-spacing:.3px;color:rgba(255,255,255,.75);transition:background .25s,padding .25s;user-select:none}
+.pill .th{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .25s}
+.pill.on{padding-left:0;padding-right:24px;color:#fff}
+.pill.on .th{left:calc(100% - 25px)}
+.pill .pe{font-size:15px;filter:grayscale(.6);opacity:.8}.pill.on .pe{filter:none;opacity:1}
+.pill.on.p-now{background:var(--coral)}.pill.on.p-hh{background:var(--sunset)}.pill.on.p-near{background:#7d3c98}.pill.on.p-music{background:#2b7bd4}
+.header-top h1{min-width:0;flex:1}
 .toggle-track.on.t-hh{background:var(--sunset)}
 .toggle-track.on.t-music{background:#2b7bd4}
 .toggle-wrap.loading{opacity:.5;pointer-events:none}
@@ -122,7 +135,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="header">
   <div class="header-top">
     <h1>🌴 KW <span>Happy Hour</span></h1>
-    <div class="hdr-toggles hgrid"><div class="toggle-wrap" id="nowWrap" onclick="toggleNow()"><span class="toggle-label" id="nowLabel">⏱ Now</span><div class="toggle-track t-now" id="nowTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleHH()"><span class="toggle-label" id="hhLabel">🍹 Happy Hrs</span><div class="toggle-track t-hh" id="hhTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" id="nearWrap" onclick="toggleNearby()"><span class="toggle-label" id="nearLabel">📍 Nearby</span><div class="toggle-track t-near" id="nearTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleMusic()"><span class="toggle-label" id="musicLabel">🎸 Music</span><div class="toggle-track t-music" id="musicTrack"><div class="toggle-thumb"></div></div></div></div>
+    <div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍹</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe">🎸</span></span></div></div></div>
   </div>
   <div class="current-info" id="currentInfo"></div>
   <div class="filters">
@@ -134,10 +147,10 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
       <option value="evening">🌅 Evening 4p–9p</option>
       <option value="late">🌙 Late 9p–4a</option>
     </select>
-    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()">⚙ Places</button>
+    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places">⚙</button>
   </div>
 </div>
-<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="toggle-wrap" onclick="toggleFF()"><span class="toggle-label" style="color:#fff">🎭 Fest</span><div class="toggle-track t-ad" id="ffTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">🔞 Adult</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">👬👭 Wo/Men</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div></div>
+<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="pw bpw" onclick="toggleFF()"><div class="pill bp p-ff" id="ffTrack"><span class="th"></span><span class="pl">🎭 Fest</span></div></div><div class="pw bpw" onclick="toggleAdult()"><div class="pill bp p-ad" id="adTrack"><span class="th"></span><span class="pl">🔞 Adult</span></div></div><div class="pw bpw" onclick="toggleMen()"><div class="pill bp p-men" id="menTrack"><span class="th"></span><span class="pl">👬👭</span></div></div></div></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
@@ -326,8 +339,9 @@ function openPlacesFilter(){const l=document.getElementById('placesList');[...V]
 function closePlaces(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placesModal').classList.remove('active');document.body.style.overflow=''}
 function toggleAllPlaces(){const c=document.querySelectorAll('#placesList input[type="checkbox"]'),all=[...c].every(x=>x.checked);c.forEach(x=>x.checked=!all)}
 function applyPlacesFilter(){hiddenPlaces=new Set();document.querySelectorAll('#placesList input[type="checkbox"]').forEach(c=>{if(!c.checked)hiddenPlaces.add(c.dataset.name)});try{localStorage.setItem('kw_hidden',JSON.stringify([...hiddenPlaces]))}catch(e){}updatePlacesBtn();closePlaces();render()}
-function updatePlacesBtn(){const b=document.getElementById('placesBtn');if(hiddenPlaces.size>0){b.classList.add('active');b.textContent=`\u2699 Places (${V.length-hiddenPlaces.size})`}else{b.classList.remove('active');b.textContent='\u2699 Places'}}
+function updatePlacesBtn(){const b=document.getElementById('placesBtn');if(hiddenPlaces.size>0){b.classList.add('active');b.textContent=`\u2699 ${V.length-hiddenPlaces.size}`}else{b.classList.remove('active');b.textContent='\u2699'}}
 window.addEventListener('scroll',()=>{document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
+(function(){const s=document.getElementById('timeFilter');[...s.options].forEach(o=>{o.dataset.l=o.textContent;o.dataset.s=o.textContent.replace(/\s+\d.*$/,'')});const sh=()=>[...s.options].forEach(o=>o.textContent=o.dataset.s),lg=()=>[...s.options].forEach(o=>o.textContent=o.dataset.l);s.addEventListener('focus',lg);s.addEventListener('mousedown',lg);s.addEventListener('touchstart',lg,{passive:true});s.addEventListener('change',()=>{sh();s.blur()});s.addEventListener('blur',sh);sh()})();
 setInterval(render,60000);init();loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>

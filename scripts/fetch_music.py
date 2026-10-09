@@ -39,8 +39,9 @@ def geocode(addr):
     if ll[0] is not None and not in_kw(*ll): ll=(None,None)
     GEO[k]=list(ll); return ll
 
-today=dt.date.today()
-start=min(today, dt.date(2026,10,19)); end=max(today+dt.timedelta(days=14), dt.date(2026,10,26))
+from zoneinfo import ZoneInfo
+today=dt.datetime.now(ZoneInfo("America/New_York")).date()
+start=min(today-dt.timedelta(days=1), dt.date(2026,10,19)); end=max(today+dt.timedelta(days=14), dt.date(2026,10,26))
 out=[]; venues={}
 
 # 1) livemusiceveryday.com

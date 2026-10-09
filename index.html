@@ -11,8 +11,10 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 .header{background:linear-gradient(135deg,var(--ocean),var(--ocean-dark));color:#fff;padding:20px 16px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px var(--shadow)}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
-.header h1{font-family:'Playfair Display',serif;font-size:clamp(24px,7.4vw,30px);font-weight:900;letter-spacing:-.5px;line-height:1.02}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+.hright{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.hright .current-info{margin:0;text-align:right;font-size:12px}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(24px,calc((100vw - 214px)/5.3),42px);font-weight:900;letter-spacing:-.5px;line-height:1.02}
 .header h1 span{color:var(--sunset)}
 .hdr-toggles{display:flex;gap:14px;align-items:center}
 .toggle-wrap{display:flex;align-items:center;gap:6px;cursor:pointer}
@@ -25,7 +27,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .toggle-thumb{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .toggle-track.on .toggle-thumb{left:20px}
 .toggle-track.on.t-ad{background:var(--coral)}
-.tgrid{display:flex;gap:6px;margin-top:10px}
+.tgrid{display:flex;gap:16px;margin-top:10px;flex-wrap:nowrap}
 .bpw{flex:0 0 auto}
 .pill.bp{width:auto;min-width:72px;padding-left:30px;padding-right:10px;background:rgba(255,255,255,.22)}
 .pill.bp.on{padding-left:10px;padding-right:30px}
@@ -137,9 +139,10 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="header">
   <div class="header-top">
     <h1>🌴 KW<br><span>Happy Hour</span></h1>
-    <div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍹</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe">🎸</span></span></div></div></div>
+    <div class="hright"><div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍹</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe">🎸</span></span></div></div></div>
+    <div class="current-info" id="currentInfo"></div>
+    </div>
   </div>
-  <div class="current-info" id="currentInfo"></div>
   <div class="filters">
     <select class="filter-select" id="dayFilter" onchange="render()"></select>
     <select class="filter-select" id="timeFilter" onchange="render()">
@@ -152,7 +155,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
     <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places">⚙<span class="plt"> Places</span></button>
   </div>
 </div>
-<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="pw bpw" onclick="toggleFF()"><div class="pill bp p-ff" id="ffTrack"><span class="th"></span><span class="pl">🎭 Fest</span></div></div><div class="pw bpw" onclick="toggleAdult()"><div class="pill bp p-ad" id="adTrack"><span class="th"></span><span class="pl">🔞 Adult</span></div></div><div class="pw bpw" onclick="toggleMen()"><div class="pill bp p-men" id="menTrack"><span class="th"></span><span class="pl">👬👭</span></div></div></div></div>
+<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="toggle-wrap" onclick="toggleFF()"><span class="toggle-label" style="color:#fff">🎭 Fest</span><div class="toggle-track t-ad" id="ffTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">🔞 Adult</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">👬👭</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>

@@ -1,0 +1,18 @@
+name: Update live music
+on:
+  schedule:
+    - cron: '0 10,16,22 * * *'   # ~6am, noon, 6pm Key West (EDT)
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/fetch_music.py
+      - run: |
+          git config user.name "music-bot"
+          git config user.email "music-bot@users.noreply.github.com"
+          git add music.json geocache.json
+          git diff --cached --quiet || (git commit -m "Update live music" && git push)

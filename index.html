@@ -288,7 +288,7 @@ function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=doc
 
 function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let info=DN[now.getDay()]+' \u2022 '+ts;if(nearbyActive&&userLat)info+=' \u2022 \uD83D\uDCCD GPS Active';document.getElementById('currentInfo').textContent=info}
 
-function render(){updateInfo();const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value;let results=[];
+function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}updateInfo();const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value;let results=[];
 V.forEach((v,vi)=>{if(hiddenPlaces.has(v.n))return;if(anyOn()?!((v.ad===1&&showAdult)||(v.ad===2&&showMen)):v.ad)return;v.h.forEach(hh=>{if((dayVal==='all'||matchDay(hh.d,parseInt(dayVal)))&&(nowActive||matchTime(hh.s,hh.e,timeVal))){const st=getStatus(hh.s,hh.e);if(nowActive&&st!=='now'&&st!=='soon')return;let dist=null,isNear=false;if(nearbyActive&&userLat&&v.lat){dist=distMi(userLat,userLng,v.lat,v.lng);isNear=dist<=NEARBY_MI}results.push({vi,v,s:hh.s,e:hh.e,days:hh.d,status:st,dist,isNear})}})});
 results.sort((a,b)=>{const so={now:0,soon:1,later:2,ended:3};if(so[a.status]!==so[b.status])return so[a.status]-so[b.status];return a.s-b.s});
 const C=document.getElementById('content');

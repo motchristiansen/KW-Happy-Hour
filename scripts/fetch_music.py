@@ -230,8 +230,46 @@ for e in sorted(out,key=lambda e:RANK.get(e["src"],9)):
     if any(k==(f["dt"],nk(f["v"])[:8]) and abs(e["s"]-f["s"])<=0.5 and (nk(e["n"])[:6]==nk(f["n"])[:6]) for f in final): continue
     final.append(e)
 final.sort(key=lambda e:(e["dt"],e["s"],e["v"]))
+
+# --- venue normalization: fill missing coordinates from every venue we already know ---
+STOP={"the","bar","saloon","restaurant","key","west","kw","grille","grill","and","co","inc","kitchen"}
+def vnorm(s):
+    s=(s or "").lower().replace("’","'").replace("&"," and ")
+    w=[x for x in re.split(r"[^a-z0-9]+",s.replace("'","")) if x and x not in STOP]
+    return "".join(w)
+MASTER={}
+def addm(name,addr,la,lo):
+    k=vnorm(name)
+    if k and la is not None and lo is not None and in_kw(la,lo): MASTER.setdefault(k,(addr or "",la,lo))
+try:
+    page=open("index.html",encoding="utf-8").read()
+    for n,a,la,lo in re.findall(r'\{n:"((?:[^"\\]|\\.)*)",a:"((?:[^"\\]|\\.)*)".*?lat:(-?[\d.]+),lng:(-?[\d.]+)\}',page): addm(n,a,float(la),float(lo))
+    m=re.search(r"const FF=(\[.*?\]);\n",page)
+    if m:
+        for x in json.loads(m[1]): addm(x.get("l"),x.get("a"),x.get("lat"),x.get("lng"))
+except Exception as x: print("master venue list (index.html) unavailable:",x,file=sys.stderr)
+for vn,(nm,a,la,lo) in list(venues.items()): addm(nm,a,la,lo)
+for k,(a,la,lo) in KNOWN.items(): addm(k,a,la,lo)
+def lookup(name):
+    k=vnorm(name)
+    if not k: return None
+    if k in MASTER: return MASTER[k]
+    c=[v for mk,v in MASTER.items() if len(min(k,mk,key=len))>=5 and (mk.startswith(k) or k.startswith(mk))]
+    return c[0] if len(set(c))==1 else None
+unplaced=set()
+for e in final:
+    if e["lat"] is None:
+        hit=lookup(e["v"])
+        if hit:
+            a,la,lo=hit;e["lat"],e["lng"]=la,lo
+            if not e.get("a"): e["a"]=a
+        else:
+            la,lo=geocode(e.get("a") or e["v"])
+            if la is not None: e["lat"],e["lng"]=la,lo
+            else: unplaced.add(e["v"])
+if unplaced: print("UNPLACED venues (no coordinates):",sorted(unplaced),file=sys.stderr)
 if len(final)<20:
     print("Too few results (",len(final),") - keeping previous music.json",file=sys.stderr); sys.exit(0)
 json.dump(GEO,open("geocache.json","w"),indent=0)
-json.dump({"updated":dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),"items":final},open("music.json","w"),ensure_ascii=False,separators=(",",":"))
+json.dump({"unplaced":sorted(unplaced),"updated":dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),"items":final},open("music.json","w"),ensure_ascii=False,separators=(",",":"))
 print("wrote",len(final),"items")

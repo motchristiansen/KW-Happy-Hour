@@ -367,7 +367,7 @@ function lineTxt(i,withTime){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\
 function shareCard(k){const c=CARDS[k];if(!c)return;const now=c.items.filter(i=>i.st==='now'),next=c.items.filter(i=>i.st!=='now');
  const where=c.name+(c.a?' ('+c.a+')':'');let msg;
  if(now.length)msg="I'm here now: "+where+'\n'+now.slice(0,3).map(i=>lineTxt(i,false)).join('\n');
- else msg='Meet me here at '+tStr(next[0].s)+': '+where+'\n'+next.slice(0,3).map(i=>lineTxt(i,true)).join('\n');
+ else msg="I'm thinking about going here later: "+where+'\n'+next.slice(0,3).map(i=>lineTxt(i,true)).join('\n');
  const url=pageURL()+'?p='+encodeURIComponent(k)+'&d='+viewDate();
  if(navigator.share)navigator.share({title:'KW Happy Hour',text:msg,url}).catch(()=>{});else{try{navigator.clipboard.writeText(msg+'\n'+url).then(()=>toast('Copied, paste it in a text'))}catch(e){toast('Sharing not supported here')}}}
 let DL=null,DLdone=false;

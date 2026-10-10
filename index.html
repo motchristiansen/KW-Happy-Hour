@@ -150,14 +150,15 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .section-label .count-music{background:#2b7bd4}
 @media(min-width:600px){.ff-banner{max-width:568px;margin:16px auto 0}}
 /* layout overrides (must stay last) */
-.filters{flex-wrap:nowrap;align-items:stretch}
-.filter-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;flex:1 1 auto;padding:10px 12px;white-space:nowrap}
-#shareBtn{flex:0 0 auto}
-.filters{gap:6px}
+.filters{flex-wrap:nowrap;align-items:stretch;gap:6px}
 .filter-select{font-size:13px;padding:10px 24px 10px 10px;background-position:right 8px center}
-.filter-btn{font-size:13px;padding:10px 10px}
-@media(max-width:479px){#shareBtn .plt{display:none}}
-@media(max-width:429px){#placesBtn .plt{display:none}}
+.filters .filter-select:nth-child(2){margin-right:auto}
+.filter-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;font-size:13px;padding:10px 10px;white-space:nowrap}
+#placesBtn .plt{display:none}
+#placesBtn{padding:10px 9px}
+#shareBtn .plt{display:inline}
+.pcount{padding:1px 5px;margin-left:2px}
+@media(max-width:379px){.filters{gap:4px}.filter-btn{padding:10px 7px}#placesBtn{padding:10px 7px}.filter-select{padding-left:8px;padding-right:21px;background-position:right 6px center}}
 </style>
 </head>
 <body>
@@ -192,7 +193,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="share-url" onclick="copyLink()">motchristiansen.github.io/KW-Happy-Hour</div>
 <div class="share-btns"><button class="btn-primary" onclick="sendLink()">📤 Send link</button><button class="btn-secondary" id="installBtn" onclick="installApp()">📲 Add to Home Screen</button></div>
 <div class="a2hs" id="a2hsHelp"><b>Hey!</b> We found it really handy to have this at our fingertips while walking around. Add it to your home screen so it's there when you need it. No app store, nothing to download &mdash; it's just this web page with a home-screen button.
-<div class="a2hs-steps"><div><b>iPhone</b> (Safari): tap Share <span class="ios-share">&#x2B06;&#xFE0E;</span> &rarr; <b>Add to Home Screen</b></div><div><b>Android</b> (Chrome): tap the button above, or &#8942; &rarr; <b>Add to Home screen</b></div></div>
+<div class="a2hs-steps"><div><b>iPhone</b>: tap Share <span class="ios-share">&#x2B06;&#xFE0E;</span> &rarr; <b>Add to Home Screen</b></div><div><b>Android</b>: tap the button above, or &#8942; &rarr; <b>Add to Home screen</b></div></div>
 <div class="a2hs-done" id="a2hsDone">✅ You're already using it from your home screen. Nice.</div></div>
 </div>
 <button class="modal-close" onclick="closeShare()">Close</button></div></div>
@@ -406,7 +407,7 @@ function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast(
 function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
 function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null})}else{const h=document.getElementById('a2hsHelp');h.scrollIntoView({behavior:'smooth',block:'center'});h.style.boxShadow='0 0 0 3px var(--coral)';setTimeout(()=>h.style.boxShadow='',1800)}}
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-setInterval(render,60000);init();shortTime();if(innerWidth<380)shortSel('dayFilter',x=>x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
+setInterval(render,60000);init();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>
 </html>

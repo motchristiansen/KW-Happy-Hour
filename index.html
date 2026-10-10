@@ -149,6 +149,9 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .status-music{background:#e2eefb;color:#2b7bd4}
 .section-label .count-music{background:#2b7bd4}
 @media(min-width:600px){.ff-banner{max-width:568px;margin:16px auto 0}}
+.hit-tile{flex:1;background:#e8edf0;border-radius:10px;padding:8px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.hit-l{font-size:12px;font-weight:600;color:var(--text-light);line-height:1.25}
+.hit-n{font-size:22px;font-weight:800;color:var(--ocean);line-height:1.15}
 /* layout overrides (must stay last) */
 .filters{flex-wrap:nowrap;align-items:stretch;gap:6px}
 .filter-select{font-size:13px;padding:10px 24px 10px 10px;background-position:right 8px center}
@@ -192,7 +195,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="modal-body">
 <div class="qr-wrap"><svg class="qr-big" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" class="segno" viewBox="0 0 37 37"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#0a3d45" d="M2 2.5h7m1 0h1m1 0h3m3 0h1m1 0h3m1 0h2m2 0h7m-33 1h1m5 0h1m1 0h1m1 0h2m2 0h1m1 0h2m3 0h3m2 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m2 0h1m3 0h2m3 0h1m7 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m3 0h1m5 0h3m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m2 0h1m2 0h1m2 0h2m1 0h1m2 0h2m3 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h6m3 0h1m-24 1h1m1 0h2m1 0h3m4 0h1m2 0h1m1 0h2m1 0h2m1 0h1m2 0h1m2 0h1m1 0h2m-30 1h1m1 0h1m7 0h1m2 0h6m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h3m1 0h6m1 0h1m1 0h1m4 0h1m1 0h1m1 0h3m1 0h4m2 0h1m-31 1h1m2 0h1m2 0h1m3 0h1m3 0h2m2 0h1m2 0h1m3 0h1m1 0h1m2 0h1m-29 1h1m1 0h1m4 0h1m2 0h1m1 0h1m2 0h2m1 0h1m1 0h2m1 0h3m1 0h2m-31 1h1m5 0h1m1 0h1m1 0h1m1 0h1m5 0h6m1 0h1m2 0h2m-32 1h1m2 0h4m1 0h1m1 0h1m6 0h4m1 0h1m1 0h1m1 0h1m1 0h3m-31 1h4m1 0h1m1 0h2m4 0h1m1 0h1m2 0h1m2 0h2m2 0h6m-31 1h1m2 0h1m1 0h3m4 0h3m5 0h3m2 0h2m1 0h2m-26 1h1m4 0h1m1 0h1m1 0h1m1 0h1m4 0h1m2 0h4m1 0h2m1 0h2m-32 1h1m3 0h4m1 0h3m1 0h2m2 0h1m1 0h1m3 0h1m2 0h2m1 0h2m-32 1h2m2 0h1m2 0h1m2 0h1m2 0h1m2 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h2m-33 1h2m2 0h3m5 0h2m2 0h1m2 0h1m1 0h2m5 0h5m-33 1h1m1 0h4m2 0h1m1 0h2m1 0h1m1 0h3m2 0h2m1 0h4m5 0h1m-30 1h1m2 0h1m1 0h1m2 0h2m2 0h1m2 0h4m1 0h3m1 0h1m2 0h3m-32 1h2m4 0h1m3 0h1m1 0h3m4 0h1m6 0h1m1 0h1m1 0h1m-32 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h2m1 0h1m2 0h9m-23 1h1m2 0h1m1 0h4m2 0h1m1 0h2m1 0h1m3 0h2m-30 1h7m1 0h1m1 0h1m1 0h2m3 0h5m1 0h2m1 0h1m1 0h1m-29 1h1m5 0h1m1 0h1m2 0h1m1 0h3m1 0h2m2 0h4m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m2 0h1m1 0h2m1 0h7m2 0h6m1 0h2m-32 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m2 0h3m2 0h1m1 0h1m2 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h2m1 0h3m3 0h3m2 0h2m1 0h1m-30 1h1m5 0h1m2 0h1m3 0h1m3 0h2m1 0h1m3 0h1m1 0h4m2 0h1m-33 1h7m1 0h4m2 0h1m1 0h4m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1"/></svg></div>
 <div class="share-url" onclick="copyLink()">motchristiansen.github.io/KW-Happy-Hour</div>
-<div class="share-btns"><button class="btn-primary" onclick="sendLink()">📤 Send link</button><button class="btn-secondary" id="installBtn" onclick="installApp()">📲 Add to Home Screen</button></div>
+<div class="share-btns"><button class="btn-primary" onclick="sendLink()">Share with a friend</button><div class="hit-tile" id="hitTile" style="display:none"></div></div>
 <div class="a2hs" id="a2hsHelp"><b>Hey!</b> We found it really handy to have this at our fingertips while walking around. Add it to your home screen so it's there when you need it. No app store, nothing to download &mdash; it's just this web page with a home-screen button.
 <div class="a2hs-steps"><div><b>iPhone</b>: tap Share <span class="ios-share">&#x2B06;&#xFE0E;</span> &rarr; <b>Add to Home Screen</b></div><div><b>Android</b>: tap &#8942; (top right) &rarr; <b>Add to Home screen</b> &rarr; <b>Add</b></div></div>
 <div class="a2hs-done" id="a2hsDone">✅ You're already using it from your home screen. Nice.</div></div>
@@ -401,11 +404,15 @@ const SHARE_URL='https://motchristiansen.github.io/KW-Happy-Hour/';
 function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
 function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function openShare(){const ib=document.getElementById('installBtn'),done=document.getElementById('a2hsDone');if(isStandalone()){ib.style.display='none';done.style.display='block'}else{ib.style.display='';done.style.display='none';ib.textContent='📲 How to add it'}document.getElementById('shareModal').classList.add('active');document.body.style.overflow='hidden'}
+const HIT_NS=/github\.io$/.test(location.hostname)?'motchristiansen-kwhh':'motchristiansen-kwhh-test';let HITS=null;
+fetch('https://abacus.jasoncameron.dev/hit/'+HIT_NS+'/visits').then(r=>r.json()).then(d=>{if(typeof d.value==='number')HITS=d.value}).catch(()=>{});
+const HIT_LINES=['🍹 Livers tested','🌴 Drinking buddies so far','🍻 Bad decisions assisted','🎉 Good times enabled','🍸 Happy hours successfully hunted','🦩 Fellow degenerates'];
+function showHits(){const el=document.getElementById('hitTile');const put=n=>{el.innerHTML=`<div class="hit-l">${HIT_LINES[Math.floor(Math.random()*HIT_LINES.length)]}</div><div class="hit-n">${n.toLocaleString()}</div>`;el.style.display=''};
+if(HITS!==null)return put(HITS);el.style.display='none';fetch('https://abacus.jasoncameron.dev/get/'+HIT_NS+'/visits').then(r=>r.json()).then(d=>{if(typeof d.value==='number'){HITS=d.value;put(HITS)}}).catch(()=>{})}
+function openShare(){const done=document.getElementById('a2hsDone');done.style.display=isStandalone()?'block':'none';showHits();document.getElementById('shareModal').classList.add('active');document.body.style.overflow='hidden'}
 function closeShare(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('shareModal').classList.remove('active');document.body.style.overflow=''}
 function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied'),()=>toast(SHARE_URL))}catch(e){toast(SHARE_URL)}}
 function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
-function installApp(){{const h=document.getElementById('a2hsHelp');h.scrollIntoView({behavior:'smooth',block:'center'});h.style.boxShadow='0 0 0 3px var(--coral)';setTimeout(()=>h.style.boxShadow='',1800)}}
 if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});if(window.caches)caches.keys().then(k=>k.forEach(n=>caches.delete(n))).catch(()=>{});
 setInterval(render,60000);init();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>

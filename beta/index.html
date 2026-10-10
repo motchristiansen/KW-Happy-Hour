@@ -138,7 +138,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .cs-num{flex:0 0 26px;height:26px;border-radius:50%;background:var(--ocean);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
 .cs-body{flex:1;min-width:0}.cs-head{font-size:14px}.cs-walk{font-size:11px;color:var(--nearby);margin-left:6px;font-weight:600}
 .cs-line{font-size:12px;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-#crawlBtns{margin-top:14px}.crawl-shuffle{width:100%;padding:12px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+#crawlBtns{margin-top:14px}
 .ffcard{display:flex;margin:16px 16px 0;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#6a2c91,#b8860b);color:#fff;box-shadow:0 2px 8px var(--shadow)}
 .ffl{flex:1;min-width:0;padding:12px 14px}.fft{font-size:15px;font-weight:700}.ffs{font-size:12px;opacity:.9;margin-top:1px}
 .chips{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
@@ -147,6 +147,16 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .ffr{flex:0 0 92px;border:none;border-left:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.14);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:8px}
 .ffr:active{background:rgba(0,0,0,.25)}.ffr .cb-ic{font-size:24px;line-height:1}
 @media(min-width:600px){.ffcard{max-width:568px;margin:16px auto 0}}
+.cp-q{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin:4px 0 8px}
+.cp-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.copt{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:9px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer}
+.copt.on{background:var(--ocean);border-color:var(--ocean);color:#fff}
+.cp-seg{display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.cseg{flex:1;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px;border:none;background:#fff;color:var(--text);cursor:pointer}
+.cseg+.cseg{border-left:1.5px solid var(--border)}.cseg.on{background:var(--ocean);color:#fff}
+.cp-go{width:100%;padding:14px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
+.cp-go:disabled{opacity:.4}
+#crawlShuffle{margin-top:-4px}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -197,8 +207,16 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <button class="modal-close" onclick="closeShare()">Close</button></div></div>
 <div class="toast" id="toast"></div>
 <div class="modal-overlay" id="crawlModal" onclick="closeCrawl(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
-<div class="modal-header"><h2>Your bar crawl</h2><div class="modal-days" id="crawlSub"></div></div>
-<div class="modal-body"><div id="crawlList"></div><div class="share-btns" id="crawlBtns"><button class="btn-primary" onclick="walkCrawl()">Walk it</button><button class="btn-secondary" onclick="shareCrawl()">Share crawl</button></div><button class="btn-secondary crawl-shuffle" onclick="buildCrawl(true)">🔀 Shuffle</button></div>
+<div class="modal-header"><h2 id="crawlTitle">Build your crawl</h2><div class="modal-days" id="crawlSub"></div></div>
+<div class="modal-body">
+<div id="crawlPrefs"><div class="cp-q">I'm into</div><div class="cp-opts" id="cpInto">
+<button class="copt" data-v="drinks" onclick="cpInto('drinks')">Drink deals</button><button class="copt" data-v="food" onclick="cpInto('food')">Food deals</button><button class="copt" data-v="music" onclick="cpInto('music')">Live bands</button><button class="copt" data-v="dj" onclick="cpInto('dj')">DJs / dancing</button><button class="copt" data-v="fest" onclick="cpInto('fest')">Fest events</button></div>
+<div class="cp-q">Stops</div><div class="cp-seg" id="cpStops"><button class="cseg" data-v="3" onclick="cpSet('stops',3)">3</button><button class="cseg" data-v="4" onclick="cpSet('stops',4)">4</button><button class="cseg" data-v="5" onclick="cpSet('stops',5)">5</button></div>
+<div class="cp-q">Time at each stop</div><div class="cp-seg" id="cpDur"><button class="cseg" data-v="0.75" onclick="cpSet('dur',0.75)">45 min</button><button class="cseg" data-v="1" onclick="cpSet('dur',1)">1 hr</button><button class="cseg" data-v="1.5" onclick="cpSet('dur',1.5)">1.5 hrs</button></div>
+<button class="btn-primary cp-go" id="cpGo" onclick="goCrawl()">Build my crawl</button></div>
+<div id="crawlRes" style="display:none"><div id="crawlList"></div><div class="share-btns" id="crawlBtns"><button class="btn-primary" onclick="walkCrawl()">Walk it</button><button class="btn-secondary" onclick="shareCrawl()">Share crawl</button></div>
+<div class="share-btns" id="crawlShuffle"><button class="btn-secondary" onclick="buildCrawl(true)">Shuffle</button><button class="btn-secondary" onclick="crawlView('prefs')">Change picks</button></div></div>
+</div>
 <button class="modal-close" onclick="closeCrawl()">Close</button></div></div>
 <div class="modal-overlay" id="placesModal" onclick="closePlaces(event)"><div class="modal places-modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header"><h2>Filter Places</h2></div><div class="places-list" id="placesList"></div><div class="places-actions"><button class="btn-secondary" onclick="setAllPlaces(true)">All</button><button class="btn-secondary" onclick="setAllPlaces(false)">None</button><button class="btn-primary" onclick="applyPlacesFilter()">Apply</button></div></div></div>
 <script>
@@ -376,34 +394,54 @@ function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchPa
  if(!DL)return;const el=document.querySelector('.pcard[data-k="'+CSS.escape(DL.k)+'"]');
  if(el){DLdone=true;const go=()=>{const e=document.querySelector('.pcard[data-k="'+CSS.escape(DL.k)+'"]');if(e){e.scrollIntoView({block:'center'});e.classList.add('flash');setTimeout(()=>e.classList.remove('flash'),2600)}};go();setTimeout(go,700);setTimeout(go,1600)}
  else if(MUSIC.length){DLdone=true;toast("That spot isn't showing with your current filters")}}
-/* ---------- bar crawl ---------- */
+/* ---------- bar crawl (with preferences) ---------- */
 let CRAWL=null,LASTCRAWL=new Set();
+const CP_DEF={into:['drinks','music'],stops:4,dur:1};
+function cpGet(){try{const c=JSON.parse(localStorage.getItem('kw2_crawl')||'null');if(c&&c.into&&c.into.length)return c}catch(e){}return {...CP_DEF,into:[...CP_DEF.into]}}
+let CP=cpGet();
+function cpSave(){try{localStorage.setItem('kw2_crawl',JSON.stringify(CP))}catch(e){}}
+function cpRender(){document.querySelectorAll('#cpInto .copt').forEach(b=>b.classList.toggle('on',CP.into.includes(b.dataset.v)));
+ document.querySelectorAll('#cpStops .cseg').forEach(b=>b.classList.toggle('on',+b.dataset.v===CP.stops));
+ document.querySelectorAll('#cpDur .cseg').forEach(b=>b.classList.toggle('on',+b.dataset.v===CP.dur));
+ document.getElementById('cpGo').disabled=!CP.into.length}
+function cpInto(v){const i=CP.into.indexOf(v);i<0?CP.into.push(v):CP.into.splice(i,1);cpRender()}
+function cpSet(k,v){CP[k]=v;cpRender()}
+function short(s,n){s=String(s||'');return s.length>n?s.slice(0,n-1).trim()+'\u2026':s}
 function crawlCandidates(date,wd){const its=[];
- if(wantHH())V.forEach((v,vi)=>{if(isHidden(v.n)||!v.lat)return;v.h.forEach(h=>{if(matchDay(h.d,wd))its.push({k:placeKey(v.n),ty:'hh',s:h.s,e:h.e,txt:v.fo||v.dr,lat:v.lat,lng:v.lng,a:v.a})})});
- FF.forEach(x=>{if(x.dt!==date||isHidden(x.l)||!x.lat)return;if(!wantFF(x))return;its.push({k:placeKey(x.l),ty:'ff',s:x.s,e:endOf(x),txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
- if(wantMU())MUSIC.forEach(x=>{if(x.dt!==date||isHidden(x.v)||x.lat==null||x.t!=='LIVE')return;its.push({k:placeKey(x.v),ty:'mu',s:x.s,e:x.e!=null?x.e:x.s+3,txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
+ V.forEach(v=>{if(isHidden(v.n)||!v.lat)return;v.h.forEach(h=>{if(matchDay(h.d,wd))its.push({k:placeKey(v.n),ty:'hh',s:h.s,e:h.e,dr:v.dr,fo:v.fo,lat:v.lat,lng:v.lng,a:v.a})})});
+ FF.forEach(x=>{if(x.dt!==date||isHidden(x.l)||!x.lat)return;if(x.ad&&!((x.ad===1&&FOCUS.adult)||(x.ad===2&&FOCUS.men)))return;its.push({k:placeKey(x.l),ty:'ff',s:x.s,e:endOf(x),txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
+ MUSIC.forEach(x=>{if(x.dt!==date||isHidden(x.v)||x.lat==null||(x.t!=='LIVE'&&x.t!=='DJ'))return;its.push({k:placeKey(x.v),ty:x.t==='DJ'?'dj':'mu',s:x.s,e:x.e!=null?x.e:x.s+3,txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
  const P=buildPlaces(),nm={};P.ent.forEach(e=>nm[e.k]=e.n);const pl={};
  its.forEach(i=>{const p=pl[i.k]||(pl[i.k]={k:i.k,name:nm[i.k]||i.k,lat:i.lat,lng:i.lng,a:i.a||'',items:[]});p.items.push(i);if(!p.a&&i.a)p.a=i.a});return Object.values(pl)}
-function buildCrawl(shuffle){const isT=document.getElementById('dayFilter').value==='all'||parseInt(document.getElementById('dayFilter').value)===appNow().getDay();
- const date=isT?todayStr():viewDate(),wd=new Date(date+'T12:00').getDay();let T=isT?Math.max(hourNow(),12):17;T=Math.ceil(T*4)/4;
- const pls=crawlCandidates(date,wd),W={hh:3,mu:2,ff:1.5},rnd=()=>shuffle?Math.random()*3.5:Math.random()*0.3;
+function whyLines(act,into){const out=[];const has=v=>into.includes(v);
+ act.forEach(i=>{if(i.ty==='hh'){if(has('drinks')&&i.dr)out.push({c:'drinks',t:'\uD83C\uDF78 '+short(i.dr,70)});if(has('food')&&i.fo)out.push({c:'food',t:'\uD83C\uDF7D\uFE0F '+short(i.fo,70)})}
+  else if(i.ty==='mu'&&has('music'))out.push({c:'music',t:'\uD83C\uDFB5 '+tStr(i.s)+' '+i.txt});
+  else if(i.ty==='dj'&&has('dj'))out.push({c:'dj',t:'\uD83C\uDFA7 '+tStr(i.s)+' '+i.txt});
+  else if(i.ty==='ff'&&has('fest'))out.push({c:'fest',t:'\uD83C\uDFAD '+tStr(i.s)+' '+i.txt})});return out}
+function buildCrawl(shuffle){const dv=document.getElementById('dayFilter').value,isT=dv==='all'||parseInt(dv)===appNow().getDay();
+ const date=isT?todayStr():viewDate(),wd=new Date(date+'T12:00').getDay(),dur=CP.dur;let T=isT?Math.max(hourNow(),12):17;T=Math.ceil(T*4)/4;
+ const pls=crawlCandidates(date,wd),rnd=()=>shuffle?Math.random()*3:Math.random()*0.3;
  const near=nearbyActive&&userLat!=null&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;let prev=near?{lat:userLat,lng:userLng}:null;const stops=[],used=new Set();
- for(let n=0;n<4;n++){let best=null;
-  for(const rad of [0.3,0.5]){for(const p of pls){if(used.has(p.k))continue;const act=p.items.filter(i=>i.s<T+0.75&&i.e>T+0.25);if(!act.length)continue;
+ for(let n=0;n<CP.stops;n++){let best=null;
+  for(const rad of [0.3,0.5]){for(const p of pls){if(used.has(p.k)||stops.some(s=>distMi(s.p.lat,s.p.lng,p.lat,p.lng)<0.02))continue;const act=p.items.filter(i=>i.s<T+dur*0.75&&i.e>T+dur*0.25);if(!act.length)continue;
+    const why=whyLines(act,CP.into);const cats=new Set(why.map(w=>w.c));if(!cats.size)continue;
     const d=prev?distMi(prev.lat,prev.lng,p.lat,p.lng):0;if(prev&&d>rad)continue;
-    const sc=Math.max(...act.map(i=>W[i.ty]))+(act.length>1?0.6:0)-d*4+rnd()-(shuffle&&LASTCRAWL.has(p.k)?2:0);if(!best||sc>best.sc)best={p,act,d,sc}}if(best)break}
-  if(!best)break;used.add(best.p.k);stops.push({...best,T});prev=best.p;T+=1}
+    const sc=cats.size*2-d*4+rnd()-(shuffle&&LASTCRAWL.has(p.k)?2:0);if(!best||sc>best.sc)best={p,act,why,d,sc}}if(best)break}
+  if(!best)break;used.add(best.p.k);stops.push({...best,T});prev=best.p;T+=dur}
  CRAWL={stops,date,start:near?{lat:userLat,lng:userLng}:null};LASTCRAWL=new Set(stops.map(s=>s.p.k));
- const L=document.getElementById('crawlList'),B=document.getElementById('crawlBtns');
+ const L=document.getElementById('crawlList'),B=document.getElementById('crawlBtns'),S=document.getElementById('crawlShuffle');
  document.getElementById('crawlSub').textContent=new Date(date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})+(near?' \u00B7 starting near you':'');
- if(stops.length<2){L.innerHTML='<div class="detail-text" style="margin-bottom:12px">Not enough going on within walking distance for a crawl right now. Try a later time, another day, or turn some toggles back on.</div>';B.style.display='none';return}
- B.style.display='';L.innerHTML=stops.map((s,i)=>`<div class="crawl-stop"><div class="cs-num">${i+1}</div><div class="cs-body"><div class="cs-head"><b>${tStr(s.T)}</b> \u00B7 ${esc(s.p.name)}${s.d&&i?`<span class="cs-walk">${s.d<0.1?'< 0.1':s.d.toFixed(1)} mi walk</span>`:''}</div>${s.act.slice(0,2).map(a=>`<div class="cs-line">${esc(lineTxt(a,a.ty!=='hh'))}</div>`).join('')}</div></div>`).join('')}
-function openCrawl(){buildCrawl(false);document.getElementById('crawlModal').classList.add('active');document.body.style.overflow='hidden'}
+ if(stops.length<2){L.innerHTML='<div class="detail-text" style="margin-bottom:12px">Not enough of what you picked within walking distance right now. Try adding more picks, a later time, or another day.</div>';B.style.display='none';S.style.display='none';return}
+ B.style.display='';S.style.display='';L.innerHTML=stops.map((s,i)=>`<div class="crawl-stop"><div class="cs-num">${i+1}</div><div class="cs-body"><div class="cs-head"><b>${tStr(s.T)}</b> \u00B7 ${esc(s.p.name)}${s.d&&i?`<span class="cs-walk">${s.d<0.1?'< 0.1':s.d.toFixed(1)} mi walk</span>`:''}</div>${s.why.slice(0,2).map(w=>`<div class="cs-line">${esc(w.t)}</div>`).join('')}</div></div>`).join('')}
+function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';
+ document.getElementById('crawlTitle').textContent=v==='prefs'?'Build your crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Pick what you\u2019re into'}
+function openCrawl(){CP=cpGet();cpRender();crawlView('prefs');document.getElementById('crawlModal').classList.add('active');document.body.style.overflow='hidden'}
+function goCrawl(){if(!CP.into.length)return;cpSave();LASTCRAWL=new Set();buildCrawl(false);crawlView('res')}
 function closeCrawl(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('crawlModal').classList.remove('active');document.body.style.overflow=''}
 function crawlMapURL(){const s=CRAWL.stops,ll=p=>p.lat+','+p.lng,o=CRAWL.start?ll(CRAWL.start):ll(s[0].p),dst=ll(s[s.length-1].p),mid=(CRAWL.start?s.slice(0,-1):s.slice(1,-1)).map(x=>ll(x.p)).join('|');
  return 'https://www.google.com/maps/dir/?api=1&travelmode=walking&origin='+o+'&destination='+dst+(mid?'&waypoints='+encodeURIComponent(mid):'')}
 function walkCrawl(){if(CRAWL&&CRAWL.stops.length)window.open(crawlMapURL(),'_blank')}
-function shareCrawl(){if(!CRAWL||!CRAWL.stops.length)return;const txt='\uD83D\uDDFA\uFE0F Bar crawl tonight:\n'+CRAWL.stops.map((s,i)=>(i+1)+'. '+tStr(s.T)+' '+s.p.name+' \u2013 '+lineTxt(s.act[0],s.act[0].ty!=='hh')).join('\n')+'\n\nRoute: '+crawlMapURL();
+function shareCrawl(){if(!CRAWL||!CRAWL.stops.length)return;const txt='\uD83D\uDDFA\uFE0F Bar crawl:\n'+CRAWL.stops.map((s,i)=>(i+1)+'. '+tStr(s.T)+' '+s.p.name+(s.why[0]?' \u2013 '+s.why[0].t:'')).join('\n')+'\n\nRoute: '+crawlMapURL();
  if(navigator.share)navigator.share({title:'Bar crawl',text:txt,url:pageURL()}).catch(()=>{});else{try{navigator.clipboard.writeText(txt+'\n'+pageURL()).then(()=>toast('Crawl copied'))}catch(e){}}}
 
 function placeCard(c){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'};const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.fa||c.name+', Key West, FL')}`;

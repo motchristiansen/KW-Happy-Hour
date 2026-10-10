@@ -160,6 +160,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .ffr{justify-content:flex-start!important;gap:0!important;padding:12px 6px 8px!important;text-align:center}
 .ffr-t{font-size:15px;font-weight:700;line-height:1.25}
 .ffr-ic{flex:1;display:flex;align-items:center;justify-content:center;padding-top:2px}
+.cs-short{font-size:12px;color:#9a6a12;background:#fef3e0;border-radius:6px;padding:6px 10px;margin-bottom:6px}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -212,7 +213,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="modal-overlay" id="crawlModal" onclick="closeCrawl(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
 <div class="modal-header"><h2 id="crawlTitle">Build your crawl</h2><div class="modal-days" id="crawlSub"></div></div>
 <div class="modal-body">
-<div id="crawlPrefs"><div class="cp-q">I'm into</div><div class="cp-opts" id="cpInto">
+<div id="crawlPrefs"><div class="cp-q">Must-haves</div><div class="cp-opts" id="cpInto">
 <button class="copt" data-v="drinks" onclick="cpInto('drinks')">Drink deals</button><button class="copt" data-v="food" onclick="cpInto('food')">Food deals</button><button class="copt" data-v="music" onclick="cpInto('music')">Live bands</button><button class="copt" data-v="dj" onclick="cpInto('dj')">DJs / dancing</button><button class="copt" data-v="fest" onclick="cpInto('fest')">Fest events</button></div>
 <div class="cp-q">Stops</div><div class="cp-seg" id="cpStops"><button class="cseg" data-v="3" onclick="cpSet('stops',3)">3</button><button class="cseg" data-v="4" onclick="cpSet('stops',4)">4</button><button class="cseg" data-v="5" onclick="cpSet('stops',5)">5</button></div>
 <div class="cp-q">Time at each stop</div><div class="cp-seg" id="cpDur"><button class="cseg" data-v="0.75" onclick="cpSet('dur',0.75)">45 min</button><button class="cseg" data-v="1" onclick="cpSet('dur',1)">1 hr</button><button class="cseg" data-v="1.5" onclick="cpSet('dur',1.5)">1.5 hrs</button></div>
@@ -427,17 +428,17 @@ function buildCrawl(shuffle){const dv=document.getElementById('dayFilter').value
  const near=nearbyActive&&userLat!=null&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;let prev=near?{lat:userLat,lng:userLng}:null;const stops=[],used=new Set();
  for(let n=0;n<CP.stops;n++){let best=null;
   for(const rad of [0.3,0.5]){for(const p of pls){if(used.has(p.k)||stops.some(s=>distMi(s.p.lat,s.p.lng,p.lat,p.lng)<0.02))continue;const act=p.items.filter(i=>i.s<T+dur*0.75&&i.e>T+dur*0.25);if(!act.length)continue;
-    const why=whyLines(act,CP.into);const cats=new Set(why.map(w=>w.c));if(!cats.size)continue;
+    const why=whyLines(act,CP.into);const cats=new Set(why.map(w=>w.c));if(!CP.into.every(c=>cats.has(c)))continue;
     const d=prev?distMi(prev.lat,prev.lng,p.lat,p.lng):0;if(prev&&d>rad)continue;
-    const sc=cats.size*2-d*4+rnd()-(shuffle&&LASTCRAWL.has(p.k)?2:0);if(!best||sc>best.sc)best={p,act,why,d,sc}}if(best)break}
+    const sc=why.length*0.5-d*4+rnd()-(shuffle&&LASTCRAWL.has(p.k)?2:0);if(!best||sc>best.sc)best={p,act,why,d,sc}}if(best)break}
   if(!best)break;used.add(best.p.k);stops.push({...best,T});prev=best.p;T+=dur}
  CRAWL={stops,date,start:near?{lat:userLat,lng:userLng}:null};LASTCRAWL=new Set(stops.map(s=>s.p.k));
  const L=document.getElementById('crawlList'),B=document.getElementById('crawlBtns'),S=document.getElementById('crawlShuffle');
  document.getElementById('crawlSub').textContent=new Date(date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})+(near?' \u00B7 starting near you':'');
- if(stops.length<2){L.innerHTML='<div class="detail-text" style="margin-bottom:12px">Not enough of what you picked within walking distance right now. Try adding more picks, a later time, or another day.</div>';B.style.display='none';S.style.display='none';return}
- B.style.display='';S.style.display='';L.innerHTML=stops.map((s,i)=>`<div class="crawl-stop"><div class="cs-num">${i+1}</div><div class="cs-body"><div class="cs-head"><b>${tStr(s.T)}</b> \u00B7 ${esc(s.p.name)}${s.d&&i?`<span class="cs-walk">${s.d<0.1?'< 0.1':s.d.toFixed(1)} mi walk</span>`:''}</div>${s.why.slice(0,2).map(w=>`<div class="cs-line">${esc(w.t)}</div>`).join('')}</div></div>`).join('')}
+ if(stops.length<2){L.innerHTML='<div class="detail-text" style="margin-bottom:12px">Couldn\u2019t find enough walkable stops with all your must-haves right now. Try fewer must-haves, a later time, or another day.</div>';B.style.display='none';S.style.display='';S.firstElementChild.style.display='none';return}
+ B.style.display='';S.style.display='';S.firstElementChild.style.display='';L.innerHTML=(stops.length<CP.stops?`<div class="cs-short">Only ${stops.length} walkable stops have all your must-haves right now.</div>`:'')+stops.map((s,i)=>`<div class="crawl-stop"><div class="cs-num">${i+1}</div><div class="cs-body"><div class="cs-head"><b>${tStr(s.T)}</b> \u00B7 ${esc(s.p.name)}${s.d&&i?`<span class="cs-walk">${s.d<0.1?'< 0.1':s.d.toFixed(1)} mi walk</span>`:''}</div>${s.why.slice(0,2).map(w=>`<div class="cs-line">${esc(w.t)}</div>`).join('')}</div></div>`).join('')}
 function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';
- document.getElementById('crawlTitle').textContent=v==='prefs'?'Build your crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Pick what you\u2019re into'}
+ document.getElementById('crawlTitle').textContent=v==='prefs'?'Build your crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Every stop will have all of these'}
 function openCrawl(){CP=cpGet();cpRender();crawlView('prefs');document.getElementById('crawlModal').classList.add('active');document.body.style.overflow='hidden'}
 function goCrawl(){if(!CP.into.length)return;cpSave();LASTCRAWL=new Set();buildCrawl(false);crawlView('res')}
 function closeCrawl(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('crawlModal').classList.remove('active');document.body.style.overflow=''}

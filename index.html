@@ -152,10 +152,11 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 /* layout overrides (must stay last) */
 .filters{flex-wrap:nowrap;align-items:stretch;gap:6px}
 .filter-select{font-size:13px;padding:10px 24px 10px 10px;background-position:right 8px center}
-.filters .filter-select:nth-child(2){margin-right:auto}
+.filter-select{flex:1 1 0}
 .filter-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;font-size:13px;padding:10px 10px;white-space:nowrap}
-#placesBtn .plt{display:none}
-#placesBtn{padding:10px 9px}
+#placesBtn .pgear{display:none}
+#placesBtn{padding:10px 10px}
+@media(max-width:399px){#placesBtn .pgear{display:inline}#placesBtn .plt{display:none}}
 #shareBtn .plt{display:inline}
 .pcount{padding:1px 5px;margin-left:2px}
 @media(max-width:379px){.filters{gap:4px}.filter-btn{padding:10px 7px}#placesBtn{padding:10px 7px}.filter-select{padding-left:8px;padding-right:21px;background-position:right 6px center}}
@@ -178,7 +179,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
       <option value="evening">🌅 Evening 4p–9p</option>
       <option value="late">🌙 Late 9p–4a</option>
     </select>
-    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places">⚙<span class="plt"> Places</span></button>
+    <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places"><span class="pgear">⚙</span><span class="plt">Places</span></button>
     <button class="filter-btn" id="shareBtn" onclick="openShare()" aria-label="Share"><svg class="qri" viewBox="0 0 9 9" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h3v3H0zM6 0h3v3H6zM0 6h3v3H0z"/><path fill="#0a5e6b" d="M1 1h1v1H1zM7 1h1v1H7zM1 7h1v1H1z"/><path fill="currentColor" d="M4 0h1v2H4zM4 3h2v1H4zM3 4h1v1H3zM5 5h1v1H5zM7 4h2v1H7zM4 6h1v3H4zM6 6h1v1H6zM8 6h1v3H8zM6 8h1v1H6z"/></svg><span class="plt"> Share</span></button>
   </div>
 </div>
@@ -390,10 +391,10 @@ function openPlacesFilter(){const P=buildPlaces(),l=document.getElementById('pla
 function closePlaces(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placesModal').classList.remove('active');document.body.style.overflow=''}
 function setAllPlaces(v){document.querySelectorAll('#placesList input[type="checkbox"]').forEach(x=>x.checked=v)}
 function applyPlacesFilter(){hiddenPlaces=new Set();document.querySelectorAll('#placesList input[type="checkbox"]').forEach(c=>{if(!c.checked)hiddenPlaces.add(c.dataset.k)});try{localStorage.setItem('kw2_hidden',JSON.stringify([...hiddenPlaces]))}catch(e){}updatePlacesBtn();closePlaces();render()}
-function updatePlacesBtn(){const b=document.getElementById('placesBtn'),P=buildPlaces(),tot=P.ent.length,hid=P.ent.filter(e=>hiddenPlaces.has(e.k)).length;b.classList.toggle('active',hid>0);b.innerHTML=`\u2699<span class="plt"> Places</span><span class="pcount">${tot-hid}</span>`}
+function updatePlacesBtn(){const b=document.getElementById('placesBtn'),P=buildPlaces(),tot=P.ent.length,hid=P.ent.filter(e=>hiddenPlaces.has(e.k)).length;b.classList.toggle('active',hid>0);b.innerHTML=`<span class="pgear">\u2699</span><span class="plt">Places</span><span class="pcount">${tot-hid}</span>`}
 window.addEventListener('scroll',()=>{document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
 function shortSel(id,fn){const s=document.getElementById(id);const prep=()=>[...s.options].forEach(o=>{if(!o.dataset.l){o.dataset.l=o.textContent;o.dataset.s=fn(o.textContent)}});const sh=()=>{prep();[...s.options].forEach(o=>o.textContent=o.dataset.s)},lg=()=>{prep();[...s.options].forEach(o=>o.textContent=o.dataset.l)};s.addEventListener('focus',lg);s.addEventListener('mousedown',lg);s.addEventListener('touchstart',lg,{passive:true});s.addEventListener('change',()=>{sh();s.blur();fitSels()});s.addEventListener('blur',()=>{sh();fitSels()});return ()=>{sh();fitSels()}}
-function fitSel(s){const c=fitSel.c||(fitSel.c=document.createElement('canvas').getContext('2d')),cs=getComputedStyle(s);c.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;const o=s.options[s.selectedIndex];if(!o)return;const txt=o.dataset&&o.dataset.s?o.dataset.s:o.textContent;s.style.width=Math.ceil(c.measureText(txt).width+parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+6)+'px'}
+function fitSel(s){const c=fitSel.c||(fitSel.c=document.createElement('canvas').getContext('2d')),cs=getComputedStyle(s);c.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;const o=s.options[s.selectedIndex];if(!o)return;const txt=o.dataset&&o.dataset.s?o.dataset.s:o.textContent;s.style.width='';s.style.minWidth=Math.ceil(c.measureText(txt).width+parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+6)+'px'}
 function fitSels(){['dayFilter','timeFilter'].forEach(i=>fitSel(document.getElementById(i)))}
 const shortTime=shortSel('timeFilter',x=>x.replace(/^[^A-Za-z]+/,'').replace(/\s+\d.*$/,''));
 const SHARE_URL='https://motchristiansen.github.io/KW-Happy-Hour/';

@@ -54,7 +54,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .qri{width:17px;height:17px}
 .hgrid{display:grid;grid-template-columns:auto auto;gap:6px;flex-shrink:0}
 .pw{cursor:pointer}.pw.loading{opacity:.5;pointer-events:none}
-.pill{position:relative;width:72px;height:28px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding-left:24px;font-size:12px;font-weight:700;letter-spacing:.3px;color:rgba(255,255,255,.75);transition:background .25s,padding .25s;user-select:none}
+.pill{position:relative;width:82px;height:28px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding-left:24px;font-size:12px;font-weight:700;letter-spacing:.3px;color:rgba(255,255,255,.75);transition:background .25s,padding .25s;user-select:none}
 .pill .th{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .25s}
 .pill.on{padding-left:0;padding-right:24px;color:#fff}
 .pill.on .th{left:calc(100% - 25px)}
@@ -169,7 +169,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="header">
   <div class="header-top">
     <h1>🌴 KW<br><span>Happy Hour</span></h1>
-    <div class="hright"><div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍸</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe note">♫</span></span></div></div></div>
+    <div class="hright"><div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍸</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Nearby</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe note">♫</span></span></div></div></div>
     <div class="current-info" id="currentInfo"></div>
     </div>
   </div>

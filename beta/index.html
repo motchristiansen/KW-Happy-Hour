@@ -129,16 +129,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .pl-t{flex:0 0 auto;font-weight:700;color:var(--ocean);font-size:12px}
 .pl-now{flex:0 0 auto;font-size:9px;font-weight:800;letter-spacing:.6px;color:#fff;background:var(--coral);border-radius:4px;padding:1px 5px}
 .pl-x{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
-.ffrow{display:flex;gap:10px;margin:16px 16px 0;align-items:stretch}
-.ffrow .ff-banner{margin:0;flex:1;min-width:0;max-width:none}
-.ffsub{font-size:12px;opacity:.9;margin-top:1px}
-.ffrow .tgrid{justify-content:space-between;gap:6px}
-.ffrow .tgrid .toggle-wrap{gap:4px}.ffrow .tgrid .toggle-label{letter-spacing:.2px;font-size:10.5px}
-.ffrow .tgrid .toggle-track{width:34px;height:20px}.ffrow .tgrid .toggle-thumb{width:16px;height:16px}.ffrow .tgrid .toggle-track.on .toggle-thumb{left:16px}
-.crawl-btn{flex:0 0 auto;aspect-ratio:1/1;border:none;border-radius:12px;background:linear-gradient(135deg,#0a5e6b,#0e8a8a);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:12px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;text-align:center;cursor:pointer;box-shadow:0 2px 8px var(--shadow)}
-.crawl-btn:active{transform:scale(.97)}.cb-ic{font-size:26px;line-height:1}
-@media(min-width:600px){.ffrow{max-width:568px;margin:16px auto 0}}
-@media(max-width:399px){.ffrow{gap:8px}.ffrow .ff-banner{padding:10px 10px}.ffrow .tgrid{gap:3px}.ffrow .tgrid .toggle-label{font-size:9.5px;letter-spacing:0}.ffrow .tgrid .toggle-track{width:28px;height:18px}.ffrow .tgrid .toggle-thumb{width:14px;height:14px}.ffrow .tgrid .toggle-track.on .toggle-thumb{left:12px}.crawl-btn{font-size:11px;aspect-ratio:auto;width:84px}.cb-ic{font-size:22px}}
+.ffsub{font-size:12px;opacity:.9;margin-top:1px}.cb-ic{font-size:26px;line-height:1}
 .pc-share{flex:0 0 auto;border:none;background:#e6f3f5;color:var(--ocean);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 .pc-head{align-items:center}
 .pc-note{margin-top:6px;font-size:11px;color:#9a6a12;background:#fef3e0;border-radius:6px;padding:4px 8px}
@@ -148,6 +139,14 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .cs-body{flex:1;min-width:0}.cs-head{font-size:14px}.cs-walk{font-size:11px;color:var(--nearby);margin-left:6px;font-weight:600}
 .cs-line{font-size:12px;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 #crawlBtns{margin-top:14px}.crawl-shuffle{width:100%;padding:12px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.ffcard{display:flex;margin:16px 16px 0;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#6a2c91,#b8860b);color:#fff;box-shadow:0 2px 8px var(--shadow)}
+.ffl{flex:1;min-width:0;padding:12px 14px}.fft{font-size:15px;font-weight:700}.ffs{font-size:12px;opacity:.9;margin-top:1px}
+.chips{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.chip{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:5px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.55);background:transparent;color:rgba(255,255,255,.9);cursor:pointer}
+.chip.on{background:#fff;color:#6a2c91;border-color:#fff}
+.ffr{flex:0 0 92px;border:none;border-left:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.14);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:8px}
+.ffr:active{background:rgba(0,0,0,.25)}.ffr .cb-ic{font-size:24px;line-height:1}
+@media(min-width:600px){.ffcard{max-width:568px;margin:16px auto 0}}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -181,7 +180,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
     <button class="filter-btn" id="shareBtn" onclick="openShare()" aria-label="Share"><svg class="qri" viewBox="0 0 9 9" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h3v3H0zM6 0h3v3H6zM0 6h3v3H0z"/><path fill="#0a5e6b" d="M1 1h1v1H1zM7 1h1v1H7zM1 7h1v1H1z"/><path fill="currentColor" d="M4 0h1v2H4zM4 3h2v1H4zM3 4h1v1H3zM5 5h1v1H5zM7 4h2v1H7zM4 6h1v3H4zM6 6h1v1H6zM8 6h1v3H8zM6 8h1v1H6z"/></svg><span class="plt"> Share</span></button>
   </div>
 </div>
-<div class="ffrow"><div class="ff-banner"><b>🎭 Fantasy Fest Oct 16–25</b><div class="ffsub">Musical Icons &amp; Iconic Musicals</div><div class="tgrid"><div class="toggle-wrap" onclick="toggleFF()"><span class="toggle-label" style="color:#fff">Fest</span><div class="toggle-track t-ad" id="ffTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">Adult</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">Wo/Men</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div></div><button class="crawl-btn" onclick="openCrawl()"><span class="cb-ic">🗺️</span><span>Build a bar crawl</span></button></div>
+<div class="ffcard"><div class="ffl"><div class="fft">Fantasy Fest Oct 16–25</div><div class="ffs">Musical Icons &amp; Iconic Musicals</div><div class="chips"><button class="chip" id="chipFF" onclick="toggleFocus('ff')">Fest</button><button class="chip" id="chipAdult" onclick="toggleFocus('adult')">Adult</button><button class="chip" id="chipMen" onclick="toggleFocus('men')">Wo/Men</button></div></div><button class="ffr" onclick="openCrawl()"><span class="cb-ic">🗺️</span><span>Bar crawl</span></button></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
@@ -273,9 +272,13 @@ norm4(FF);
 const TRIP={2:"2026-10-20",3:"2026-10-21",4:"2026-10-22",5:"2026-10-23",6:"2026-10-24",0:"2026-10-25",1:"2026-10-19"};
 function lsOn(k){try{return localStorage.getItem(k)!=='0'}catch(e){return true}}
 function lsSet(k,v){try{localStorage.setItem(k,v?'1':'0')}catch(e){}}
-let showAdult=lsOn('kw2_adult'),showMen=lsOn('kw2_men'),showFF=lsOn('kw2_ff'),showHH=lsOn('kw2_hh');
+let showHH=lsOn('kw2_hh'),FOCUS={ff:false,adult:false,men:false};
+function anyFocus(){return FOCUS.ff||FOCUS.adult||FOCUS.men}
+function wantHH(){return showHH&&!anyFocus()}function wantMU(){return showMusic&&!anyFocus()}
+function wantFF(x){return anyFocus()?((FOCUS.ff&&!x.ad)||(FOCUS.adult&&x.ad===1)||(FOCUS.men&&x.ad===2)):true}
+function toggleFocus(k){FOCUS[k]=!FOCUS[k];syncAll();render()}
 let showMusic=lsOn('kw2_music'),MUSIC=[],MUP='';try{const c=JSON.parse(localStorage.getItem('kw_music_data')||'null');if(c){MUSIC=norm4(c.items);MUP=c.updated}}catch(e){}
-function syncAll(){[['ffTrack',showFF],['adTrack',showAdult],['menTrack',showMen],['hhTrack',showHH],['musicTrack',showMusic]].forEach(([i,v])=>document.getElementById(i).classList.toggle('on',!!v));['hhLabel','musicLabel'].forEach((i,k)=>document.getElementById(i).classList.toggle('on',k?showMusic:showHH))}
+function syncAll(){[['hhTrack',showHH],['musicTrack',showMusic]].forEach(([i,v])=>document.getElementById(i).classList.toggle('on',!!v));['hhLabel','musicLabel'].forEach((i,k)=>document.getElementById(i).classList.toggle('on',k?showMusic:showHH));[['chipFF','ff'],['chipAdult','adult'],['chipMen','men']].forEach(([i,k])=>document.getElementById(i).classList.toggle('on',FOCUS[k]))}
 function toggleHH(){showHH=!showHH;lsSet('kw2_hh',showHH);syncAll();render()}
 function toggleMusic(){showMusic=!showMusic;lsSet('kw2_music',showMusic);syncAll();render()}
 const ART={"elle haley": {"g": "Americana singer-songwriter", "b": "2025 Key West Music Award, Best Vocalist.", "fb": "https://www.facebook.com/ElleHaleyMusic", "ig": "https://www.instagram.com/ellehaleymusic"}, "cliff cody": {"g": "Country", "b": "Big-voiced Texas-born country singer-songwriter.", "yt": "https://www.youtube.com/channel/UCC1GAdfRlrjpOkssAMAy6Cg", "fb": "https://www.facebook.com/cliffcodymusic/", "ig": "https://www.instagram.com/cliffcody/"}, "dan harvey": {"g": "Solo & full band", "b": "Has played music cruises alongside Lynyrd Skynyrd, Zac Brown and Sister Hazel.", "yt": "https://www.youtube.com/@danharveyband8726", "fb": "https://www.facebook.com/danharveyband/", "ig": "https://www.instagram.com/danharveyentertainment/"}, "aaron blumer": {"g": "Singer-songwriter", "b": "Road-tested troubadour: taverns, barns, boats, three countries.", "fb": "https://www.facebook.com/profile.php?id=100031545295690", "ig": "https://www.instagram.com/aaronblumer/"}, "pierce august": {"g": "Singer-songwriter", "b": "Gritty, reflective originals; a decade in Aspen fronting Sittin' on Strings."}, "oren polak": {"g": "Eclectic covers", "b": "High-energy Irish Kevin's regular since 2016, mixes many genres."}, "reggae lou & the kind budz": {"g": "Roots reggae / calypso", "b": "Key West Music Award nominee, Best Reggae Band."}, "tommy tangie": {"g": "DJ + live trumpet", "b": "House, lounge and dance remixes with trumpet over the top."}, "gerd rube": {"g": "'70s-'80s rock covers", "b": "Bon Jovi, Def Leppard, Tom Petty, Foreigner and more, plus originals from his 21 CDs."}, "latin music on mallory": {"g": "Latin", "b": "Latin music at El Meson de Pepe's on Mallory Square."}, "benjammin": {"g": "Outlaw country / Southern rock", "b": "Marine veteran turned waterfront troubadour."}};
@@ -287,9 +290,6 @@ function openMusic(i){const x=MUSIC[i],mu=`https://www.google.com/maps/search/?a
 document.getElementById('modalHeader').innerHTML=`<h2>${esc(x.n)}</h2><div class="modal-time">\uD83D\uDD50 ${tStr(x.s)}${x.e!==null?' \u2013 '+tStr(x.e):''}</div><div class="modal-days">\uD83D\uDCC5 ${lbl}</div><div class="modal-address"><a href="${mu}" target="_blank">\uD83D\uDCCD ${esc(x.v)}${x.a?' \u2014 '+x.a:''}</a></div>`;
 const ar=artOf(x.n);document.getElementById('modalBody').innerHTML=(ar?`<div class="modal-section"><h3>\uD83C\uDFB5 Style</h3><div class="detail-text"><b>${esc(ar.g)}</b><br>${esc(ar.b)}</div></div>`:'')+((x.t==='LIVE'||x.t==='DJ')?`<div class="modal-section"><h3>${ar&&(ar.yt||ar.fb||ar.ig)?'Their pages':'Look them up'}</h3>${linkRow(x.n)}</div>`:'')+`<div class="modal-section"><h3>Type</h3><div class="detail-text">${esc(x.t)}</div></div><div class="modal-section"><h3>Source</h3><div class="detail-text" style="font-size:13px">${x.src==='LME'?'livemusiceveryday.com':'keywestconcierge.com'} (auto-updated). Lineups can change last minute.</div></div>`;
 document.getElementById('detailModal').classList.add('active');document.body.style.overflow='hidden'}
-function toggleFF(){showFF=!showFF;lsSet('kw2_ff',showFF);syncAll();render()}
-function toggleMen(){showMen=!showMen;lsSet('kw2_men',showMen);syncAll();render()}
-function toggleAdult(){showAdult=!showAdult;lsSet('kw2_adult',showAdult);syncAll();render()}
 function todayStr(){const d=appNow();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;if(dv==='all')return null;return parseInt(dv)===appNow().getDay()?todayStr():TRIP[dv]}
 function ffTime(x){return tStr(x.s)+(x.e!==null?'<br>\u2013<br>'+tStr(x.e):'')}
@@ -343,12 +343,12 @@ const KW_CENTER=[24.5551,-81.7800];
 function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}if(typeof fitSels==='function')try{fitSels()}catch(e){}updateInfo();
 const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value,C=document.getElementById('content');
 const hhToday=dayVal!=='all'&&parseInt(dayVal)===appNow().getDay();const items=[];
-if(showHH)V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dayVal==='all'||matchDay(hh.d,parseInt(dayVal))))return;if(!nowActive&&timeVal!=='all'&&!matchTime(hh.s,hh.e,timeVal))return;
+if(wantHH())V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dayVal==='all'||matchDay(hh.d,parseInt(dayVal))))return;if(!nowActive&&timeVal!=='all'&&!matchTime(hh.s,hh.e,timeVal))return;
  const st=hhToday?getStatus(hh.s,hh.e):'later';if(st==='ended')return;if(nowActive&&st!=='now'&&st!=='soon')return;
  items.push({k:placeKey(v.n),a:v.a,fa:v.fa,lat:v.lat,lng:v.lng,ty:'hh',s:hh.s,e:hh.e,st,txt:v.fo||v.dr,open:`openDetail(${vi},${hh.s},${hh.e},'${hh.d}')`})})});
 const dt=ffDate();
-if(dt){if(showFF)prep(FF,dt,x=>!x.ad||(x.ad===1&&showAdult)||(x.ad===2&&showMen)).forEach(x=>items.push({k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
- if(showMusic)prep(MUSIC,dt,()=>true).forEach(x=>items.push({k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
+if(dt){prep(FF,dt,wantFF).forEach(x=>items.push({k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
+ if(wantMU())prep(MUSIC,dt,()=>true).forEach(x=>items.push({k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
 const P=buildPlaces(),nameOf={};P.ent.forEach(e=>nameOf[e.k]=e.n);const pri={hh:0,ff:1,mu:2};
 const isToday=hhToday||dt===todayStr();const near=nearbyActive&&userLat!=null,onIsland=near&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;
 function mk(its){const cards={};its.forEach(it=>{const c=cards[it.k]||(cards[it.k]={k:it.k,name:nameOf[it.k]||it.k,items:[],lat:null,lng:null,a:'',fa:'',ap:9});c.items.push(it);if(c.lat==null&&it.lat!=null){c.lat=it.lat;c.lng=it.lng}if(it.a&&pri[it.ty]<c.ap){c.a=it.a;c.fa=it.fa;c.ap=pri[it.ty]}});
@@ -379,9 +379,9 @@ function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchPa
 /* ---------- bar crawl ---------- */
 let CRAWL=null,LASTCRAWL=new Set();
 function crawlCandidates(date,wd){const its=[];
- if(showHH)V.forEach((v,vi)=>{if(isHidden(v.n)||!v.lat)return;v.h.forEach(h=>{if(matchDay(h.d,wd))its.push({k:placeKey(v.n),ty:'hh',s:h.s,e:h.e,txt:v.fo||v.dr,lat:v.lat,lng:v.lng,a:v.a})})});
- if(showFF)FF.forEach(x=>{if(x.dt!==date||isHidden(x.l)||!x.lat)return;if(x.ad&&!((x.ad===1&&showAdult)||(x.ad===2&&showMen)))return;its.push({k:placeKey(x.l),ty:'ff',s:x.s,e:endOf(x),txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
- if(showMusic)MUSIC.forEach(x=>{if(x.dt!==date||isHidden(x.v)||x.lat==null||x.t!=='LIVE')return;its.push({k:placeKey(x.v),ty:'mu',s:x.s,e:x.e!=null?x.e:x.s+3,txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
+ if(wantHH())V.forEach((v,vi)=>{if(isHidden(v.n)||!v.lat)return;v.h.forEach(h=>{if(matchDay(h.d,wd))its.push({k:placeKey(v.n),ty:'hh',s:h.s,e:h.e,txt:v.fo||v.dr,lat:v.lat,lng:v.lng,a:v.a})})});
+ FF.forEach(x=>{if(x.dt!==date||isHidden(x.l)||!x.lat)return;if(!wantFF(x))return;its.push({k:placeKey(x.l),ty:'ff',s:x.s,e:endOf(x),txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
+ if(wantMU())MUSIC.forEach(x=>{if(x.dt!==date||isHidden(x.v)||x.lat==null||x.t!=='LIVE')return;its.push({k:placeKey(x.v),ty:'mu',s:x.s,e:x.e!=null?x.e:x.s+3,txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
  const P=buildPlaces(),nm={};P.ent.forEach(e=>nm[e.k]=e.n);const pl={};
  its.forEach(i=>{const p=pl[i.k]||(pl[i.k]={k:i.k,name:nm[i.k]||i.k,lat:i.lat,lng:i.lng,a:i.a||'',items:[]});p.items.push(i);if(!p.a&&i.a)p.a=i.a});return Object.values(pl)}
 function buildCrawl(shuffle){const isT=document.getElementById('dayFilter').value==='all'||parseInt(document.getElementById('dayFilter').value)===appNow().getDay();

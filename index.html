@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <title>KW Happy Hour</title>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
 <meta name="theme-color" content="#0a5e6b">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -193,7 +193,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="share-url" onclick="copyLink()">motchristiansen.github.io/KW-Happy-Hour</div>
 <div class="share-btns"><button class="btn-primary" onclick="sendLink()">📤 Send link</button><button class="btn-secondary" id="installBtn" onclick="installApp()">📲 Add to Home Screen</button></div>
 <div class="a2hs" id="a2hsHelp"><b>Hey!</b> We found it really handy to have this at our fingertips while walking around. Add it to your home screen so it's there when you need it. No app store, nothing to download &mdash; it's just this web page with a home-screen button.
-<div class="a2hs-steps"><div><b>iPhone</b>: tap Share <span class="ios-share">&#x2B06;&#xFE0E;</span> &rarr; <b>Add to Home Screen</b></div><div><b>Android</b>: tap the button above, or &#8942; &rarr; <b>Add to Home screen</b></div></div>
+<div class="a2hs-steps"><div><b>iPhone</b>: tap Share <span class="ios-share">&#x2B06;&#xFE0E;</span> &rarr; <b>Add to Home Screen</b></div><div><b>Android</b>: tap &#8942; (top right) &rarr; <b>Add to Home screen</b> &rarr; <b>Add</b></div></div>
 <div class="a2hs-done" id="a2hsDone">✅ You're already using it from your home screen. Nice.</div></div>
 </div>
 <button class="modal-close" onclick="closeShare()">Close</button></div></div>
@@ -396,17 +396,16 @@ function shortSel(id,fn){const s=document.getElementById(id);const prep=()=>[...
 function fitSel(s){const c=fitSel.c||(fitSel.c=document.createElement('canvas').getContext('2d')),cs=getComputedStyle(s);c.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;const o=s.options[s.selectedIndex];if(!o)return;const txt=o.dataset&&o.dataset.s?o.dataset.s:o.textContent;s.style.width=Math.ceil(c.measureText(txt).width+parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+6)+'px'}
 function fitSels(){['dayFilter','timeFilter'].forEach(i=>fitSel(document.getElementById(i)))}
 const shortTime=shortSel('timeFilter',x=>x.replace(/^[^A-Za-z]+/,'').replace(/\s+\d.*$/,''));
-const SHARE_URL='https://motchristiansen.github.io/KW-Happy-Hour/';let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
+const SHARE_URL='https://motchristiansen.github.io/KW-Happy-Hour/';
 function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
 function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function openShare(){const ib=document.getElementById('installBtn'),done=document.getElementById('a2hsDone');if(isStandalone()){ib.style.display='none';done.style.display='block'}else{ib.style.display='';done.style.display='none';ib.textContent=isIOS()?'📲 How to add (iPhone)':'📲 Add to Home Screen'}document.getElementById('shareModal').classList.add('active');document.body.style.overflow='hidden'}
+function openShare(){const ib=document.getElementById('installBtn'),done=document.getElementById('a2hsDone');if(isStandalone()){ib.style.display='none';done.style.display='block'}else{ib.style.display='';done.style.display='none';ib.textContent='📲 How to add it'}document.getElementById('shareModal').classList.add('active');document.body.style.overflow='hidden'}
 function closeShare(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('shareModal').classList.remove('active');document.body.style.overflow=''}
 function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied'),()=>toast(SHARE_URL))}catch(e){toast(SHARE_URL)}}
 function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
-function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null})}else{const h=document.getElementById('a2hsHelp');h.scrollIntoView({behavior:'smooth',block:'center'});h.style.boxShadow='0 0 0 3px var(--coral)';setTimeout(()=>h.style.boxShadow='',1800)}}
-if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+function installApp(){{const h=document.getElementById('a2hsHelp');h.scrollIntoView({behavior:'smooth',block:'center'});h.style.boxShadow='0 0 0 3px var(--coral)';setTimeout(()=>h.style.boxShadow='',1800)}}
+if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});if(window.caches)caches.keys().then(k=>k.forEach(n=>caches.delete(n))).catch(()=>{});
 setInterval(render,60000);init();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>

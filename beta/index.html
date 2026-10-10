@@ -115,8 +115,8 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .pc-name{font-size:16px;font-weight:700;flex:1;min-width:0}
 .pc-dist{font-size:11px;font-weight:700;color:var(--nearby);background:#f0e6f6;border-radius:8px;padding:1px 7px;white-space:nowrap}
 .pc-addr{display:inline-block;font-size:12px;color:var(--ocean);text-decoration:none;font-weight:500;margin:2px 0 6px}
-.pl{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #eef2f3;cursor:pointer;font-size:13px;min-width:0}
-.pl:active{background:#f5f8f9}
+.pline{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #eef2f3;cursor:pointer;font-size:13px;min-width:0}
+.pline:active{background:#f5f8f9}
 .pl-ic{flex:0 0 auto;font-size:14px}
 .pl-t{flex:0 0 auto;font-weight:700;color:var(--ocean);font-size:12px}
 .pl-now{flex:0 0 auto;font-size:9px;font-weight:800;letter-spacing:.6px;color:#fff;background:var(--coral);border-radius:4px;padding:1px 5px}
@@ -294,7 +294,17 @@ function init(){const df=document.getElementById('dayFilter');df.innerHTML='<opt
 
 function toggleNow(){nowActive=!nowActive;document.getElementById('nowTrack').classList.toggle('on',nowActive);document.getElementById('nowLabel').classList.toggle('on',nowActive);if(nowActive){savedDay=document.getElementById('dayFilter').value;savedTime=document.getElementById('timeFilter').value;document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}else{document.getElementById('dayFilter').value=savedDay;document.getElementById('timeFilter').value=savedTime}render()}
 
-function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=document.getElementById('nearTrack'),label=document.getElementById('nearLabel');if(nearbyActive){nearbyActive=false;userLat=null;userLng=null;track.classList.remove('on');label.classList.remove('on');render();return}if(!navigator.geolocation){alert('Geolocation not supported');return}wrap.classList.add('loading');navigator.geolocation.getCurrentPosition(pos=>{userLat=pos.coords.latitude;userLng=pos.coords.longitude;nearbyActive=true;wrap.classList.remove('loading');track.classList.add('on');label.classList.add('on');render()},err=>{wrap.classList.remove('loading');alert('Location access denied. Enable location in browser settings.')},{enableHighAccuracy:true,timeout:10000})}
+let geoWatch=null;
+function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=document.getElementById('nearTrack'),label=document.getElementById('nearLabel');
+if(nearbyActive||geoWatch!==null){nearbyActive=false;userLat=null;userLng=null;if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null}track.classList.remove('on');label.classList.remove('on');label.textContent='Nearby';wrap.classList.remove('loading');render();return}
+if(!navigator.geolocation){alert('Location not supported on this browser');return}
+wrap.classList.add('loading');label.textContent='Locating\u2026';let got=false;
+const onPos=pos=>{const la=pos.coords.latitude,lo=pos.coords.longitude,moved=userLat==null||distMi(userLat,userLng,la,lo)>0.012;userLat=la;userLng=lo;
+ if(!got){got=true;nearbyActive=true;wrap.classList.remove('loading');label.textContent='Nearby';track.classList.add('on');label.classList.add('on');render()}else if(moved)render()};
+const onErr=err=>{if(got)return;wrap.classList.remove('loading');label.textContent='Nearby';if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null}
+ alert(err&&err.code===1?'Location access denied. Enable location for this site in your browser settings.':'Could not get your location. Try again in a moment.')};
+navigator.geolocation.getCurrentPosition(onPos,()=>{},{enableHighAccuracy:false,maximumAge:60000,timeout:5000});
+geoWatch=navigator.geolocation.watchPosition(onPos,onErr,{enableHighAccuracy:true,maximumAge:15000,timeout:20000})}
 
 function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let info=DN[now.getDay()]+' \u2022 '+ts;document.getElementById('currentInfo').textContent=info}
 
@@ -308,19 +318,18 @@ if(showHH)V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dayVa
 const dt=ffDate();
 if(dt){if(showFF)prep(FF,dt,x=>!x.ad||(x.ad===1&&showAdult)||(x.ad===2&&showMen)).forEach(x=>items.push({k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
  if(showMusic)prep(MUSIC,dt,()=>true).forEach(x=>items.push({k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
-const P=buildPlaces(),nameOf={};P.ent.forEach(e=>nameOf[e.k]=e.n);const pri={hh:0,ff:1,mu:2},cards={};
-items.forEach(it=>{const c=cards[it.k]||(cards[it.k]={k:it.k,name:nameOf[it.k]||it.k,items:[],lat:null,lng:null,a:'',fa:'',ap:9});c.items.push(it);if(c.lat==null&&it.lat!=null){c.lat=it.lat;c.lng=it.lng}if(it.a&&pri[it.ty]<c.ap){c.a=it.a;c.fa=it.fa;c.ap=pri[it.ty]}});
-let list=Object.values(cards);const isToday=hhToday||dt===todayStr();
-const near=nearbyActive&&userLat!=null,onIsland=near&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;
-list.forEach(c=>{c.items.sort((a,b)=>a.s-b.s);c.first=Math.min(...c.items.map(i=>i.s));c.hot=c.items.some(i=>i.st==='now')?2:c.items.some(i=>i.st==='soon')?1:0;c.dist=near&&c.lat!=null?distMi(userLat,userLng,c.lat,c.lng):null});
-if(onIsland)list=list.filter(c=>c.dist!=null&&c.dist<=NEARBY_MI);
+const P=buildPlaces(),nameOf={};P.ent.forEach(e=>nameOf[e.k]=e.n);const pri={hh:0,ff:1,mu:2};
+const isToday=hhToday||dt===todayStr();const near=nearbyActive&&userLat!=null,onIsland=near&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;
+function mk(its){const cards={};its.forEach(it=>{const c=cards[it.k]||(cards[it.k]={k:it.k,name:nameOf[it.k]||it.k,items:[],lat:null,lng:null,a:'',fa:'',ap:9});c.items.push(it);if(c.lat==null&&it.lat!=null){c.lat=it.lat;c.lng=it.lng}if(it.a&&pri[it.ty]<c.ap){c.a=it.a;c.fa=it.fa;c.ap=pri[it.ty]}});
+ let l=Object.values(cards);l.forEach(c=>{c.items.sort((a,b)=>a.s-b.s);c.first=Math.min(...c.items.map(i=>i.s));c.hot=c.items.some(i=>i.st==='now')?2:c.items.some(i=>i.st==='soon')?1:0;c.dist=near&&c.lat!=null?distMi(userLat,userLng,c.lat,c.lng):null});
+ if(onIsland)l=l.filter(c=>c.dist!=null&&c.dist<=NEARBY_MI);return l}
 const byDist=(a,b)=>(a.dist==null?1e9:a.dist)-(b.dist==null?1e9:b.dist)||a.first-b.first,byTime=(a,b)=>a.first-b.first||a.name.localeCompare(b.name);
-const groups=isToday?[['\uD83D\uDD34 Happening Now \u00B7 next 2 hrs',list.filter(c=>c.hot>0)],['\uD83D\uDD35 Later',list.filter(c=>c.hot===0)]]:[['\uD83D\uDCC5 '+(dayVal==='all'?'All days':DN[parseInt(dayVal)]),list]];
+const groups=isToday?[['Happening Now \u00B7 next 2 hrs',mk(items.filter(i=>i.st==='now'||i.st==='soon'))],['Rest of today',mk(items.filter(i=>i.st!=='now'&&i.st!=='soon'))]]:[[(dayVal==='all'?'All days':DN[parseInt(dayVal)]),mk(items)]];
 const nearNote=onIsland?' \u00B7 within 5 blocks':'';let html='';
 groups.forEach(([lbl,g])=>{if(!g.length)return;g.sort(near?byDist:byTime);html+=`<div class="section-label">${lbl}${nearNote} <span class="count">${g.length}</span></div>`;g.forEach(c=>html+=placeCard(c))});
 C.innerHTML=html||`<div class="no-results"><div class="emoji">\uD83C\uDF19</div><p>${onIsland?'Nothing within 5 blocks right now.<br>Turn off Nearby to see everything.':'Nothing matches your filters.<br>Try a different time or day!'}</p></div>`}
 function placeCard(c){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'};const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.fa||c.name+', Key West, FL')}`;
-const lines=c.items.map(i=>`<div class="pl" onclick="${i.open}"><span class="pl-ic">${ic[i.ty]}</span><span class="pl-t">${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</span>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="pl-x">${esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}</div>`).join('');
+const lines=c.items.map(i=>`<div class="pline" onclick="${i.open}"><span class="pl-ic">${ic[i.ty]}</span><span class="pl-t">${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</span>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="pl-x">${esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}</div>`).join('');
 return `<div class="pcard ${c.hot===2?'hot':c.hot===1?'warm':''}"><div class="pc-head"><div class="pc-name">${esc(c.name)}</div>${c.dist!=null?`<span class="pc-dist">${c.dist<0.1?'< 0.1':c.dist.toFixed(1)} mi</span>`:''}</div><a class="pc-addr" href="${mu}" target="_blank">\uD83D\uDCCD ${esc(c.a||'Map')}</a><div class="pc-lines">${lines}</div></div>`}
 
 

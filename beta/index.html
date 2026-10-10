@@ -144,7 +144,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .chips{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .chip{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:5px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.55);background:transparent;color:rgba(255,255,255,.9);cursor:pointer}
 .chip.on{background:#fff;color:#6a2c91;border-color:#fff}
-.ffr{flex:0 0 100px;border:none;border-left:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.14);color:#fff;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;padding:12px 10px;cursor:pointer;text-align:center}
+.ffr{flex:0 0 92px;border:none;border-left:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.14);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:8px}
 .ffr:active{background:rgba(0,0,0,.25)}.ffr .cb-ic{font-size:24px;line-height:1}
 @media(min-width:600px){.ffcard{max-width:568px;margin:16px auto 0}}
 .cp-q{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin:4px 0 8px}
@@ -157,9 +157,9 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .cp-go{width:100%;padding:14px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
 .cp-go:disabled{opacity:.4}
 #crawlShuffle{margin-top:-4px}
-.cb-t{font-size:15px;font-weight:700;line-height:1.25;white-space:nowrap}
-.cb-i{flex:1;display:flex;align-items:center;justify-content:center;padding-top:6px}
-.cb-svg{width:44px;height:44px}
+.ffr{justify-content:flex-start!important;gap:0!important;padding:12px 6px 8px!important;text-align:center}
+.ffr-t{font-size:15px;font-weight:700;line-height:1.25}
+.ffr-ic{flex:1;display:flex;align-items:center;justify-content:center;padding-top:2px}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -193,7 +193,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
     <button class="filter-btn" id="shareBtn" onclick="openShare()" aria-label="Share"><svg class="qri" viewBox="0 0 9 9" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h3v3H0zM6 0h3v3H6zM0 6h3v3H0z"/><path fill="#0a5e6b" d="M1 1h1v1H1zM7 1h1v1H7zM1 7h1v1H1z"/><path fill="currentColor" d="M4 0h1v2H4zM4 3h2v1H4zM3 4h1v1H3zM5 5h1v1H5zM7 4h2v1H7zM4 6h1v3H4zM6 6h1v1H6zM8 6h1v3H8zM6 8h1v1H6z"/></svg><span class="plt"> Share</span></button>
   </div>
 </div>
-<div class="ffcard"><div class="ffl"><div class="fft">Fantasy Fest Oct 16–25</div><div class="ffs">Musical Icons &amp; Iconic Musicals</div><div class="chips"><button class="chip" id="chipFF" onclick="toggleFocus('ff')">Fest</button><button class="chip" id="chipAdult" onclick="toggleFocus('adult')">Adult</button><button class="chip" id="chipMen" onclick="toggleFocus('men')">Wo/Men</button></div></div><button class="ffr" onclick="openCrawl()" aria-label="Build a bar crawl"><span class="cb-t">Bar crawl</span><span class="cb-i"><svg class="cb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"/><path d="M19 18v.01"/></svg></span></button></div>
+<div class="ffcard"><div class="ffl"><div class="fft">Fantasy Fest Oct 16–25</div><div class="ffs">Musical Icons &amp; Iconic Musicals</div><div class="chips"><button class="chip" id="chipFF" onclick="toggleFocus('ff')">Fest</button><button class="chip" id="chipAdult" onclick="toggleFocus('adult')">Adult</button><button class="chip" id="chipMen" onclick="toggleFocus('men')">Wo/Men</button></div></div><button class="ffr" onclick="openCrawl()" aria-label="Build a bar crawl"><span class="ffr-t">Bar Crawl</span><span class="ffr-ic"><svg viewBox="0 0 24 24" width="58" height="58" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"/><path d="M19 18v.01"/></svg></span></button></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>

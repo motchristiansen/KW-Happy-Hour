@@ -6,6 +6,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <title>KW Happy Hour</title>
 <link rel="icon" href="icon-192.png">
+<meta name="description" content="Happy hours, Fantasy Fest & live music in Key West, by time and place. No app. Just tap.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="KW Happy Hour — Meet me here">
+<meta property="og:description" content="Happy hours, Fantasy Fest & live music in Key West, by time and place. No app. Just tap.">
+<meta property="og:image" content="https://motchristiansen.github.io/KW-Happy-Hour/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://motchristiansen.github.io/KW-Happy-Hour/">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0a5e6b">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,93 +26,57 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .hright{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
 .hright .current-info{margin:0;text-align:right;font-size:12px}
 .header h1{font-family:'Playfair Display',serif;font-size:clamp(24px,calc((100vw - 214px)/5.3),42px);font-weight:900;letter-spacing:-.5px;line-height:1.02}
-.header h1 span{color:var(--sunset)}
-.hdr-toggles{display:flex;gap:14px;align-items:center}
 .toggle-wrap{display:flex;align-items:center;gap:6px;cursor:pointer}
 .toggle-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.7)}
-.toggle-label.on{color:#fff}
 .toggle-track{width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.25);position:relative;transition:background .25s}
 .toggle-track.on{background:var(--ocean-dark);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
-.toggle-track.on.t-near{background:#7d3c98}
-.toggle-track.on.t-now{background:var(--coral)}
 .toggle-thumb{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .toggle-track.on .toggle-thumb{left:20px}
 .toggle-track.on.t-ad{background:var(--coral)}
 .tgrid{display:flex;gap:16px;margin-top:10px;flex-wrap:nowrap}
 .tgrid .toggle-label{white-space:nowrap}
 @media(max-width:399px){.tgrid{gap:8px;justify-content:space-between}.tgrid .toggle-wrap{gap:4px}.tgrid .toggle-label{letter-spacing:0;font-size:10.5px}.tgrid .toggle-track{width:34px;height:20px}.tgrid .toggle-thumb{width:16px;height:16px}.tgrid .toggle-track.on .toggle-thumb{left:16px}}
-.bpw{flex:0 0 auto}
-.pill.bp{width:auto;min-width:72px;padding-left:30px;padding-right:10px;background:rgba(255,255,255,.22)}
-.pill.bp.on{padding-left:10px;padding-right:30px}
-.pill.on.p-ff,.pill.on.p-ad,.pill.on.p-men{background:var(--coral)}
-.header h1 span{white-space:nowrap}
-.filter-btn{padding:10px 12px;font-size:13px;flex:0 0 auto;display:inline-flex;align-items:center;gap:4px}
-.qri{width:15px;height:15px;color:#fff}
+.header h1 span{color:var(--sunset);white-space:nowrap}
 .qr-wrap{background:#fff;border-radius:14px;padding:10px;width:min(220px,70vw);margin:0 auto 10px;box-shadow:0 2px 10px var(--shadow)}
 .qr-big{width:100%;height:auto;display:block}
 .share-url{text-align:center;font-weight:600;color:var(--ocean);font-size:14px;margin-bottom:12px;word-break:break-all}
-.share-btns{display:flex;gap:10px;margin-bottom:14px}.share-btns button{flex:1;padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.share-btns{display:flex;gap:10px;margin-bottom:14px}
+.share-btns button{flex:1;padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
 .a2hs{background:linear-gradient(135deg,#fef3e0,#fdecd0);border:1px solid #f5dbb0;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
-.a2hs-steps{margin-top:8px;font-size:13px}.a2hs-steps div{margin-top:4px}.ios-share{display:inline-block;border:1.5px solid currentColor;border-radius:3px;padding:0 3px;font-size:11px;line-height:1.3}
+.a2hs-steps{margin-top:8px;font-size:13px}
+.a2hs-steps div{margin-top:4px}
+.ios-share{display:inline-block;border:1.5px solid currentColor;border-radius:3px;padding:0 3px;font-size:11px;line-height:1.3}
 .a2hs-done{display:none;margin-top:8px;font-weight:600}
-.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#1a2a2d;color:#fff;padding:10px 16px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300}.toast.show{opacity:1}
-.pcount{font-size:11px;font-weight:700;background:rgba(255,255,255,.22);border-radius:9px;padding:1px 6px;margin-left:3px}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#1a2a2d;color:#fff;padding:10px 16px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300}
+.toast.show{opacity:1}
 .filter-btn.active .pcount{background:rgba(255,255,255,.35)}
-.pill .pe.note{font-size:19px;font-weight:700;color:#fff;filter:none;opacity:.75;line-height:1}.pill.on .pe.note{opacity:1}
-.qri{width:17px;height:17px}
+.pill .pe.note{font-size:19px;font-weight:700;color:#fff;filter:none;opacity:.75;line-height:1}
+.pill.on .pe.note{opacity:1}
+.qri{width:17px;height:17px;color:#fff}
 .hgrid{display:grid;grid-template-columns:auto auto;gap:6px;flex-shrink:0}
-.pw{cursor:pointer}.pw.loading{opacity:.5;pointer-events:none}
+.pw{cursor:pointer}
+.pw.loading{opacity:.5;pointer-events:none}
 .pill{position:relative;width:82px;height:28px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding-left:24px;font-size:12px;font-weight:700;letter-spacing:.3px;color:rgba(255,255,255,.75);transition:background .25s,padding .25s;user-select:none}
 .pill .th{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .25s}
 .pill.on{padding-left:0;padding-right:24px;color:#fff}
 .pill.on .th{left:calc(100% - 25px)}
-.pill .pe{font-size:15px;filter:grayscale(.6);opacity:.8}.pill.on .pe{filter:none;opacity:1}
-.pill.on.p-now{background:var(--coral)}.pill.on.p-hh{background:var(--sunset)}.pill.on.p-near{background:#7d3c98}.pill.on.p-music{background:#2b7bd4}
+.pill .pe{font-size:15px;filter:grayscale(.6);opacity:.8}
+.pill.on .pe{filter:none;opacity:1}
+.pill.on.p-now{background:var(--coral)}
+.pill.on.p-hh{background:var(--sunset)}
+.pill.on.p-near{background:#7d3c98}
+.pill.on.p-music{background:#2b7bd4}
 .header-top h1{min-width:0;flex:1}
-.toggle-track.on.t-hh{background:var(--sunset)}
-.toggle-track.on.t-music{background:#2b7bd4}
-.toggle-wrap.loading{opacity:.5;pointer-events:none}
 .current-info{font-size:13px;opacity:.8;margin-bottom:14px;font-weight:500}
-.filters{display:flex;gap:8px;flex-wrap:wrap}
-.filter-select{flex:0 0 auto;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px 28px 10px 12px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
 .filter-select option{color:var(--text);background:#fff}
-.filter-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px 14px;border-radius:10px;cursor:pointer;transition:background .15s;white-space:nowrap}
 .filter-btn:hover{background:rgba(255,255,255,.25)}
 .filter-btn.active{background:var(--coral);border-color:var(--coral)}
 .content{padding:16px;padding-bottom:100px}
 .section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-light);margin:20px 0 10px;display:flex;align-items:center;gap:8px}
 .section-label .count{background:var(--ocean);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px}
-.section-label .count-nearby{background:var(--nearby)}
 .no-results{text-align:center;padding:60px 20px;color:var(--text-light)}
 .no-results .emoji{font-size:48px;margin-bottom:12px}
 .no-results p{font-size:15px;line-height:1.5}
-.venue-card{background:var(--card-bg);border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:0 2px 8px var(--shadow);display:grid;grid-template-columns:70px 1fr;gap:12px;cursor:pointer;transition:transform .12s,box-shadow .12s;border-left:4px solid var(--ocean)}
-.venue-card:active{transform:scale(.985);box-shadow:0 1px 4px var(--shadow)}
-.venue-card.happening-now{border-left-color:var(--coral)}
-.venue-card.coming-soon{border-left-color:var(--sunset)}
-.venue-card.is-nearby{border-left-color:var(--nearby)}
-.venue-card.is-ended{border-left-color:#bbb;opacity:.55}
-.venue-card.is-ended .time-range{color:#999}
-.venue-time{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.venue-time .time-range{font-size:13px;font-weight:700;color:var(--ocean);line-height:1.3}
-.venue-card.happening-now .time-range{color:var(--coral)}
-.venue-card.coming-soon .time-range{color:var(--sunset)}
-.venue-card.is-nearby .time-range{color:var(--nearby)}
-.venue-time .status-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:4px;margin-top:4px}
-.status-now{background:#fde8e4;color:var(--coral)}
-.status-soon{background:#fef3e0;color:#c47f1a}
-.status-later{background:#e0f0f3;color:var(--ocean)}
-.status-nearby{background:#f0e6f6;color:var(--nearby)}
-.status-ended{background:#eee;color:#999}
-.dist-badge{font-size:10px;font-weight:600;color:var(--nearby);margin-top:2px}
-.venue-info{min-width:0}
-.venue-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.venue-name .day-badge{font-size:9px;font-weight:700;background:#e8edf0;color:var(--text-light);padding:1px 5px;border-radius:3px;white-space:nowrap}
-.venue-address{font-size:12px;color:var(--text-light);margin-bottom:6px}
-.venue-address a{color:var(--ocean);text-decoration:none;font-weight:500}
-.deal-line{font-size:12px;color:var(--text);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.deal-line+.deal-line{margin-top:2px}
-.deal-icon{margin-right:3px}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal-overlay.active{opacity:1;pointer-events:all}
 .modal{background:#fff;width:100%;max-height:85vh;border-radius:20px 20px 0 0;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);-webkit-overflow-scrolling:touch}
@@ -138,30 +110,62 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 @media(min-width:600px){.content{max-width:600px;margin:0 auto}.header>*{max-width:600px;margin-left:auto;margin-right:auto}}
 .ff-banner{margin:16px 16px 0;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,#6a2c91,#b8860b);color:#fff;font-size:12px;line-height:1.45}
 .ff-banner b{font-size:13px}
-.venue-card.is-ff{border-left-color:#d4a017}
-.venue-card.is-ff .time-range{color:#9a7300}
-.status-ff{background:#fbf0d0;color:#9a7300}
-.section-label .count-ff{background:#d4a017}
-.venue-card.is-music{border-left-color:#2b7bd4}
-.venue-card.is-music .time-range{color:#2b7bd4}
 .mlinks{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .mlinks a{font-size:11px;font-weight:600;text-decoration:none;color:var(--ocean);background:#e6f3f5;padding:3px 8px;border-radius:12px}
-.status-music{background:#e2eefb;color:#2b7bd4}
-.section-label .count-music{background:#2b7bd4}
 @media(min-width:600px){.ff-banner{max-width:568px;margin:16px auto 0}}
 .hit-tile{flex:1;background:#e8edf0;border-radius:10px;padding:8px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center}
 .hit-l{font-size:12px;font-weight:600;color:var(--text-light);line-height:1.25}
 .hit-n{font-size:22px;font-weight:800;color:var(--ocean);line-height:1.15}
+.pcard{background:var(--card-bg);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;box-shadow:0 2px 8px var(--shadow);border-left:4px solid var(--ocean)}
+.pcard.hot{border-left-color:var(--coral)}
+.pcard.warm{border-left-color:var(--sunset)}
+.pc-head{display:flex;align-items:baseline;gap:8px}
+.pc-name{font-size:16px;font-weight:700;flex:1;min-width:0}
+.pc-dist{font-size:11px;font-weight:700;color:var(--nearby);background:#f0e6f6;border-radius:8px;padding:1px 7px;white-space:nowrap}
+.pc-addr{display:inline-block;font-size:12px;color:var(--ocean);text-decoration:none;font-weight:500;margin:2px 0 6px}
+.pline{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #eef2f3;cursor:pointer;font-size:13px;min-width:0}
+.pline:active{background:#f5f8f9}
+.pl-ic{flex:0 0 auto;font-size:14px}
+.pl-t{flex:0 0 auto;font-weight:700;color:var(--ocean);font-size:12px}
+.pl-now{flex:0 0 auto;font-size:9px;font-weight:800;letter-spacing:.6px;color:#fff;background:var(--coral);border-radius:4px;padding:1px 5px}
+.pl-x{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.ffsub{font-size:12px;opacity:.9;margin-top:1px}.cb-ic{font-size:26px;line-height:1}
+.pc-share{flex:0 0 auto;border:none;background:#e6f3f5;color:var(--ocean);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.pc-head{align-items:center}
+.pc-note{margin-top:6px;font-size:11px;color:#9a6a12;background:#fef3e0;border-radius:6px;padding:4px 8px}
+.pcard.flash{box-shadow:0 0 0 3px var(--coral),0 2px 8px var(--shadow);transition:box-shadow .3s}
+.crawl-stop{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cs-num{flex:0 0 26px;height:26px;border-radius:50%;background:var(--ocean);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.cs-body{flex:1;min-width:0}.cs-head{font-size:14px}.cs-walk{font-size:11px;color:var(--nearby);margin-left:6px;font-weight:600}
+.cs-line{font-size:12px;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+#crawlBtns{margin-top:14px}
+.ffcard{display:flex;margin:16px 16px 0;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#6a2c91,#b8860b);color:#fff;box-shadow:0 2px 8px var(--shadow)}
+.ffl{flex:1;min-width:0;padding:12px 14px}.fft{font-size:15px;font-weight:700}.ffs{font-size:12px;opacity:.9;margin-top:1px}
+.chips{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.chip{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:5px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.55);background:transparent;color:rgba(255,255,255,.9);cursor:pointer}
+.chip.on{background:#fff;color:#6a2c91;border-color:#fff}
+.ffr{flex:0 0 92px;border:none;border-left:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.14);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:8px}
+.ffr:active{background:rgba(0,0,0,.25)}.ffr .cb-ic{font-size:24px;line-height:1}
+@media(min-width:600px){.ffcard{max-width:568px;margin:16px auto 0}}
+.cp-q{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin:4px 0 8px}
+.cp-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.copt{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:9px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer}
+.copt.on{background:var(--ocean);border-color:var(--ocean);color:#fff}
+.cp-seg{display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.cseg{flex:1;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px;border:none;background:#fff;color:var(--text);cursor:pointer}
+.cseg+.cseg{border-left:1.5px solid var(--border)}.cseg.on{background:var(--ocean);color:#fff}
+.cp-go{width:100%;padding:14px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
+.cp-go:disabled{opacity:.4}
+#crawlShuffle{margin-top:-4px}
 /* layout overrides (must stay last) */
-.filters{flex-wrap:nowrap;align-items:stretch;gap:6px}
-.filter-select{font-size:13px;padding:10px 24px 10px 10px;background-position:right 8px center}
-.filter-select{flex:1 1 0}
-.filter-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;font-size:13px;padding:10px 10px;white-space:nowrap}
+.filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
+.filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
+.filter-btn{padding:10px 10px;font-size:13px;flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;border-radius:10px;cursor:pointer;transition:background .15s;white-space:nowrap;justify-content:center}
 #placesBtn .pgear{display:none}
 #placesBtn{padding:10px 10px}
 @media(max-width:399px){#placesBtn .pgear{display:inline}#placesBtn .plt{display:none}}
 #shareBtn .plt{display:inline}
-.pcount{padding:1px 5px;margin-left:2px}
+.pcount{font-size:11px;font-weight:700;background:rgba(255,255,255,.22);border-radius:9px;padding:1px 5px;margin-left:2px}
 @media(max-width:379px){.filters{gap:4px}.filter-btn{padding:10px 7px}#placesBtn{padding:10px 7px}.filter-select{padding-left:8px;padding-right:21px;background-position:right 6px center}}
 </style>
 </head>
@@ -186,7 +190,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
     <button class="filter-btn" id="shareBtn" onclick="openShare()" aria-label="Share"><svg class="qri" viewBox="0 0 9 9" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h3v3H0zM6 0h3v3H6zM0 6h3v3H0z"/><path fill="#0a5e6b" d="M1 1h1v1H1zM7 1h1v1H7zM1 7h1v1H1z"/><path fill="currentColor" d="M4 0h1v2H4zM4 3h2v1H4zM3 4h1v1H3zM5 5h1v1H5zM7 4h2v1H7zM4 6h1v3H4zM6 6h1v1H6zM8 6h1v3H8zM6 8h1v1H6z"/></svg><span class="plt"> Share</span></button>
   </div>
 </div>
-<div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="toggle-wrap" onclick="toggleFF()"><span class="toggle-label" style="color:#fff">🎭 Fest</span><div class="toggle-track t-ad" id="ffTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">🔞 Adult</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">🧑‍🤝‍🧑 Wo/Men</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div></div>
+<div class="ffcard"><div class="ffl"><div class="fft">Fantasy Fest Oct 16–25</div><div class="ffs">Musical Icons &amp; Iconic Musicals</div><div class="chips"><button class="chip" id="chipFF" onclick="toggleFocus('ff')">Fest</button><button class="chip" id="chipAdult" onclick="toggleFocus('adult')">Adult</button><button class="chip" id="chipMen" onclick="toggleFocus('men')">Wo/Men</button></div></div><button class="ffr" onclick="openCrawl()"><span class="cb-ic">🗺️</span><span>Bar crawl</span></button></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
@@ -202,6 +206,18 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 </div>
 <button class="modal-close" onclick="closeShare()">Close</button></div></div>
 <div class="toast" id="toast"></div>
+<div class="modal-overlay" id="crawlModal" onclick="closeCrawl(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+<div class="modal-header"><h2 id="crawlTitle">Build your crawl</h2><div class="modal-days" id="crawlSub"></div></div>
+<div class="modal-body">
+<div id="crawlPrefs"><div class="cp-q">I'm into</div><div class="cp-opts" id="cpInto">
+<button class="copt" data-v="drinks" onclick="cpInto('drinks')">Drink deals</button><button class="copt" data-v="food" onclick="cpInto('food')">Food deals</button><button class="copt" data-v="music" onclick="cpInto('music')">Live bands</button><button class="copt" data-v="dj" onclick="cpInto('dj')">DJs / dancing</button><button class="copt" data-v="fest" onclick="cpInto('fest')">Fest events</button></div>
+<div class="cp-q">Stops</div><div class="cp-seg" id="cpStops"><button class="cseg" data-v="3" onclick="cpSet('stops',3)">3</button><button class="cseg" data-v="4" onclick="cpSet('stops',4)">4</button><button class="cseg" data-v="5" onclick="cpSet('stops',5)">5</button></div>
+<div class="cp-q">Time at each stop</div><div class="cp-seg" id="cpDur"><button class="cseg" data-v="0.75" onclick="cpSet('dur',0.75)">45 min</button><button class="cseg" data-v="1" onclick="cpSet('dur',1)">1 hr</button><button class="cseg" data-v="1.5" onclick="cpSet('dur',1.5)">1.5 hrs</button></div>
+<button class="btn-primary cp-go" id="cpGo" onclick="goCrawl()">Build my crawl</button></div>
+<div id="crawlRes" style="display:none"><div id="crawlList"></div><div class="share-btns" id="crawlBtns"><button class="btn-primary" onclick="walkCrawl()">Walk it</button><button class="btn-secondary" onclick="shareCrawl()">Share crawl</button></div>
+<div class="share-btns" id="crawlShuffle"><button class="btn-secondary" onclick="buildCrawl(true)">Shuffle</button><button class="btn-secondary" onclick="crawlView('prefs')">Change picks</button></div></div>
+</div>
+<button class="modal-close" onclick="closeCrawl()">Close</button></div></div>
 <div class="modal-overlay" id="placesModal" onclick="closePlaces(event)"><div class="modal places-modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header"><h2>Filter Places</h2></div><div class="places-list" id="placesList"></div><div class="places-actions"><button class="btn-secondary" onclick="setAllPlaces(true)">All</button><button class="btn-secondary" onclick="setAllPlaces(false)">None</button><button class="btn-primary" onclick="applyPlacesFilter()">Apply</button></div></div></div>
 <script>
 const V=[
@@ -274,51 +290,36 @@ norm4(FF);
 const TRIP={2:"2026-10-20",3:"2026-10-21",4:"2026-10-22",5:"2026-10-23",6:"2026-10-24",0:"2026-10-25",1:"2026-10-19"};
 function lsOn(k){try{return localStorage.getItem(k)!=='0'}catch(e){return true}}
 function lsSet(k,v){try{localStorage.setItem(k,v?'1':'0')}catch(e){}}
-let showAdult=lsOn('kw2_adult'),showMen=lsOn('kw2_men'),showFF=lsOn('kw2_ff'),showHH=lsOn('kw2_hh');
+let showHH=lsOn('kw2_hh'),FOCUS={ff:false,adult:false,men:false};
+function anyFocus(){return FOCUS.ff||FOCUS.adult||FOCUS.men}
+function wantHH(){return showHH&&!anyFocus()}function wantMU(){return showMusic&&!anyFocus()}
+function wantFF(x){return anyFocus()?((FOCUS.ff&&!x.ad)||(FOCUS.adult&&x.ad===1)||(FOCUS.men&&x.ad===2)):true}
+function toggleFocus(k){FOCUS[k]=!FOCUS[k];syncAll();render()}
 let showMusic=lsOn('kw2_music'),MUSIC=[],MUP='';try{const c=JSON.parse(localStorage.getItem('kw_music_data')||'null');if(c){MUSIC=norm4(c.items);MUP=c.updated}}catch(e){}
-function syncAll(){[['ffTrack',showFF],['adTrack',showAdult],['menTrack',showMen],['hhTrack',showHH],['musicTrack',showMusic]].forEach(([i,v])=>document.getElementById(i).classList.toggle('on',!!v));['hhLabel','musicLabel'].forEach((i,k)=>document.getElementById(i).classList.toggle('on',k?showMusic:showHH))}
+function syncAll(){[['hhTrack',showHH],['musicTrack',showMusic]].forEach(([i,v])=>document.getElementById(i).classList.toggle('on',!!v));['hhLabel','musicLabel'].forEach((i,k)=>document.getElementById(i).classList.toggle('on',k?showMusic:showHH));[['chipFF','ff'],['chipAdult','adult'],['chipMen','men']].forEach(([i,k])=>document.getElementById(i).classList.toggle('on',FOCUS[k]))}
 function toggleHH(){showHH=!showHH;lsSet('kw2_hh',showHH);syncAll();render()}
 function toggleMusic(){showMusic=!showMusic;lsSet('kw2_music',showMusic);syncAll();render()}
 const ART={"elle haley": {"g": "Americana singer-songwriter", "b": "2025 Key West Music Award, Best Vocalist.", "fb": "https://www.facebook.com/ElleHaleyMusic", "ig": "https://www.instagram.com/ellehaleymusic"}, "cliff cody": {"g": "Country", "b": "Big-voiced Texas-born country singer-songwriter.", "yt": "https://www.youtube.com/channel/UCC1GAdfRlrjpOkssAMAy6Cg", "fb": "https://www.facebook.com/cliffcodymusic/", "ig": "https://www.instagram.com/cliffcody/"}, "dan harvey": {"g": "Solo & full band", "b": "Has played music cruises alongside Lynyrd Skynyrd, Zac Brown and Sister Hazel.", "yt": "https://www.youtube.com/@danharveyband8726", "fb": "https://www.facebook.com/danharveyband/", "ig": "https://www.instagram.com/danharveyentertainment/"}, "aaron blumer": {"g": "Singer-songwriter", "b": "Road-tested troubadour: taverns, barns, boats, three countries.", "fb": "https://www.facebook.com/profile.php?id=100031545295690", "ig": "https://www.instagram.com/aaronblumer/"}, "pierce august": {"g": "Singer-songwriter", "b": "Gritty, reflective originals; a decade in Aspen fronting Sittin' on Strings."}, "oren polak": {"g": "Eclectic covers", "b": "High-energy Irish Kevin's regular since 2016, mixes many genres."}, "reggae lou & the kind budz": {"g": "Roots reggae / calypso", "b": "Key West Music Award nominee, Best Reggae Band."}, "tommy tangie": {"g": "DJ + live trumpet", "b": "House, lounge and dance remixes with trumpet over the top."}, "gerd rube": {"g": "'70s-'80s rock covers", "b": "Bon Jovi, Def Leppard, Tom Petty, Foreigner and more, plus originals from his 21 CDs."}, "latin music on mallory": {"g": "Latin", "b": "Latin music at El Meson de Pepe's on Mallory Square."}, "benjammin": {"g": "Outlaw country / Southern rock", "b": "Marine veteran turned waterfront troubadour."}};
 function artOf(n){const k=n.toLowerCase().replace(/’/g,"'");return ART[k]||null}
 function srch(n){const q=encodeURIComponent(n+' Key West'),a=artOf(n)||{};return{yt:a.yt||'https://www.youtube.com/results?search_query='+q,fb:a.fb||'https://www.facebook.com/search/top?q='+q,gg:'https://www.google.com/search?q='+encodeURIComponent('"'+n+'" Key West music'),ig:a.ig}}
 function linkRow(n){const s=srch(n);return `<div class="mlinks" onclick="event.stopPropagation()"><a href="${s.yt}" target="_blank">\u25B6\uFE0F YouTube</a><a href="${s.fb}" target="_blank">\uD83D\uDCD8 Facebook</a>${s.ig?`<a href="${s.ig}" target="_blank">\uD83D\uDCF8 Insta</a>`:''}<a href="${s.gg}" target="_blank">\uD83D\uDD0E Google</a></div>`}
-function loadMusic(){fetch('music.json?'+Date.now()).then(r=>r.json()).then(d=>{if(!d||!d.items)return;MUSIC=norm4(d.items);PLC=null;updatePlacesBtn();MUP=d.updated;try{localStorage.setItem('kw_music_data',JSON.stringify(d))}catch(e){}render()}).catch(()=>{})}
+function loadMusic(){fetch((location.pathname.includes('/beta/')?'../':'')+'music.json?'+Date.now()).then(r=>r.json()).then(d=>{if(!d||!d.items)return;MUSIC=norm4(d.items);PLC=null;updatePlacesBtn();setTimeout(handleDeepLink,50);MUP=d.updated;try{localStorage.setItem('kw_music_data',JSON.stringify(d))}catch(e){}render()}).catch(()=>{})}
 function openMusic(i){const x=MUSIC[i],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.v+', '+(x.a||'')+', Key West, FL')}`,lbl=new Date(x.dt+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
-document.getElementById('modalHeader').innerHTML=`<h2>${x.n}</h2><div class="modal-time">\uD83D\uDD50 ${tStr(x.s)}${x.e!==null?' \u2013 '+tStr(x.e):''}</div><div class="modal-days">\uD83D\uDCC5 ${lbl}</div><div class="modal-address"><a href="${mu}" target="_blank">\uD83D\uDCCD ${x.v}${x.a?' \u2014 '+x.a:''}</a></div>`;
-const ar=artOf(x.n);document.getElementById('modalBody').innerHTML=(ar?`<div class="modal-section"><h3>\uD83C\uDFB5 Style</h3><div class="detail-text"><b>${ar.g}</b><br>${ar.b}</div></div>`:'')+((x.t==='LIVE'||x.t==='DJ')?`<div class="modal-section"><h3>${ar&&(ar.yt||ar.fb||ar.ig)?'Their pages':'Look them up'}</h3>${linkRow(x.n)}</div>`:'')+`<div class="modal-section"><h3>Type</h3><div class="detail-text">${x.t}</div></div><div class="modal-section"><h3>Source</h3><div class="detail-text" style="font-size:13px">${x.src==='LME'?'livemusiceveryday.com':'keywestconcierge.com'} (auto-updated). Lineups can change last minute.</div></div>`;
+document.getElementById('modalHeader').innerHTML=`<h2>${esc(x.n)}</h2><div class="modal-time">\uD83D\uDD50 ${tStr(x.s)}${x.e!==null?' \u2013 '+tStr(x.e):''}</div><div class="modal-days">\uD83D\uDCC5 ${lbl}</div><div class="modal-address"><a href="${mu}" target="_blank">\uD83D\uDCCD ${esc(x.v)}${x.a?' \u2014 '+x.a:''}</a></div>`;
+const ar=artOf(x.n);document.getElementById('modalBody').innerHTML=(ar?`<div class="modal-section"><h3>\uD83C\uDFB5 Style</h3><div class="detail-text"><b>${esc(ar.g)}</b><br>${esc(ar.b)}</div></div>`:'')+((x.t==='LIVE'||x.t==='DJ')?`<div class="modal-section"><h3>${ar&&(ar.yt||ar.fb||ar.ig)?'Their pages':'Look them up'}</h3>${linkRow(x.n)}</div>`:'')+`<div class="modal-section"><h3>Type</h3><div class="detail-text">${esc(x.t)}</div></div><div class="modal-section"><h3>Source</h3><div class="detail-text" style="font-size:13px">${x.src==='LME'?'livemusiceveryday.com':'keywestconcierge.com'} (auto-updated). Lineups can change last minute.</div></div>`;
 document.getElementById('detailModal').classList.add('active');document.body.style.overflow='hidden'}
-function toggleFF(){showFF=!showFF;lsSet('kw2_ff',showFF);syncAll();render()}
-function toggleMen(){showMen=!showMen;lsSet('kw2_men',showMen);syncAll();render()}
-function toggleAdult(){showAdult=!showAdult;lsSet('kw2_adult',showAdult);syncAll();render()}
 function todayStr(){const d=appNow();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;return dv==='all'?null:TRIP[dv]}
+function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;if(dv==='all')return null;return parseInt(dv)===appNow().getDay()?todayStr():TRIP[dv]}
 function ffTime(x){return tStr(x.s)+(x.e!==null?'<br>\u2013<br>'+tStr(x.e):'')}
 function endOf(x){return x.e!==null?x.e:x.s+(x.s>=17?4:3)}
 function evStatus(x){if(x.dt!==todayStr())return'later';return getStatus(x.s,endOf(x))}
 function norm4(a){(a||[]).forEach(x=>{if(!x._n&&x.s<4){x.dt=prevDay(x.dt);x.s+=24;if(x.e!==null)x.e+=24}x._n=1});return a}
 function prevDay(d){const x=new Date(d+'T12:00');x.setDate(x.getDate()-1);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
-function nowH(){const n=new Date();return n.getHours()+n.getMinutes()/60}
 function prep(arr,dt,keep){const today=todayStr(),tv=document.getElementById('timeFilter').value,pd=prevDay(dt);
 let ev=arr.map((x,i)=>Object.assign({i},x)).filter(x=>keep(x)&&x.dt===dt&&!isHidden(x.l||x.v));
 ev.forEach(x=>{x.st=evStatus(x);x.dist=null;x.near=false;if(nearbyActive&&userLat&&x.lat){x.dist=distMi(userLat,userLng,x.lat,x.lng);x.near=x.dist<=NEARBY_MI}});
 ev=ev.filter(x=>x.st!=='ended'&&(nowActive?(x.st==='now'||x.st==='soon'):(tv==='all'||matchTime(x.s,endOf(x),tv))));
 const so={now:0,soon:1,later:2};ev.sort((a,b)=>(so[a.st]-so[b.st])||(a.s-b.s));return ev}
-function sect(icon,title,cls,dt,ev,card,foot){if(!ev.length)return'';const lbl=new Date(dt+'T12:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});let h='';
-const near=ev.filter(x=>x.near).sort((a,b)=>a.dist-b.dist),rest=ev.filter(x=>!x.near);
-if(near.length){h+=`<div class="section-label">\uD83D\uDCCD Nearby ${title} <span class="count count-nearby">${near.length}</span></div>`;near.forEach(x=>h+=card(x))}
-if(rest.length){h+=`<div class="section-label">${icon} ${title} \u2022 ${lbl} <span class="count ${cls}">${rest.length}</span></div>`;rest.forEach(x=>h+=card(x))}
-return h+(foot||'')}
-function ffCard(x){const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.fa)}`;
-const tag=x.near?'<span class="status-tag status-nearby">NEARBY</span>':x.st==='now'?'<span class="status-tag status-now">NOW</span>':x.st==='soon'?'<span class="status-tag status-soon">SOON</span>':'<span class="status-tag status-ff">FEST</span>';
-const db=x.dist!==null?`<div class="dist-badge">${x.dist<0.1?'< 0.1':x.dist.toFixed(1)} mi</div>`:'';
-return `<div class="venue-card is-ff" onclick="openFF(${x.i})"><div class="venue-time"><div class="time-range">${ffTime(x)}</div>${tag}${db}</div><div class="venue-info"><div class="venue-name">${x.n}${x.ad===1?' <span class="day-badge">18+</span>':x.ad===2?(x.w?' <span class="day-badge">WOMEN</span>':' <span class="day-badge">MEN</span>'):''}${x.c?' <span class="day-badge">CONFIRM</span>':''}</div><div class="venue-address"><a href="${mu}" onclick="event.stopPropagation()" target="_blank">\uD83D\uDCCD ${x.l}</a></div>${x.p?`<div class="deal-line">\uD83C\uDF9F ${x.p}</div>`:''}<div class="deal-line">${x.x}</div></div></div>`}
-function mCard(x){const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.v+', '+(x.a||'')+', Key West, FL')}`;
-const tag=x.near?'<span class="status-tag status-nearby">NEARBY</span>':x.st==='now'?'<span class="status-tag status-now">NOW</span>':x.st==='soon'?'<span class="status-tag status-soon">SOON</span>':'<span class="status-tag status-music">'+x.t+'</span>';
-const db=x.dist!==null?`<div class="dist-badge">${x.dist<0.1?'< 0.1':x.dist.toFixed(1)} mi</div>`:'';
-return `<div class="venue-card is-music" onclick="openMusic(${x.i})"><div class="venue-time"><div class="time-range">${tStr(x.s)}${x.e!==null?'<br>\u2013<br>'+tStr(x.e):''}</div>${tag}${db}</div><div class="venue-info"><div class="venue-name">${x.n} <span class="day-badge">${x.t}</span></div>${artOf(x.n)?`<div class="deal-line">\uD83C\uDFB5 ${artOf(x.n).g}</div>`:''}<div class="venue-address"><a href="${mu}" onclick="event.stopPropagation()" target="_blank">\uD83D\uDCCD ${x.v}</a></div>${(x.t==='LIVE'||x.t==='DJ')?linkRow(x.n):''}</div></div>`}
-function ffHtml(){const dt=ffDate();if(!dt)return'';return sect('\uD83C\uDFAD','Fantasy Fest','count-ff',dt,prep(FF,dt,x=>showFF&&(!x.ad||(x.ad===1&&showAdult)||(x.ad===2&&showMen))),ffCard)}
-function musicHtml(){if(!showMusic)return'';const dt=ffDate();if(!dt||!MUSIC.length)return'';return sect('\uD83C\uDFB8','Music & Entertainment','count-music',dt,prep(MUSIC,dt,()=>true),mCard,MUP?`<div style="font-size:11px;color:var(--text-light);margin:-4px 0 8px 4px">Lineups auto-updated ${new Date(MUP).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div>`:'')}
 function openFF(i){const x=FF[i],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.fa)}`,lbl=new Date(x.dt+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
 document.getElementById('modalHeader').innerHTML=`<h2>${x.n}</h2><div class="modal-time">\uD83D\uDD50 ${ffTime(x).replace(/<br>/g,' ')}${x.e===null?' start':''}</div><div class="modal-days">\uD83D\uDCC5 ${lbl}</div><div class="modal-address"><a href="${mu}" target="_blank">\uD83D\uDCCD ${x.l} \u2014 ${x.a}</a></div>`;
 let b=`<div class="modal-section"><h3>About</h3><div class="detail-text">${x.x}</div></div>`;
@@ -342,34 +343,111 @@ function init(){const df=document.getElementById('dayFilter');df.innerHTML='<opt
 
 function toggleNow(){nowActive=!nowActive;document.getElementById('nowTrack').classList.toggle('on',nowActive);document.getElementById('nowLabel').classList.toggle('on',nowActive);if(nowActive){savedDay=document.getElementById('dayFilter').value;savedTime=document.getElementById('timeFilter').value;document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}else{document.getElementById('dayFilter').value=savedDay;document.getElementById('timeFilter').value=savedTime}render()}
 
-function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=document.getElementById('nearTrack'),label=document.getElementById('nearLabel');if(nearbyActive){nearbyActive=false;userLat=null;userLng=null;track.classList.remove('on');label.classList.remove('on');render();return}if(!navigator.geolocation){alert('Geolocation not supported');return}wrap.classList.add('loading');navigator.geolocation.getCurrentPosition(pos=>{userLat=pos.coords.latitude;userLng=pos.coords.longitude;nearbyActive=true;wrap.classList.remove('loading');track.classList.add('on');label.classList.add('on');render()},err=>{wrap.classList.remove('loading');alert('Location access denied. Enable location in browser settings.')},{enableHighAccuracy:true,timeout:10000})}
+let geoWatch=null;
+function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=document.getElementById('nearTrack'),label=document.getElementById('nearLabel');
+if(nearbyActive||geoWatch!==null){nearbyActive=false;userLat=null;userLng=null;if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null}track.classList.remove('on');label.classList.remove('on');label.textContent='Nearby';wrap.classList.remove('loading');render();return}
+if(!navigator.geolocation){alert('Location not supported on this browser');return}
+wrap.classList.add('loading');label.textContent='Locating\u2026';let got=false;
+const onPos=pos=>{const la=pos.coords.latitude,lo=pos.coords.longitude,moved=userLat==null||distMi(userLat,userLng,la,lo)>0.012;userLat=la;userLng=lo;
+ if(!got){got=true;nearbyActive=true;wrap.classList.remove('loading');label.textContent='Nearby';track.classList.add('on');label.classList.add('on');render()}else if(moved)render()};
+const onErr=err=>{if(got)return;wrap.classList.remove('loading');label.textContent='Nearby';if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null}
+ alert(err&&err.code===1?'Location access denied. Enable location for this site in your browser settings.':'Could not get your location. Try again in a moment.')};
+navigator.geolocation.getCurrentPosition(onPos,()=>{},{enableHighAccuracy:false,maximumAge:60000,timeout:5000});
+geoWatch=navigator.geolocation.watchPosition(onPos,onErr,{enableHighAccuracy:true,maximumAge:15000,timeout:20000})}
 
-function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let info=DN[now.getDay()]+' \u2022 '+ts;if(nearbyActive&&userLat)info+=' \u2022 \uD83D\uDCCD GPS Active';document.getElementById('currentInfo').textContent=info}
+function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let info=DN[now.getDay()]+' \u2022 '+ts;document.getElementById('currentInfo').textContent=info}
 
-function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}if(typeof fitSels==='function')try{fitSels()}catch(e){}updateInfo();const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value;let results=[];
-V.forEach((v,vi)=>{if(isHidden(v.n))return;if(!showHH)return;v.h.forEach(hh=>{if((dayVal==='all'||matchDay(hh.d,parseInt(dayVal)))&&(nowActive||matchTime(hh.s,hh.e,timeVal))){const st=getStatus(hh.s,hh.e);if(nowActive&&st!=='now'&&st!=='soon')return;let dist=null,isNear=false;if(nearbyActive&&userLat&&v.lat){dist=distMi(userLat,userLng,v.lat,v.lng);isNear=dist<=NEARBY_MI}results.push({vi,v,s:hh.s,e:hh.e,days:hh.d,status:st,dist,isNear})}})});
-results.sort((a,b)=>{const so={now:0,soon:1,later:2,ended:3};if(so[a.status]!==so[b.status])return so[a.status]-so[b.status];return a.s-b.s});
-const C=document.getElementById('content');
-const ffH=ffHtml()+musicHtml();if(!results.length){C.innerHTML=ffH||'<div class="no-results"><div class="emoji">\uD83C\uDF19</div><p>No happy hours match your filters.<br>Try a different time or day!</p></div>';return}
-const nearbyNow=results.filter(r=>r.isNear&&r.status==='now').sort((a,b)=>a.dist-b.dist);
-const nearbySoon=results.filter(r=>r.isNear&&r.status==='soon').sort((a,b)=>a.dist-b.dist);
-const nowItems=results.filter(r=>r.status==='now'&&!r.isNear);
-const soonItems=results.filter(r=>r.status==='soon'&&!r.isNear);
-const laterItems=results.filter(r=>r.status==='later');
-let html=ffH;
-if(nearbyNow.length){html+=`<div class="section-label">\uD83D\uDCCD Happening Nearby <span class="count count-nearby">${nearbyNow.length}</span></div>`;nearbyNow.forEach(r=>html+=card(r,true))}
-if(nearbySoon.length){html+=`<div class="section-label">\uD83D\uDCCD Starting Nearby Soon <span class="count count-nearby">${nearbySoon.length}</span></div>`;nearbySoon.forEach(r=>html+=card(r,true))}
-if(nowItems.length){html+=`<div class="section-label">\uD83D\uDD34 Happening Now <span class="count">${nowItems.length}</span></div>`;nowItems.forEach(r=>html+=card(r))}
-if(soonItems.length){html+=`<div class="section-label">\uD83D\uDFE1 Starting Soon <span class="count">${soonItems.length}</span></div>`;soonItems.forEach(r=>html+=card(r))}
-if(laterItems.length){html+=`<div class="section-label">\uD83D\uDD35 Later <span class="count">${laterItems.length}</span></div>`;laterItems.forEach(r=>html+=card(r))}
-C.innerHTML=html}
+const KW_CENTER=[24.5551,-81.7800];
+function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}if(typeof fitSels==='function')try{fitSels()}catch(e){}updateInfo();
+const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value,C=document.getElementById('content');
+const hhToday=dayVal!=='all'&&parseInt(dayVal)===appNow().getDay();const items=[];
+if(wantHH())V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dayVal==='all'||matchDay(hh.d,parseInt(dayVal))))return;if(!nowActive&&timeVal!=='all'&&!matchTime(hh.s,hh.e,timeVal))return;
+ const st=hhToday?getStatus(hh.s,hh.e):'later';if(st==='ended')return;if(nowActive&&st!=='now'&&st!=='soon')return;
+ items.push({k:placeKey(v.n),a:v.a,fa:v.fa,lat:v.lat,lng:v.lng,ty:'hh',s:hh.s,e:hh.e,st,txt:v.fo||v.dr,open:`openDetail(${vi},${hh.s},${hh.e},'${hh.d}')`})})});
+const dt=ffDate();
+if(dt){prep(FF,dt,wantFF).forEach(x=>items.push({k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
+ if(wantMU())prep(MUSIC,dt,()=>true).forEach(x=>items.push({k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
+const P=buildPlaces(),nameOf={};P.ent.forEach(e=>nameOf[e.k]=e.n);const pri={hh:0,ff:1,mu:2};
+const isToday=hhToday||dt===todayStr();const near=nearbyActive&&userLat!=null,onIsland=near&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;
+function mk(its){const cards={};its.forEach(it=>{const c=cards[it.k]||(cards[it.k]={k:it.k,name:nameOf[it.k]||it.k,items:[],lat:null,lng:null,a:'',fa:'',ap:9});c.items.push(it);if(c.lat==null&&it.lat!=null){c.lat=it.lat;c.lng=it.lng}if(it.a&&pri[it.ty]<c.ap){c.a=it.a;c.fa=it.fa;c.ap=pri[it.ty]}});
+ let l=Object.values(cards);l.forEach(c=>{c.items.sort((a,b)=>a.s-b.s);c.first=Math.min(...c.items.map(i=>i.s));c.hot=c.items.some(i=>i.st==='now')?2:c.items.some(i=>i.st==='soon')?1:0;c.dist=near&&c.lat!=null?distMi(userLat,userLng,c.lat,c.lng):null});
+ if(onIsland)l=l.filter(c=>c.dist!=null&&c.dist<=NEARBY_MI);return l}
+const byDist=(a,b)=>(a.dist==null?1e9:a.dist)-(b.dist==null?1e9:b.dist)||a.first-b.first,byTime=(a,b)=>a.first-b.first||a.name.localeCompare(b.name);
+const groups=isToday?[['Happening Now \u00B7 next 2 hrs',mk(items.filter(i=>i.st==='now'||i.st==='soon'))],['Rest of today',mk(items.filter(i=>i.st!=='now'&&i.st!=='soon'))]]:[[(dayVal==='all'?'All days':DN[parseInt(dayVal)]),mk(items)]];
+const nearNote=onIsland?' \u00B7 within 5 blocks':'';let html='';
+groups.forEach(([lbl,g])=>{if(!g.length)return;g.sort(near?byDist:byTime);html+=`<div class="section-label">${lbl}${nearNote} <span class="count">${g.length}</span></div>`;g.forEach(c=>html+=placeCard(c))});
+C.innerHTML=html||`<div class="no-results"><div class="emoji">\uD83C\uDF19</div><p>${onIsland?'Nothing within 5 blocks right now.<br>Turn off Nearby to see everything.':'Nothing matches your filters.<br>Try a different time or day!'}</p></div>`}
+let CARDS={};
+function viewDate(){const d=ffDate();if(d)return d;const dv=document.getElementById('dayFilter').value;return dv==='all'?todayStr():(parseInt(dv)===appNow().getDay()?todayStr():TRIP[dv])}
+function inFest(d){return !!d&&d>='2026-10-16'&&d<='2026-10-25'}
+function pageURL(){return location.origin+location.pathname}
+function lineTxt(i,withTime){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'}[i.ty];const tx=i.ty==='hh'?'Happy hour '+tStr(i.s)+'\u2013'+tStr(i.e):(withTime?tStr(i.s)+' ':'')+i.txt;return ic+' '+tx}
+function shareCard(k){const c=CARDS[k];if(!c)return;const now=c.items.filter(i=>i.st==='now'),next=c.items.filter(i=>i.st!=='now');
+ const where=c.name+(c.a?' ('+c.a+')':'');let msg;
+ if(now.length)msg="I'm here now: "+where+'\n'+now.slice(0,3).map(i=>lineTxt(i,false)).join('\n');
+ else msg="I'm thinking about going here later: "+where+'\n'+next.slice(0,3).map(i=>lineTxt(i,true)).join('\n');
+ const url=pageURL()+'?p='+encodeURIComponent(k)+'&d='+viewDate();
+ if(navigator.share)navigator.share({title:'KW Happy Hour',text:msg,url}).catch(()=>{});else{try{navigator.clipboard.writeText(msg+'\n'+url).then(()=>toast('Copied, paste it in a text'))}catch(e){toast('Sharing not supported here')}}}
+let DL=null,DLdone=false;
+function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchParams(location.search);DL=q.get('p')?{k:q.get('p'),d:q.get('d')}:false;
+  if(DL&&DL.d&&DL.d!==todayStr()){const w=new Date(DL.d+'T12:00').getDay();if(TRIP[w]===DL.d){document.getElementById('dayFilter').value=String(w);render()}}}
+ if(!DL)return;const el=document.querySelector('.pcard[data-k="'+CSS.escape(DL.k)+'"]');
+ if(el){DLdone=true;const go=()=>{const e=document.querySelector('.pcard[data-k="'+CSS.escape(DL.k)+'"]');if(e){e.scrollIntoView({block:'center'});e.classList.add('flash');setTimeout(()=>e.classList.remove('flash'),2600)}};go();setTimeout(go,700);setTimeout(go,1600)}
+ else if(MUSIC.length){DLdone=true;toast("That spot isn't showing with your current filters")}}
+/* ---------- bar crawl (with preferences) ---------- */
+let CRAWL=null,LASTCRAWL=new Set();
+const CP_DEF={into:['drinks','music'],stops:4,dur:1};
+function cpGet(){try{const c=JSON.parse(localStorage.getItem('kw2_crawl')||'null');if(c&&c.into&&c.into.length)return c}catch(e){}return {...CP_DEF,into:[...CP_DEF.into]}}
+let CP=cpGet();
+function cpSave(){try{localStorage.setItem('kw2_crawl',JSON.stringify(CP))}catch(e){}}
+function cpRender(){document.querySelectorAll('#cpInto .copt').forEach(b=>b.classList.toggle('on',CP.into.includes(b.dataset.v)));
+ document.querySelectorAll('#cpStops .cseg').forEach(b=>b.classList.toggle('on',+b.dataset.v===CP.stops));
+ document.querySelectorAll('#cpDur .cseg').forEach(b=>b.classList.toggle('on',+b.dataset.v===CP.dur));
+ document.getElementById('cpGo').disabled=!CP.into.length}
+function cpInto(v){const i=CP.into.indexOf(v);i<0?CP.into.push(v):CP.into.splice(i,1);cpRender()}
+function cpSet(k,v){CP[k]=v;cpRender()}
+function short(s,n){s=String(s||'');return s.length>n?s.slice(0,n-1).trim()+'\u2026':s}
+function crawlCandidates(date,wd){const its=[];
+ V.forEach(v=>{if(isHidden(v.n)||!v.lat)return;v.h.forEach(h=>{if(matchDay(h.d,wd))its.push({k:placeKey(v.n),ty:'hh',s:h.s,e:h.e,dr:v.dr,fo:v.fo,lat:v.lat,lng:v.lng,a:v.a})})});
+ FF.forEach(x=>{if(x.dt!==date||isHidden(x.l)||!x.lat)return;if(x.ad&&!((x.ad===1&&FOCUS.adult)||(x.ad===2&&FOCUS.men)))return;its.push({k:placeKey(x.l),ty:'ff',s:x.s,e:endOf(x),txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
+ MUSIC.forEach(x=>{if(x.dt!==date||isHidden(x.v)||x.lat==null||(x.t!=='LIVE'&&x.t!=='DJ'))return;its.push({k:placeKey(x.v),ty:x.t==='DJ'?'dj':'mu',s:x.s,e:x.e!=null?x.e:x.s+3,txt:x.n,lat:x.lat,lng:x.lng,a:x.a})});
+ const P=buildPlaces(),nm={};P.ent.forEach(e=>nm[e.k]=e.n);const pl={};
+ its.forEach(i=>{const p=pl[i.k]||(pl[i.k]={k:i.k,name:nm[i.k]||i.k,lat:i.lat,lng:i.lng,a:i.a||'',items:[]});p.items.push(i);if(!p.a&&i.a)p.a=i.a});return Object.values(pl)}
+function whyLines(act,into){const out=[];const has=v=>into.includes(v);
+ act.forEach(i=>{if(i.ty==='hh'){if(has('drinks')&&i.dr)out.push({c:'drinks',t:'\uD83C\uDF78 '+short(i.dr,70)});if(has('food')&&i.fo)out.push({c:'food',t:'\uD83C\uDF7D\uFE0F '+short(i.fo,70)})}
+  else if(i.ty==='mu'&&has('music'))out.push({c:'music',t:'\uD83C\uDFB5 '+tStr(i.s)+' '+i.txt});
+  else if(i.ty==='dj'&&has('dj'))out.push({c:'dj',t:'\uD83C\uDFA7 '+tStr(i.s)+' '+i.txt});
+  else if(i.ty==='ff'&&has('fest'))out.push({c:'fest',t:'\uD83C\uDFAD '+tStr(i.s)+' '+i.txt})});return out}
+function buildCrawl(shuffle){const dv=document.getElementById('dayFilter').value,isT=dv==='all'||parseInt(dv)===appNow().getDay();
+ const date=isT?todayStr():viewDate(),wd=new Date(date+'T12:00').getDay(),dur=CP.dur;let T=isT?Math.max(hourNow(),12):17;T=Math.ceil(T*4)/4;
+ const pls=crawlCandidates(date,wd),rnd=()=>shuffle?Math.random()*3:Math.random()*0.3;
+ const near=nearbyActive&&userLat!=null&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;let prev=near?{lat:userLat,lng:userLng}:null;const stops=[],used=new Set();
+ for(let n=0;n<CP.stops;n++){let best=null;
+  for(const rad of [0.3,0.5]){for(const p of pls){if(used.has(p.k)||stops.some(s=>distMi(s.p.lat,s.p.lng,p.lat,p.lng)<0.02))continue;const act=p.items.filter(i=>i.s<T+dur*0.75&&i.e>T+dur*0.25);if(!act.length)continue;
+    const why=whyLines(act,CP.into);const cats=new Set(why.map(w=>w.c));if(!cats.size)continue;
+    const d=prev?distMi(prev.lat,prev.lng,p.lat,p.lng):0;if(prev&&d>rad)continue;
+    const sc=cats.size*2-d*4+rnd()-(shuffle&&LASTCRAWL.has(p.k)?2:0);if(!best||sc>best.sc)best={p,act,why,d,sc}}if(best)break}
+  if(!best)break;used.add(best.p.k);stops.push({...best,T});prev=best.p;T+=dur}
+ CRAWL={stops,date,start:near?{lat:userLat,lng:userLng}:null};LASTCRAWL=new Set(stops.map(s=>s.p.k));
+ const L=document.getElementById('crawlList'),B=document.getElementById('crawlBtns'),S=document.getElementById('crawlShuffle');
+ document.getElementById('crawlSub').textContent=new Date(date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})+(near?' \u00B7 starting near you':'');
+ if(stops.length<2){L.innerHTML='<div class="detail-text" style="margin-bottom:12px">Not enough of what you picked within walking distance right now. Try adding more picks, a later time, or another day.</div>';B.style.display='none';S.style.display='none';return}
+ B.style.display='';S.style.display='';L.innerHTML=stops.map((s,i)=>`<div class="crawl-stop"><div class="cs-num">${i+1}</div><div class="cs-body"><div class="cs-head"><b>${tStr(s.T)}</b> \u00B7 ${esc(s.p.name)}${s.d&&i?`<span class="cs-walk">${s.d<0.1?'< 0.1':s.d.toFixed(1)} mi walk</span>`:''}</div>${s.why.slice(0,2).map(w=>`<div class="cs-line">${esc(w.t)}</div>`).join('')}</div></div>`).join('')}
+function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';
+ document.getElementById('crawlTitle').textContent=v==='prefs'?'Build your crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Pick what you\u2019re into'}
+function openCrawl(){CP=cpGet();cpRender();crawlView('prefs');document.getElementById('crawlModal').classList.add('active');document.body.style.overflow='hidden'}
+function goCrawl(){if(!CP.into.length)return;cpSave();LASTCRAWL=new Set();buildCrawl(false);crawlView('res')}
+function closeCrawl(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('crawlModal').classList.remove('active');document.body.style.overflow=''}
+function crawlMapURL(){const s=CRAWL.stops,ll=p=>p.lat+','+p.lng,o=CRAWL.start?ll(CRAWL.start):ll(s[0].p),dst=ll(s[s.length-1].p),mid=(CRAWL.start?s.slice(0,-1):s.slice(1,-1)).map(x=>ll(x.p)).join('|');
+ return 'https://www.google.com/maps/dir/?api=1&travelmode=walking&origin='+o+'&destination='+dst+(mid?'&waypoints='+encodeURIComponent(mid):'')}
+function walkCrawl(){if(CRAWL&&CRAWL.stops.length)window.open(crawlMapURL(),'_blank')}
+function shareCrawl(){if(!CRAWL||!CRAWL.stops.length)return;const txt='\uD83D\uDDFA\uFE0F Bar crawl:\n'+CRAWL.stops.map((s,i)=>(i+1)+'. '+tStr(s.T)+' '+s.p.name+(s.why[0]?' \u2013 '+s.why[0].t:'')).join('\n')+'\n\nRoute: '+crawlMapURL();
+ if(navigator.share)navigator.share({title:'Bar crawl',text:txt,url:pageURL()}).catch(()=>{});else{try{navigator.clipboard.writeText(txt+'\n'+pageURL()).then(()=>toast('Crawl copied'))}catch(e){}}}
 
-function card(r,nearby){const v=r.v,cls=nearby?'is-nearby':r.status==='now'?'happening-now':r.status==='soon'?'coming-soon':r.status==='ended'?'is-ended':'';
-const tag=nearby?'<span class="status-tag status-nearby">NEARBY</span>':r.status==='now'?'<span class="status-tag status-now">NOW</span>':r.status==='soon'?'<span class="status-tag status-soon">SOON</span>':r.status==='ended'?'<span class="status-tag status-ended">ENDED</span>':'<span class="status-tag status-later">LATER</span>';
-const distB=r.dist!==null?`<div class="dist-badge">${r.dist<0.1?'< 0.1':r.dist.toFixed(1)} mi</div>`:'';
-const dayB=r.days!=='daily'?`<span class="day-badge">${r.days.toUpperCase()}</span>`:'';
-const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.fa)}`;
-return`<div class="venue-card ${cls}" onclick="openDetail(${r.vi},${r.s},${r.e},'${r.days}')"><div class="venue-time"><div class="time-range">${tStr(r.s)}<br>\u2013<br>${tStr(r.e)}</div>${tag}${distB}</div><div class="venue-info"><div class="venue-name">${v.n} ${dayB}</div><div class="venue-address"><a href="${mu}" onclick="event.stopPropagation()" target="_blank">\uD83D\uDCCD ${v.a}</a></div><div class="deal-line"><span class="deal-icon">\uD83C\uDF7D</span>${v.fo}</div><div class="deal-line"><span class="deal-icon">\uD83C\uDF79</span>${v.dr}</div></div></div>`}
+function placeCard(c){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'};const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.fa||c.name+', Key West, FL')}`;
+const lines=c.items.map(i=>`<div class="pline" onclick="${i.open}"><span class="pl-ic">${ic[i.ty]}</span><span class="pl-t">${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</span>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="pl-x">${esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}</div>`).join('');
+CARDS[c.k]=c;return `<div class="pcard ${c.hot===2?'hot':c.hot===1?'warm':''}" data-k="${c.k}"><div class="pc-head"><div class="pc-name">${esc(c.name)}</div><button class="pc-share" aria-label="Share this spot" onclick="event.stopPropagation();shareCard(\'${c.k}\')"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"/></svg></button>${c.dist!=null?`<span class="pc-dist">${c.dist<0.1?'< 0.1':c.dist.toFixed(1)} mi</span>`:''}</div><a class="pc-addr" href="${mu}" target="_blank">\uD83D\uDCCD ${esc(c.a||'Map')}</a><div class="pc-lines">${lines}</div>${c.items.some(i=>i.ty==='hh')&&inFest(viewDate())?'<div class="pc-note">Fest week: happy hour deals may change, confirm before you go.</div>':''}</div>`}
+
 
 function openDetail(vi,start,end,days){const v=V[vi],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.fa)}`,dd=days==='daily'?'Every Day':days.toUpperCase();
 let di='';if(nearbyActive&&userLat&&v.lat){const d=distMi(userLat,userLng,v.lat,v.lng);di=` \u2022 ${d.toFixed(2)} mi away`}
@@ -384,13 +462,14 @@ if(v.h.length>1){b+=`<div class="modal-section"><h3>\u23F0 All Happy Hours</h3><
 document.getElementById('modalBody').innerHTML=b;document.getElementById('detailModal').classList.add('active');document.body.style.overflow='hidden'}
 
 function closeDetail(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('detailModal').classList.remove('active');document.body.style.overflow=''}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function pkey(n){return (n||'').toLowerCase().replace(/^the /,'').replace(/[^a-z0-9]/g,'')}
 let PLC=null;function buildPlaces(){const raw=[];V.forEach(v=>raw.push([v.n,'\uD83C\uDF79']));FF.forEach(x=>raw.push([x.l,'\uD83C\uDFAD']));(MUSIC||[]).forEach(x=>raw.push([x.v,'\uD83C\uDFB8']));
 const ent=[],canon={};raw.slice().sort((a,b)=>pkey(a[0]).length-pkey(b[0]).length).forEach(([n,ic])=>{const k=pkey(n);if(!k)return;let e=ent.find(e=>k.length>=4&&e.k.length>=4&&(k.startsWith(e.k)||e.k.startsWith(k)));if(!e){e={k,n,ic:new Set()};ent.push(e)}e.ic.add(ic);canon[n]=e.k});
 ent.sort((a,b)=>a.n.localeCompare(b.n));PLC={ent,canon};return PLC}
 function placeKey(n){if(!PLC)buildPlaces();return PLC.canon[n]||pkey(n)}
 function isHidden(n){return hiddenPlaces.size>0&&hiddenPlaces.has(placeKey(n))}
-function openPlacesFilter(){const P=buildPlaces(),l=document.getElementById('placesList');l.innerHTML=P.ent.map(e=>`<label class="place-check"><input type="checkbox" ${hiddenPlaces.has(e.k)?'':'checked'} data-k="${e.k}"><span style="flex:1">${e.n}</span><span style="font-size:13px;opacity:.8">${[...e.ic].join('')}</span></label>`).join('');document.getElementById('placesModal').classList.add('active');document.body.style.overflow='hidden'}
+function openPlacesFilter(){const P=buildPlaces(),l=document.getElementById('placesList');l.innerHTML=P.ent.map(e=>`<label class="place-check"><input type="checkbox" ${hiddenPlaces.has(e.k)?'':'checked'} data-k="${e.k}"><span style="flex:1">${esc(e.n)}</span><span style="font-size:13px;opacity:.8">${[...e.ic].join('')}</span></label>`).join('');document.getElementById('placesModal').classList.add('active');document.body.style.overflow='hidden'}
 function closePlaces(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placesModal').classList.remove('active');document.body.style.overflow=''}
 function setAllPlaces(v){document.querySelectorAll('#placesList input[type="checkbox"]').forEach(x=>x.checked=v)}
 function applyPlacesFilter(){hiddenPlaces=new Set();document.querySelectorAll('#placesList input[type="checkbox"]').forEach(c=>{if(!c.checked)hiddenPlaces.add(c.dataset.k)});try{localStorage.setItem('kw2_hidden',JSON.stringify([...hiddenPlaces]))}catch(e){}updatePlacesBtn();closePlaces();render()}
@@ -402,9 +481,8 @@ function fitSels(){['dayFilter','timeFilter'].forEach(i=>fitSel(document.getElem
 const shortTime=shortSel('timeFilter',x=>x.replace(/^[^A-Za-z]+/,'').replace(/\s+\d.*$/,''));
 const SHARE_URL='https://motchristiansen.github.io/KW-Happy-Hour/';
 function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
-function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-const HIT_NS=/github\.io$/.test(location.hostname)?'motchristiansen-kwhh':'motchristiansen-kwhh-test';let HITS=null;
+const HIT_NS=/github\.io$/.test(location.hostname)&&!location.pathname.includes('/beta/')?'motchristiansen-kwhh':'motchristiansen-kwhh-test';let HITS=null;
 fetch('https://abacus.jasoncameron.dev/hit/'+HIT_NS+'/visits').then(r=>r.json()).then(d=>{if(typeof d.value==='number')HITS=d.value}).catch(()=>{});
 const HIT_LINES=['🍹 Livers tested','🌴 Drinking buddies so far','🍻 Bad decisions assisted','🎉 Good times enabled','🍸 Happy hours successfully hunted','🦩 Fellow degenerates'];
 function showHits(){const el=document.getElementById('hitTile');const put=n=>{el.innerHTML=`<div class="hit-l">${HIT_LINES[Math.floor(Math.random()*HIT_LINES.length)]}</div><div class="hit-n">${n.toLocaleString()}</div>`;el.style.display=''};
@@ -414,7 +492,7 @@ function closeShare(e){if(e&&e.target!==e.currentTarget)return;document.getEleme
 function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied'),()=>toast(SHARE_URL))}catch(e){toast(SHARE_URL)}}
 function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
 if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});if(window.caches)caches.keys().then(k=>k.forEach(n=>caches.delete(n))).catch(()=>{});
-setInterval(render,60000);init();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
+setInterval(render,60000);init();handleDeepLink();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <title>KW Happy Hour</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0a5e6b">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--ocean:#0a5e6b;--ocean-dark:#073d45;--sand:#f5efe6;--coral:#e8634a;--sunset:#f4a940;--white:#fff;--text:#1a2a2d;--text-light:#5a6a6d;--card-bg:#fff;--border:#dde5e6;--shadow:rgba(10,94,107,.12);--radius:14px;--nearby:#9b59b6}
@@ -36,8 +39,24 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .pill.on.p-ff,.pill.on.p-ad,.pill.on.p-men{background:var(--coral)}
 .header h1 span{white-space:nowrap}
 .filter-select{padding:10px 26px 10px 10px;font-size:13px;background-position:right 9px center}
-.filter-btn{padding:10px 12px;font-size:13px;flex:0 0 auto}
-@media(max-width:379px){.plt{display:none}.filter-btn{font-size:15px;padding:10px 13px}}
+.filter-btn{padding:10px 12px;font-size:13px;flex:0 0 auto;display:inline-flex;align-items:center;gap:4px}
+.filter-select{flex:1 1 0;min-width:0}
+#dayFilter{flex:0 0 auto;min-width:76px}
+@media(max-width:389px){.filters{gap:6px}.filter-btn{padding:10px 8px}.pcount{margin-left:2px;padding:1px 5px}#dayFilter{min-width:70px}}
+.qri{width:15px;height:15px;color:#fff}
+.qr-wrap{background:#fff;border-radius:14px;padding:10px;width:min(220px,70vw);margin:0 auto 10px;box-shadow:0 2px 10px var(--shadow)}
+.qr-big{width:100%;height:auto;display:block}
+.share-url{text-align:center;font-weight:600;color:var(--ocean);font-size:14px;margin-bottom:12px;word-break:break-all}
+.share-btns{display:flex;gap:10px;margin-bottom:14px}.share-btns button{flex:1;padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.a2hs{background:linear-gradient(135deg,#fef3e0,#fdecd0);border:1px solid #f5dbb0;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
+.a2hs-steps{margin-top:8px;font-size:13px}.a2hs-steps div{margin-top:4px}.ios-share{display:inline-block;border:1.5px solid currentColor;border-radius:3px;padding:0 3px;font-size:11px;line-height:1.3}
+.a2hs-done{display:none;margin-top:8px;font-weight:600}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#1a2a2d;color:#fff;padding:10px 16px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300}.toast.show{opacity:1}
+@media(max-width:479px){.plt{display:none}.filter-btn{font-size:15px;padding:10px 11px}}
+.pcount{font-size:11px;font-weight:700;background:rgba(255,255,255,.22);border-radius:9px;padding:1px 6px;margin-left:3px}
+.filter-btn.active .pcount{background:rgba(255,255,255,.35)}
+.pill .pe.note{font-size:19px;font-weight:700;color:#fff;filter:none;opacity:.75;line-height:1}.pill.on .pe.note{opacity:1}
+.qri{width:17px;height:17px}
 .hgrid{display:grid;grid-template-columns:auto auto;gap:6px;flex-shrink:0}
 .pw{cursor:pointer}.pw.loading{opacity:.5;pointer-events:none}
 .pill{position:relative;width:72px;height:28px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding-left:24px;font-size:12px;font-weight:700;letter-spacing:.3px;color:rgba(255,255,255,.75);transition:background .25s,padding .25s;user-select:none}
@@ -141,7 +160,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="header">
   <div class="header-top">
     <h1>🌴 KW<br><span>Happy Hour</span></h1>
-    <div class="hright"><div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍹</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe">🎸</span></span></div></div></div>
+    <div class="hright"><div class="hgrid"><div class="pw" id="nowWrap" onclick="toggleNow()"><div class="pill p-now" id="nowTrack"><span class="th"></span><span class="pl" id="nowLabel">Now</span></div></div><div class="pw" id="hhWrap" onclick="toggleHH()"><div class="pill p-hh" id="hhTrack"><span class="th"></span><span class="pl" id="hhLabel"><span class="pe">🍸</span></span></div></div><div class="pw" id="nearWrap" onclick="toggleNearby()"><div class="pill p-near" id="nearTrack"><span class="th"></span><span class="pl" id="nearLabel">Near</span></div></div><div class="pw" id="musicWrap" onclick="toggleMusic()"><div class="pill p-music" id="musicTrack"><span class="th"></span><span class="pl" id="musicLabel"><span class="pe note">♫</span></span></div></div></div>
     <div class="current-info" id="currentInfo"></div>
     </div>
   </div>
@@ -155,12 +174,25 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
       <option value="late">🌙 Late 9p–4a</option>
     </select>
     <button class="filter-btn" id="placesBtn" onclick="openPlacesFilter()" aria-label="Filter places">⚙<span class="plt"> Places</span></button>
+    <button class="filter-btn" id="shareBtn" onclick="openShare()" aria-label="Share"><svg class="qri" viewBox="0 0 9 9" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h3v3H0zM6 0h3v3H6zM0 6h3v3H0z"/><path fill="#0a5e6b" d="M1 1h1v1H1zM7 1h1v1H7zM1 7h1v1H1z"/><path fill="currentColor" d="M4 0h1v2H4zM4 3h2v1H4zM3 4h1v1H3zM5 5h1v1H5zM7 4h2v1H7zM4 6h1v3H4zM6 6h1v1H6zM8 6h1v3H8zM6 8h1v1H6z"/></svg><span class="plt"> Share</span></button>
   </div>
 </div>
 <div class="ff-banner">🎭 <b>Fantasy Fest Oct 16–25</b> · Musical Icons &amp; Iconic Musicals<br>Some happy hours may change during the fest; confirm before you go.<div class="tgrid"><div class="toggle-wrap" onclick="toggleFF()"><span class="toggle-label" style="color:#fff">🎭 Fest</span><div class="toggle-track t-ad" id="ffTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleAdult()"><span class="toggle-label" style="color:#fff">🔞 Adult</span><div class="toggle-track t-ad" id="adTrack"><div class="toggle-thumb"></div></div></div><div class="toggle-wrap" onclick="toggleMen()"><span class="toggle-label" style="color:#fff">🧑‍🤝‍🧑 Wo/Men</span><div class="toggle-track t-ad" id="menTrack"><div class="toggle-thumb"></div></div></div></div></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
+<div class="modal-overlay" id="shareModal" onclick="closeShare(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+<div class="modal-header"><h2>Share KW Happy Hour</h2></div>
+<div class="modal-body">
+<div class="qr-wrap"><svg class="qr-big" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" class="segno" viewBox="0 0 37 37"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#0a3d45" d="M2 2.5h7m1 0h1m1 0h3m3 0h1m1 0h3m1 0h2m2 0h7m-33 1h1m5 0h1m1 0h1m1 0h2m2 0h1m1 0h2m3 0h3m2 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m2 0h1m3 0h2m3 0h1m7 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m3 0h1m5 0h3m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m2 0h1m2 0h1m2 0h2m1 0h1m2 0h2m3 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h6m3 0h1m-24 1h1m1 0h2m1 0h3m4 0h1m2 0h1m1 0h2m1 0h2m1 0h1m2 0h1m2 0h1m1 0h2m-30 1h1m1 0h1m7 0h1m2 0h6m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h3m1 0h6m1 0h1m1 0h1m4 0h1m1 0h1m1 0h3m1 0h4m2 0h1m-31 1h1m2 0h1m2 0h1m3 0h1m3 0h2m2 0h1m2 0h1m3 0h1m1 0h1m2 0h1m-29 1h1m1 0h1m4 0h1m2 0h1m1 0h1m2 0h2m1 0h1m1 0h2m1 0h3m1 0h2m-31 1h1m5 0h1m1 0h1m1 0h1m1 0h1m5 0h6m1 0h1m2 0h2m-32 1h1m2 0h4m1 0h1m1 0h1m6 0h4m1 0h1m1 0h1m1 0h1m1 0h3m-31 1h4m1 0h1m1 0h2m4 0h1m1 0h1m2 0h1m2 0h2m2 0h6m-31 1h1m2 0h1m1 0h3m4 0h3m5 0h3m2 0h2m1 0h2m-26 1h1m4 0h1m1 0h1m1 0h1m1 0h1m4 0h1m2 0h4m1 0h2m1 0h2m-32 1h1m3 0h4m1 0h3m1 0h2m2 0h1m1 0h1m3 0h1m2 0h2m1 0h2m-32 1h2m2 0h1m2 0h1m2 0h1m2 0h1m2 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h2m-33 1h2m2 0h3m5 0h2m2 0h1m2 0h1m1 0h2m5 0h5m-33 1h1m1 0h4m2 0h1m1 0h2m1 0h1m1 0h3m2 0h2m1 0h4m5 0h1m-30 1h1m2 0h1m1 0h1m2 0h2m2 0h1m2 0h4m1 0h3m1 0h1m2 0h3m-32 1h2m4 0h1m3 0h1m1 0h3m4 0h1m6 0h1m1 0h1m1 0h1m-32 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h2m1 0h1m2 0h9m-23 1h1m2 0h1m1 0h4m2 0h1m1 0h2m1 0h1m3 0h2m-30 1h7m1 0h1m1 0h1m1 0h2m3 0h5m1 0h2m1 0h1m1 0h1m-29 1h1m5 0h1m1 0h1m2 0h1m1 0h3m1 0h2m2 0h4m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m2 0h1m1 0h2m1 0h7m2 0h6m1 0h2m-32 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m2 0h3m2 0h1m1 0h1m2 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h2m1 0h3m3 0h3m2 0h2m1 0h1m-30 1h1m5 0h1m2 0h1m3 0h1m3 0h2m1 0h1m3 0h1m1 0h4m2 0h1m-33 1h7m1 0h4m2 0h1m1 0h4m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1"/></svg></div>
+<div class="share-url" onclick="copyLink()">motchristiansen.github.io/KW-Happy-Hour</div>
+<div class="share-btns"><button class="btn-primary" onclick="sendLink()">📤 Send link</button><button class="btn-secondary" id="installBtn" onclick="installApp()">📲 Add to Home Screen</button></div>
+<div class="a2hs" id="a2hsHelp"><b>Hey!</b> We found it really handy to have this at our fingertips while walking around. Add it to your home screen so it's there when you need it. No app store, nothing to download &mdash; it's just this web page with a home-screen button.
+<div class="a2hs-steps"><div><b>iPhone</b> (Safari): tap Share <span class="ios-share">&#x2B06;&#xFE0E;</span> &rarr; <b>Add to Home Screen</b></div><div><b>Android</b> (Chrome): tap the button above, or &#8942; &rarr; <b>Add to Home screen</b></div></div>
+<div class="a2hs-done" id="a2hsDone">✅ You're already using it from your home screen. Nice.</div></div>
+</div>
+<button class="modal-close" onclick="closeShare()">Close</button></div></div>
+<div class="toast" id="toast"></div>
 <div class="modal-overlay" id="placesModal" onclick="closePlaces(event)"><div class="modal places-modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header"><h2>Filter Places</h2></div><div class="places-list" id="placesList"></div><div class="places-actions"><button class="btn-secondary" onclick="setAllPlaces(true)">All</button><button class="btn-secondary" onclick="setAllPlaces(false)">None</button><button class="btn-primary" onclick="applyPlacesFilter()">Apply</button></div></div></div>
 <script>
 const V=[
@@ -353,10 +385,22 @@ function openPlacesFilter(){const P=buildPlaces(),l=document.getElementById('pla
 function closePlaces(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placesModal').classList.remove('active');document.body.style.overflow=''}
 function setAllPlaces(v){document.querySelectorAll('#placesList input[type="checkbox"]').forEach(x=>x.checked=v)}
 function applyPlacesFilter(){hiddenPlaces=new Set();document.querySelectorAll('#placesList input[type="checkbox"]').forEach(c=>{if(!c.checked)hiddenPlaces.add(c.dataset.k)});try{localStorage.setItem('kw2_hidden',JSON.stringify([...hiddenPlaces]))}catch(e){}updatePlacesBtn();closePlaces();render()}
-function updatePlacesBtn(){const b=document.getElementById('placesBtn'),P=buildPlaces(),tot=P.ent.length,hid=P.ent.filter(e=>hiddenPlaces.has(e.k)).length;b.classList.toggle('active',hid>0);b.innerHTML=`\u2699<span class="plt"> Places</span> (${tot-hid})`}
+function updatePlacesBtn(){const b=document.getElementById('placesBtn'),P=buildPlaces(),tot=P.ent.length,hid=P.ent.filter(e=>hiddenPlaces.has(e.k)).length;b.classList.toggle('active',hid>0);b.innerHTML=`\u2699<span class="plt"> Places</span><span class="pcount">${tot-hid}</span>`}
 window.addEventListener('scroll',()=>{document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
-(function(){const s=document.getElementById('timeFilter');[...s.options].forEach(o=>{o.dataset.l=o.textContent;o.dataset.s=o.textContent.replace(/\s+\d.*$/,'')});const sh=()=>[...s.options].forEach(o=>o.textContent=o.dataset.s),lg=()=>[...s.options].forEach(o=>o.textContent=o.dataset.l);s.addEventListener('focus',lg);s.addEventListener('mousedown',lg);s.addEventListener('touchstart',lg,{passive:true});s.addEventListener('change',()=>{sh();s.blur()});s.addEventListener('blur',sh);sh()})();
-setInterval(render,60000);init();loadMusic();setInterval(loadMusic,3600000);
+function shortSel(id,fn){const s=document.getElementById(id);const prep=()=>[...s.options].forEach(o=>{if(!o.dataset.l){o.dataset.l=o.textContent;o.dataset.s=fn(o.textContent)}});const sh=()=>{prep();[...s.options].forEach(o=>o.textContent=o.dataset.s)},lg=()=>{prep();[...s.options].forEach(o=>o.textContent=o.dataset.l)};s.addEventListener('focus',lg);s.addEventListener('mousedown',lg);s.addEventListener('touchstart',lg,{passive:true});s.addEventListener('change',()=>{sh();s.blur()});s.addEventListener('blur',sh);return sh}
+const shortTime=shortSel('timeFilter',x=>x.replace(/^[^A-Za-z]+/,'').replace(/\s+\d.*$/,''));
+const SHARE_URL='https://motchristiansen.github.io/KW-Happy-Hour/';let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
+function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function openShare(){const ib=document.getElementById('installBtn'),done=document.getElementById('a2hsDone');if(isStandalone()){ib.style.display='none';done.style.display='block'}else{ib.style.display='';done.style.display='none';ib.textContent=isIOS()?'📲 How to add (iPhone)':'📲 Add to Home Screen'}document.getElementById('shareModal').classList.add('active');document.body.style.overflow='hidden'}
+function closeShare(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('shareModal').classList.remove('active');document.body.style.overflow=''}
+function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied'),()=>toast(SHARE_URL))}catch(e){toast(SHARE_URL)}}
+function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null})}else{const h=document.getElementById('a2hsHelp');h.scrollIntoView({behavior:'smooth',block:'center'});h.style.boxShadow='0 0 0 3px var(--coral)';setTimeout(()=>h.style.boxShadow='',1800)}}
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+setInterval(render,60000);init();shortSel('dayFilter',x=>x.slice(0,3))();shortTime();loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>
 </html>

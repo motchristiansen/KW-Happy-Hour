@@ -364,20 +364,22 @@ function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-U
 const KW_CENTER=[24.5551,-81.7800];
 function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}if(typeof fitSels==='function')try{fitSels()}catch(e){}updateInfo();
 const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElementById('timeFilter').value,C=document.getElementById('content');
-const hhToday=dayVal!=='all'&&parseInt(dayVal)===appNow().getDay();const items=[];
-if(wantHH())V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dayVal==='all'||matchDay(hh.d,parseInt(dayVal))))return;if(!nowActive&&timeVal!=='all'&&!matchTime(hh.s,hh.e,timeVal))return;
+function collect(dv,dt,hhToday){const items=[];
+if(wantHH())V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dv==='all'||matchDay(hh.d,parseInt(dv))))return;if(!nowActive&&timeVal!=='all'&&!matchTime(hh.s,hh.e,timeVal))return;
  const st=hhToday?getStatus(hh.s,hh.e):'later';if(st==='ended')return;if(nowActive&&st!=='now'&&st!=='soon')return;
  items.push({k:placeKey(v.n),a:v.a,fa:v.fa,lat:v.lat,lng:v.lng,ty:'hh',s:hh.s,e:hh.e,st,txt:v.fo||v.dr,open:`openDetail(${vi},${hh.s},${hh.e},'${hh.d}')`})})});
-const dt=ffDate();
 if(dt){prep(FF,dt,wantFF).forEach(x=>items.push({k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
  if(wantMU())prep(MUSIC,dt,()=>true).forEach(x=>items.push({k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
+return items}
+const allWeek=dayVal==='all'&&!nowActive,hhToday=dayVal!=='all'&&parseInt(dayVal)===appNow().getDay();const dt=allWeek?null:ffDate();const items=allWeek?[]:collect(dayVal,dt,hhToday);
 const P=buildPlaces(),nameOf={};P.ent.forEach(e=>nameOf[e.k]=e.n);const pri={hh:0,ff:1,mu:2};
 const isToday=hhToday||dt===todayStr();const near=nearbyActive&&userLat!=null,onIsland=near&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;
 function mk(its){const cards={};its.forEach(it=>{const c=cards[it.k]||(cards[it.k]={k:it.k,name:nameOf[it.k]||it.k,items:[],lat:null,lng:null,a:'',fa:'',ap:9});c.items.push(it);if(c.lat==null&&it.lat!=null){c.lat=it.lat;c.lng=it.lng}if(it.a&&pri[it.ty]<c.ap){c.a=it.a;c.fa=it.fa;c.ap=pri[it.ty]}});
  let l=Object.values(cards);l.forEach(c=>{c.items.sort((a,b)=>a.s-b.s);c.first=Math.min(...c.items.map(i=>i.s));c.hot=c.items.some(i=>i.st==='now')?2:c.items.some(i=>i.st==='soon')?1:0;c.dist=near&&c.lat!=null?distMi(userLat,userLng,c.lat,c.lng):null});
  if(onIsland)l=l.filter(c=>c.dist!=null&&c.dist<=NEARBY_MI);return l}
 const byDist=(a,b)=>(a.dist==null?1e9:a.dist)-(b.dist==null?1e9:b.dist)||a.first-b.first,byTime=(a,b)=>a.first-b.first||a.name.localeCompare(b.name);
-const groups=isToday?[['Happening Now \u00B7 next 2 hrs',mk(items.filter(i=>i.st==='now'||i.st==='soon'))],['Rest of today',mk(items.filter(i=>i.st!=='now'&&i.st!=='soon'))]]:[[(dayVal==='all'?'All days':DN[parseInt(dayVal)]),mk(items)]];
+const WEEK=['2026-10-19','2026-10-20','2026-10-21','2026-10-22','2026-10-23','2026-10-24','2026-10-25','2026-10-26'];
+const groups=allWeek?WEEK.map(d=>{const g=mk(collect(String(new Date(d+'T12:00').getDay()),d,d===todayStr()));g.forEach(c=>c.dt=d);return [new Date(d+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}),g]}):isToday?[['Happening Now \u00B7 next 2 hrs',mk(items.filter(i=>i.st==='now'||i.st==='soon'))],['Rest of today',mk(items.filter(i=>i.st!=='now'&&i.st!=='soon'))]]:[[(dayVal==='all'?'All days':DN[parseInt(dayVal)]),mk(items)]];
 const nearNote=onIsland?' \u00B7 within 5 blocks':'';let html='';
 groups.forEach(([lbl,g])=>{if(!g.length)return;g.sort(near?byDist:byTime);html+=`<div class="section-label">${lbl}${nearNote} <span class="count">${g.length}</span></div>`;g.forEach(c=>html+=placeCard(c))});
 C.innerHTML=html||`<div class="no-results"><div class="emoji">\uD83C\uDF19</div><p>${onIsland?'Nothing within 5 blocks right now.<br>Turn off Nearby to see everything.':'Nothing matches your filters.<br>Try a different time or day!'}</p></div>`}
@@ -390,7 +392,7 @@ function shareCard(k){const c=CARDS[k];if(!c)return;const now=c.items.filter(i=>
  const where=c.name+(c.a?' ('+c.a+')':'');let msg;
  if(now.length)msg="I'm here now: "+where+'\n'+now.slice(0,3).map(i=>lineTxt(i,false)).join('\n');
  else msg="I'm thinking about going here later: "+where+'\n'+next.slice(0,3).map(i=>lineTxt(i,true)).join('\n');
- const url=pageURL()+'?p='+encodeURIComponent(k)+'&d='+viewDate();
+ const url=pageURL()+'?p='+encodeURIComponent(k)+'&d='+(c.dt||viewDate());
  if(navigator.share)navigator.share({title:'KW Happy Hour',text:msg,url}).catch(()=>{});else{try{navigator.clipboard.writeText(msg+'\n'+url).then(()=>toast('Copied, paste it in a text'))}catch(e){toast('Sharing not supported here')}}}
 let DL=null,DLdone=false;
 function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchParams(location.search);DL=q.get('p')?{k:q.get('p'),d:q.get('d')}:false;
@@ -450,7 +452,7 @@ function shareCrawl(){if(!CRAWL||!CRAWL.stops.length)return;const txt='\uD83D\uD
 
 function placeCard(c){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'};const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.fa||c.name+', Key West, FL')}`;
 const lines=c.items.map(i=>`<div class="pline" onclick="${i.open}"><span class="pl-ic">${ic[i.ty]}</span><span class="pl-t">${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</span>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="pl-x">${esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}</div>`).join('');
-CARDS[c.k]=c;return `<div class="pcard ${c.hot===2?'hot':c.hot===1?'warm':''}" data-k="${c.k}"><div class="pc-head"><div class="pc-name">${esc(c.name)}</div><button class="pc-share" aria-label="Share this spot" onclick="event.stopPropagation();shareCard(\'${c.k}\')"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"/></svg></button>${c.dist!=null?`<span class="pc-dist">${c.dist<0.1?'< 0.1':c.dist.toFixed(1)} mi</span>`:''}</div><a class="pc-addr" href="${mu}" target="_blank">\uD83D\uDCCD ${esc(c.a||'Map')}</a><div class="pc-lines">${lines}</div>${c.items.some(i=>i.ty==='hh')&&inFest(viewDate())?'<div class="pc-note">Fest week: happy hour deals may change, confirm before you go.</div>':''}</div>`}
+CARDS[c.k]=c;return `<div class="pcard ${c.hot===2?'hot':c.hot===1?'warm':''}" data-k="${c.k}"><div class="pc-head"><div class="pc-name">${esc(c.name)}</div><button class="pc-share" aria-label="Share this spot" onclick="event.stopPropagation();shareCard(\'${c.k}\')"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"/></svg></button>${c.dist!=null?`<span class="pc-dist">${c.dist<0.1?'< 0.1':c.dist.toFixed(1)} mi</span>`:''}</div><a class="pc-addr" href="${mu}" target="_blank">\uD83D\uDCCD ${esc(c.a||'Map')}</a><div class="pc-lines">${lines}</div>${c.items.some(i=>i.ty==='hh')&&inFest(c.dt||viewDate())?'<div class="pc-note">Fest week: happy hour deals may change, confirm before you go.</div>':''}</div>`}
 
 
 function openDetail(vi,start,end,days){const v=V[vi],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.fa)}`,dd=days==='daily'?'Every Day':days.toUpperCase();

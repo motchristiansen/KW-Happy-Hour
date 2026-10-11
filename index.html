@@ -313,7 +313,7 @@ document.getElementById('modalHeader').innerHTML=`<h2>${esc(x.n)}</h2><div class
 const ar=artOf(x.n);document.getElementById('modalBody').innerHTML=(ar?`<div class="modal-section"><h3>\uD83C\uDFB5 Style</h3><div class="detail-text"><b>${esc(ar.g)}</b><br>${esc(ar.b)}</div></div>`:'')+((x.t==='LIVE'||x.t==='DJ')?`<div class="modal-section"><h3>${ar&&(ar.yt||ar.fb||ar.ig)?'Their pages':'Look them up'}</h3>${linkRow(x.n)}</div>`:'')+`<div class="modal-section"><h3>Type</h3><div class="detail-text">${esc(x.t)}</div></div><div class="modal-section"><h3>Source</h3><div class="detail-text" style="font-size:13px">${x.src==='LME'?'livemusiceveryday.com':'keywestconcierge.com'} (auto-updated). Lineups can change last minute.</div></div>`;
 document.getElementById('detailModal').classList.add('active');document.body.style.overflow='hidden'}
 function todayStr(){const d=appNow();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;if(dv==='all')return null;return parseInt(dv)===appNow().getDay()?todayStr():TRIP[dv]}
+function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;if(dv==='all')return null;const td=todayStr();return parseInt(dv)===appNow().getDay()&&td>='2026-10-16'&&td<='2026-10-26'?td:TRIP[dv]}
 function ffTime(x){return tStr(x.s)+(x.e!==null?'<br>\u2013<br>'+tStr(x.e):'')}
 function endOf(x){return x.e!==null?x.e:x.s+(x.s>=17?4:3)}
 function evStatus(x){if(x.dt!==todayStr())return'later';return getStatus(x.s,endOf(x))}

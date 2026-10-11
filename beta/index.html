@@ -317,7 +317,7 @@ const ART={"elle haley": {"g": "Americana singer-songwriter", "b": "2025 Key Wes
 function artOf(n){const k=n.toLowerCase().replace(/’/g,"'");return ART[k]||null}
 function srch(n){const q=encodeURIComponent(n+' Key West'),a=artOf(n)||{};return{yt:a.yt||'https://www.youtube.com/results?search_query='+q,fb:a.fb||'https://www.facebook.com/search/top?q='+q,gg:'https://www.google.com/search?q='+encodeURIComponent('"'+n+'" Key West music'),ig:a.ig}}
 function linkRow(n){const s=srch(n);return `<div class="mlinks" onclick="event.stopPropagation()"><a href="${s.yt}" target="_blank">\u25B6\uFE0F YouTube</a><a href="${s.fb}" target="_blank">\uD83D\uDCD8 Facebook</a>${s.ig?`<a href="${s.ig}" target="_blank">\uD83D\uDCF8 Insta</a>`:''}<a href="${s.gg}" target="_blank">\uD83D\uDD0E Google</a></div>`}
-function loadMusic(){fetch((location.pathname.includes('/beta/')?'../':'')+'music.json?'+Date.now()).then(r=>r.json()).then(d=>{if(!d||!d.items)return;MUSIC=norm4(d.items);PLC=null;updatePlacesBtn();setTimeout(handleDeepLink,50);MUP=d.updated;try{localStorage.setItem('kw_music_data',JSON.stringify(d))}catch(e){}render()}).catch(()=>{})}
+function loadMusic(){fetch((location.pathname.includes('/beta/')?'../':'')+'music.json?'+Date.now()).then(r=>r.json()).then(d=>{if(!d||!d.items)return;MUSIC=norm4(d.items);PLC=null;updatePlacesBtn();favUI();setTimeout(handleDeepLink,50);MUP=d.updated;try{localStorage.setItem('kw_music_data',JSON.stringify(d))}catch(e){}render()}).catch(()=>{})}
 function openMusic(i){const x=MUSIC[i],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.v+', '+(x.a||'')+', Key West, FL')}`,lbl=new Date(x.dt+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
 document.getElementById('modalHeader').innerHTML=`<h2>${esc(x.n)}</h2><div class="modal-time">\uD83D\uDD50 ${tStr(x.s)}${x.e!==null?' \u2013 '+tStr(x.e):''}</div><div class="modal-days">\uD83D\uDCC5 ${lbl}</div><div class="modal-address"><a href="${mu}" target="_blank">\uD83D\uDCCD ${esc(x.v)}${x.a?' \u2014 '+x.a:''}</a></div>`;
 const ar=artOf(x.n);document.getElementById('modalBody').innerHTML=(ar?`<div class="modal-section"><h3>\uD83C\uDFB5 Style</h3><div class="detail-text"><b>${esc(ar.g)}</b><br>${esc(ar.b)}</div></div>`:'')+((x.t==='LIVE'||x.t==='DJ')?`<div class="modal-section"><h3>${ar&&(ar.yt||ar.fb||ar.ig)?'Their pages':'Look them up'}</h3>${linkRow(x.n)}</div>`:'')+`<div class="modal-section"><h3>Type</h3><div class="detail-text">${esc(x.t)}</div></div><div class="modal-section"><h3>Source</h3><div class="detail-text" style="font-size:13px">${x.src==='LME'?'livemusiceveryday.com':'keywestconcierge.com'} (auto-updated). Lineups can change last minute.</div></div>`;
@@ -373,9 +373,15 @@ function updateInfo(){const now=new Date();const ts=now.toLocaleTimeString('en-U
 
 let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem('kw2_favs')||'[]'))}catch(e){}let FAVONLY=false;
 function favSave(){try{localStorage.setItem('kw2_favs',JSON.stringify([...FAVS]))}catch(e){}}
-function favUI(){const z=document.getElementById('favZone');if(!z)return;document.getElementById('favCnt').textContent=FAVS.size+' saved';z.classList.toggle('on',FAVONLY);document.getElementById('favPath').setAttribute('fill',FAVONLY?'currentColor':'none')}
+function favInfo(f){const p=f.split('|');if(p[0]==='hh')return {once:false};const dt=p[1];let s=null,e=null;
+ if(p[0]==='ff'){const x=FF.find(x=>x.dt===dt&&x.n===p.slice(2).join('|'));if(x){s=x.s;e=endOf(x)}}
+ else if(p[0]==='mu'){const v=p[2],st=parseFloat(p[3]),n=p.slice(4).join('|');const x=MUSIC.find(x=>x.dt===dt&&x.v===v&&x.s===st&&x.n===n);s=st;e=x&&x.e!=null?x.e:st+3}
+ return {once:true,dt,s,e}}
+function favUpcoming(f){const i=favInfo(f);if(!i.once)return true;const td=todayStr();if(i.dt>td)return true;if(i.dt<td)return false;return i.s==null||getStatus(i.s,i.e)!=='ended'}
+function favPrune(){const td=todayStr();let ch=false;[...FAVS].forEach(f=>{const i=favInfo(f);if(i.once&&i.dt<td){FAVS.delete(f);ch=true}});if(ch)favSave()}
+function favUI(){const z=document.getElementById('favZone');if(!z)return;favPrune();document.getElementById('favCnt').textContent=[...FAVS].filter(favUpcoming).length+' saved';z.classList.toggle('on',FAVONLY);document.getElementById('favPath').setAttribute('fill',FAVONLY?'currentColor':'none')}
 function favPop(){const z=document.getElementById('favZone');z.classList.remove('pop');void z.offsetWidth;z.classList.add('pop');setTimeout(()=>z.classList.remove('pop'),300)}
-function toggleFavFilter(){if(!FAVONLY&&!FAVS.size){toast('Tap \u2661 on any line to save it');favPop();return}FAVONLY=!FAVONLY;favUI();favPop();render()}
+function toggleFavFilter(){favPrune();if(!FAVONLY&&!FAVS.size){toast('Tap \u2661 on any line to save it');favPop();return}FAVONLY=!FAVONLY;favUI();favPop();render()}
 function toggleFav(btn){const f=btn.dataset.f;if(FAVS.has(f))FAVS.delete(f);else FAVS.add(f);favSave();btn.classList.toggle('on',FAVS.has(f));btn.textContent=FAVS.has(f)?'\u2665':'\u2661';favUI();favPop();if(FAVONLY&&!FAVS.size){FAVONLY=false;favUI()}if(FAVONLY)render()}
 const KW_CENTER=[24.5551,-81.7800];
 function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}if(typeof fitSels==='function')try{fitSels()}catch(e){}updateInfo();
@@ -514,7 +520,7 @@ function closeShare(e){if(e&&e.target!==e.currentTarget)return;document.getEleme
 function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied'),()=>toast(SHARE_URL))}catch(e){toast(SHARE_URL)}}
 function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
 if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});if(window.caches)caches.keys().then(k=>k.forEach(n=>caches.delete(n))).catch(()=>{});
-setInterval(render,60000);init();favUI();handleDeepLink();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
+setInterval(()=>{render();favUI()},60000);init();favUI();handleDeepLink();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>
 </html>

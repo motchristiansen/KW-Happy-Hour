@@ -171,6 +171,21 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 @media(max-width:399px){.ffr{flex-basis:64px!important}.ffcard .chips{gap:4px}.ffr .ffr-t{font-size:12.5px}.ffr .ffr-ic svg{width:38px;height:38px}.ffl{padding:12px 10px!important}.ffcard .chip{padding:4px 7px;font-size:11px}.fft{font-size:14px}.ffs{font-size:11px}}
 .pl-fav{flex:0 0 auto;border:none;background:none;color:#c0392b;font-size:18px;line-height:1;padding:2px 2px 2px 6px;cursor:pointer;opacity:.55}
 .pl-fav.on{opacity:1}
+.leg-btn{width:100%;border:none;border-radius:12px;padding:12px 14px;background:linear-gradient(135deg,#b8860b,#e0a526);color:#fff;font-family:'DM Sans',sans-serif;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;margin-bottom:6px;box-shadow:0 2px 8px var(--shadow)}
+.leg-btn-t{font-size:16px;font-weight:700}.leg-btn-s{font-size:12px;opacity:.95}
+.cp-or{text-align:center;font-size:12px;color:var(--text-light);margin:8px 0 10px}
+.leg-pb{margin:2px 0 4px;height:8px;border-radius:4px;background:#e8edf0;overflow:hidden}.leg-pb .pf{height:100%;background:#2d8659;border-radius:4px;transition:width .3s}
+.leg-pt{font-size:13px;font-weight:700;color:#2d8659;margin-bottom:6px}
+.leg-nudge{margin:6px 0;background:#f0e6f6;color:#7d3c98;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.leg-nudge button{border:none;background:#7d3c98;color:#fff;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer}
+.leg-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.leg-b{flex:1;min-width:0}.leg-n{font-size:15px;font-weight:700}.leg-row.hit .leg-n{color:#2d8659}
+.leg-a{font-size:11px;color:var(--ocean);margin-top:1px}.leg-x{font-size:12px;color:var(--text-light);line-height:1.4;margin-top:3px}
+.leg-note{font-size:11px;color:#9a6a12;margin-top:3px;font-style:italic}.leg-today{font-size:11px;color:var(--ocean);font-weight:600;margin-top:3px}.leg-when{font-size:11px;color:#2d8659;font-weight:700;margin-top:3px}
+.leg-cb{flex:0 0 22px;height:22px;border:2px solid #9aa8ab;border-radius:5px;margin-top:2px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+.leg-row.hit .leg-cb{background:#2d8659;border-color:#2d8659}
+.leg-walknote{font-size:11px;color:var(--text-light);text-align:center;margin:-6px 0 8px}
+#legWalk:disabled{opacity:.4}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -223,12 +238,13 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="modal-overlay" id="crawlModal" onclick="closeCrawl(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
 <div class="modal-header"><h2 id="crawlTitle">Build your crawl</h2><div class="modal-days" id="crawlSub"></div></div>
 <div class="modal-body">
-<div id="crawlPrefs"><div class="cp-q">Must-haves</div><div class="cp-opts" id="cpInto">
+<div id="crawlPrefs"><button class="leg-btn" onclick="openLegend()"><span class="leg-btn-t">🏆 Legendary Crawl</span><span class="leg-btn-s" id="legBtnSub"></span></button><div class="cp-or">or build your own</div><div class="cp-q">Must-haves</div><div class="cp-opts" id="cpInto">
 <button class="copt" data-v="drinks" onclick="cpInto('drinks')">Drink deals</button><button class="copt" data-v="food" onclick="cpInto('food')">Food deals</button><button class="copt" data-v="music" onclick="cpInto('music')">Live bands</button><button class="copt" data-v="dj" onclick="cpInto('dj')">DJs / dancing</button><button class="copt" data-v="fest" onclick="cpInto('fest')">Fest events</button></div>
 <div class="cp-q">Stops</div><div class="cp-seg" id="cpStops"><button class="cseg" data-v="3" onclick="cpSet('stops',3)">3</button><button class="cseg" data-v="4" onclick="cpSet('stops',4)">4</button><button class="cseg" data-v="5" onclick="cpSet('stops',5)">5</button></div>
 <div class="cp-q">Time at each stop</div><div class="cp-seg" id="cpDur"><button class="cseg" data-v="0.75" onclick="cpSet('dur',0.75)">45 min</button><button class="cseg" data-v="1" onclick="cpSet('dur',1)">1 hr</button><button class="cseg" data-v="1.5" onclick="cpSet('dur',1.5)">1.5 hrs</button></div>
 <div class="cp-q">Route</div><div class="cp-seg" id="cpRoute"><button class="cseg" data-v="oneway" onclick="cpSet('route','oneway')">One way</button><button class="cseg" data-v="loop" onclick="cpSet('route','loop')">Loop back</button></div>
 <button class="btn-primary cp-go" id="cpGo" onclick="goCrawl()">Build my crawl</button></div>
+<div id="crawlLegend" style="display:none"><div class="pb leg-pb"><div class="pf" id="legPf"></div></div><div class="leg-pt" id="legPt"></div><div id="legNudge"></div><div id="legList"></div><div class="share-btns" style="margin-top:12px"><button class="btn-primary" id="legWalk" onclick="legWalk()">Walk it</button><button class="btn-secondary" onclick="legShare()">Share progress</button></div><div class="leg-walknote" id="legWalkNote"></div><div class="share-btns"><button class="btn-secondary" onclick="crawlView('prefs')">← Build your own crawl</button></div></div>
 <div id="crawlRes" style="display:none"><div id="crawlList"></div><div class="share-btns" id="crawlBtns"><button class="btn-primary" onclick="walkCrawl()">Walk it</button><button class="btn-secondary" onclick="shareCrawl()">Share crawl</button></div>
 <div class="share-btns" id="crawlShuffle"><button class="btn-secondary" onclick="shuffleCrawl()">Shuffle</button><button class="btn-secondary" onclick="crawlView('prefs')">Create new</button></div></div>
 </div>
@@ -488,7 +504,50 @@ function renderCrawl(){const {stops,date,start,endGap,route,want}=CRAWL,near=!!s
 function saveCrawl(){try{localStorage.setItem('kw2_lastcrawl',JSON.stringify({date:CRAWL.date,start:CRAWL.start,endGap:CRAWL.endGap,route:CRAWL.route,want:CRAWL.want,stops:CRAWL.stops.map(s=>({p:{k:s.p.k,name:s.p.name,lat:s.p.lat,lng:s.p.lng,a:s.p.a},T:s.T,d:s.d,why:s.why,act:s.act}))}))}catch(e){}}
 function loadCrawl(){try{const c=JSON.parse(localStorage.getItem('kw2_lastcrawl')||'null');if(c&&c.stops&&c.stops.length>=2&&c.date>=todayStr())return c}catch(e){}return null}
 function shuffleCrawl(){if(!CRAWL_CANDS.length){const prev=CRAWL&&CRAWL.stops.map(s=>s.p.k).join('>');CP=cpGet();buildCrawl(false);if(CRAWL.stops.map(s=>s.p.k).join('>')===prev&&CRAWL_CANDS.length>1)buildCrawl(true)}else buildCrawl(true)}
-function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';
+/* ---------- Legendary Crawl ---------- */
+const LEGENDS=[
+{id:'schooner',n:'Schooner Wharf',a:'202 William St',lat:24.5610,lng:-81.8018,m:['schoonerwharf'],x:"Open-air bar on the Historic Seaport waterfront that bills itself as \u201Ca last little piece of old Key West.\u201D Live music daily, with the maritime vibe that's long defined the island."},
+{id:'twofriends',n:'Two Friends Patio',a:'512 Front St',lat:24.5588,lng:-81.8056,m:['twofriends'],x:"A Key West icon since 1967 and a favorite hangout of Johnny Carson. Treasure hunter Mel Fisher is said to have received his first chests of Atocha gold here."},
+{id:'hogsbreath',n:"Hog's Breath Saloon",a:'400 Front St',lat:24.5592,lng:-81.8060,m:['hogsbreath'],x:"The Hog's Breath was born in Fort Walton Beach in 1976 and landed in Key West in 1988. Famous motto: \u201CHog's breath is better than no breath at all,\u201D and nobody leaves without the T-shirt."},
+{id:'chartroom',n:'The Chart Room',a:'1 Duval St (Pier House)',lat:24.5603,lng:-81.8063,m:['chartroom'],x:"A converted hotel room turned tiny dive bar, and the site of Jimmy Buffett's first Key West gig. Regulars' ashes are interred in the bar, and the hot dogs and popcorn are still free.",note:"* Tucked inside the Pier House Resort and hard to find. Ask the hotel's front desk to point the way."},
+{id:'smallest',n:'The Smallest Bar',a:'124 Duval St',lat:24.5596,lng:-81.8055,m:['smallestbar'],x:"Just 72 square feet with two stools, and it claims to be the smallest bar in the country. Order the Key Lime Pie shot."},
+{id:'captony',n:"Captain Tony's Saloon",a:'428 Greene St',lat:24.5590,lng:-81.8053,m:['captaintony','capttony'],x:"This building was the original Sloppy Joe's, where Hemingway spent his evenings in the 1930s. Later run by Capt. Tony Tarracino, who became mayor in 1989, and a young Jimmy Buffett played here too."},
+{id:'sloppyjoes',n:"Sloppy Joe's",a:'201 Duval St',lat:24.5591,lng:-81.8050,m:['sloppyjoe'],x:"Opened the day Prohibition ended in 1933 and became Hemingway's favorite; he's said to have named it. Moved to this corner in the late 1930s and hosts the annual Hemingway Look-Alike Contest."},
+{id:'ricks',n:"Rick's / Durty Harry's",a:'202 Duval St',lat:24.5586,lng:-81.8040,m:['ricks','durtyharry'],x:"An entertainment complex with eight bars under one roof. Live rock at Durty Harry's nearly every night, while Rick's upstairs dance club heats up late."},
+{id:'irishkevins',n:"Irish Kevin's",a:'211 Duval St',lat:24.5584,lng:-81.8041,m:['irishkevin'],x:"Singalong show bar on lower Duval since 1998, open until the wee hours. A Duval Crawl staple."},
+{id:'smokintuna',n:"Smokin' Tuna Saloon",a:'4 Charles St',lat:24.5583,lng:-81.8044,m:['smokintuna'],x:"Tucked on a quiet lane just off the 200 block of Duval. Bills itself as having the best live music in Key West."},
+{id:'alamo',n:'The Alamo',a:'4 Charles St',lat:24.5584,lng:-81.8045,m:['alamo'],x:"Next door to the Smokin' Tuna on the same Charles Street lane. A revival of the beloved old El Alamo bar, with live music every day."},
+{id:'bullwhistle',n:'Bull & Whistle / Garden of Eden',a:'224 Duval St',lat:24.5579,lng:-81.8034,m:['bullwhistle','bullandwhistle','gardenofeden'],x:"The last of Duval's old-time open-air bars: three bars stacked in one building. Up top is the Garden of Eden, the island's famously clothing-optional rooftop."},
+{id:'hanks',n:"Hank's Hair of the Dog",a:'409 Caroline St',lat:24.5573,lng:-81.8058,m:['hankshair','hankssaloon'],x:"Dog-friendly open-air saloon on Caroline Street with live music from early afternoon to midnight. The Garbo's Grill food truck out back is a big part of the draw."},
+{id:'williets',n:"Willie T's",a:'525 Duval St',lat:24.5552,lng:-81.8013,m:['williet'],x:"Famous for the tens of thousands of signed dollar bills stapled to its walls and ceiling. Bring a marker and add yours."},
+{id:'greenparrot',n:'Green Parrot',a:'601 Whitehead St',lat:24.5541,lng:-81.8030,m:['greenparrot'],x:"The building dates to 1890 and went from grocery store to sailors' bar before becoming the Green Parrot in the '70s. \u201CA sunny place for shady people,\u201D with live music and never a cover."},
+{id:'rumbar',n:'The Rum Bar',a:'1117 Duval St (Speakeasy Inn)',lat:24.5489,lng:-81.7968,m:['rumbar','speakeasy'],x:"Former home of Prohibition-era rum runner Raul Vasquez, who hid smuggled rum in one of the island's few basements. Now pours hundreds of rums from around the world."}];
+let LEG={};try{LEG=JSON.parse(localStorage.getItem('kw2_legends')||'{}')}catch(e){}
+function legSave(){try{localStorage.setItem('kw2_legends',JSON.stringify(LEG))}catch(e){}}
+function legHit(){return LEGENDS.filter(b=>LEG[b.id]).length}
+function legToday(b){const td=todayStr(),wd=new Date(td+'T12:00').getDay();let best=null;
+ const its=[];V.forEach(v=>{const k=pkey(v.n);if(!b.m.some(m=>k.includes(m)))return;v.h.forEach(h=>{if(matchDay(h.d,wd))its.push({ty:'hh',s:h.s,e:h.e})})});
+ FF.forEach(x=>{if(x.dt===td&&!x.ad&&b.m.some(m=>pkey(x.l).includes(m)))its.push({ty:'ff',s:x.s,e:endOf(x),t:x.n})});
+ MUSIC.forEach(x=>{if(x.dt===td&&b.m.some(m=>pkey(x.v).includes(m)))its.push({ty:'mu',s:x.s,e:x.e!=null?x.e:x.s+3,t:x.n})});
+ its.filter(i=>getStatus(i.s,i.e)!=='ended').sort((a,c)=>a.s-c.s).forEach(i=>{if(!best)best=i});
+ if(!best)return '';return best.ty==='hh'?'\uD83C\uDF78 Happy hour '+tStr(best.s)+'\u2013'+tStr(best.e):(best.ty==='mu'?'\uD83C\uDFB5 ':'\uD83C\uDFAD ')+tStr(best.s)+' '+best.t}
+function legDate(d){return new Date(d+'T12:00').toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'})}
+function renderLegend(){const n=legHit(),tot=LEGENDS.length;
+ document.getElementById('legPf').style.width=(n/tot*100)+'%';document.getElementById('legPt').textContent=n===tot?'All '+tot+' hit. Key West Legend!':"You've hit "+n+' of '+tot;
+ let nud='';if(nearbyActive&&userLat!=null){const c=LEGENDS.filter(b=>!LEG[b.id]).map(b=>({b,d:distMi(userLat,userLng,b.lat,b.lng)})).sort((a,b)=>a.d-b.d)[0];if(c&&c.d<=0.04)nud=`<div class="leg-nudge"><span>At ${esc(c.b.n)}? Check it off</span><button onclick="legToggle('${c.b.id}',true)">Check off</button></div>`}
+ document.getElementById('legNudge').innerHTML=nud;
+ document.getElementById('legList').innerHTML=LEGENDS.map(b=>{const h=LEG[b.id],tdy=h?'':legToday(b);return `<div class="leg-row${h?' hit':''}" onclick="legToggle('${b.id}')"><div class="leg-b"><div class="leg-n">${esc(b.n)}</div><div class="leg-a">\uD83D\uDCCD ${esc(b.a)}</div><div class="leg-x">${esc(b.x)}</div>${b.note?`<div class="leg-note">${esc(b.note)}</div>`:''}${h?`<div class="leg-when">\u2713 Hit ${legDate(h)}</div>`:(tdy?`<div class="leg-today">Today: ${esc(tdy)}</div>`:'')}</div><div class="leg-cb">${h?'\u2713':''}</div></div>`}).join('');
+ const left=LEGENDS.filter(b=>!LEG[b.id]).length;document.getElementById('legWalk').disabled=!left;document.getElementById('legWalkNote').textContent=left>10?'Route covers your next 10 stops.':''}
+function legToggle(id,force){if(LEG[id]&&!force)delete LEG[id];else{LEG[id]=todayStr();const b=LEGENDS.find(x=>x.id===id);if(legHit()===LEGENDS.length)toast('\uD83C\uDFC6 All '+LEGENDS.length+' hit. Key West Legend!');}legSave();renderLegend()}
+function openLegend(){crawlView('legend');renderLegend()}
+function legRouteURL(){const left=LEGENDS.filter(b=>!LEG[b.id]).slice(0,10),ll=p=>p.lat+','+p.lng;if(!left.length)return '';
+ const start=nearbyActive&&userLat!=null?{lat:userLat,lng:userLng}:null,o=start?ll(start):ll(left[0]),dst=ll(left[left.length-1]),mid=(start?left.slice(0,-1):left.slice(1,-1)).map(ll).join('|');
+ return 'https://www.google.com/maps/dir/?api=1&travelmode=walking&origin='+o+'&destination='+dst+(mid?'&waypoints='+encodeURIComponent(mid):'')}
+function legWalk(){const u=legRouteURL();if(u)window.open(u,'_blank')}
+function legShare(){const n=legHit(),tot=LEGENDS.length;const txt=(n===tot?'\uD83C\uDFC6 I hit all '+tot+' legendary Key West bars!':"I've hit "+n+' of '+tot+' legendary Key West bars \uD83C\uDFC6')+'\n'+LEGENDS.map(b=>(LEG[b.id]?'\u2705 ':'\u2B1C ')+b.n).join('\n');
+ if(navigator.share)navigator.share({title:'Legendary Crawl',text:txt,url:pageURL()}).catch(()=>{});else{try{navigator.clipboard.writeText(txt+'\n'+pageURL()).then(()=>toast('Copied, paste it in a text'))}catch(e){}}}
+
+function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';document.getElementById('crawlLegend').style.display=v==='legend'?'':'none';if(v==='legend'){document.getElementById('crawlTitle').textContent='Legendary Crawl';document.getElementById('crawlSub').textContent='The bucket-list bars of Key West';return}if(v==='prefs'){const lb=document.getElementById('legBtnSub');if(lb)lb.textContent=LEGENDS.length+' bucket-list bars \u00B7 you\u2019ve hit '+legHit()}
  document.getElementById('crawlTitle').textContent=v==='prefs'?'Build your crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Every stop will have all of these'}
 function openCrawl(){CP=cpGet();cpRender();const last=loadCrawl();if(last){CRAWL=last;CRAWL_CANDS=[];renderCrawl();crawlView('res')}else crawlView('prefs');document.getElementById('crawlModal').classList.add('active');document.body.style.overflow='hidden'}
 function goCrawl(){if(!CP.into.length)return;cpSave();LASTCRAWL=new Set();buildCrawl(false);crawlView('res')}

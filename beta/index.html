@@ -227,6 +227,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <button class="copt" data-v="drinks" onclick="cpInto('drinks')">Drink deals</button><button class="copt" data-v="food" onclick="cpInto('food')">Food deals</button><button class="copt" data-v="music" onclick="cpInto('music')">Live bands</button><button class="copt" data-v="dj" onclick="cpInto('dj')">DJs / dancing</button><button class="copt" data-v="fest" onclick="cpInto('fest')">Fest events</button></div>
 <div class="cp-q">Stops</div><div class="cp-seg" id="cpStops"><button class="cseg" data-v="3" onclick="cpSet('stops',3)">3</button><button class="cseg" data-v="4" onclick="cpSet('stops',4)">4</button><button class="cseg" data-v="5" onclick="cpSet('stops',5)">5</button></div>
 <div class="cp-q">Time at each stop</div><div class="cp-seg" id="cpDur"><button class="cseg" data-v="0.75" onclick="cpSet('dur',0.75)">45 min</button><button class="cseg" data-v="1" onclick="cpSet('dur',1)">1 hr</button><button class="cseg" data-v="1.5" onclick="cpSet('dur',1.5)">1.5 hrs</button></div>
+<div class="cp-q">Route</div><div class="cp-seg" id="cpRoute"><button class="cseg" data-v="oneway" onclick="cpSet('route','oneway')">One way</button><button class="cseg" data-v="loop" onclick="cpSet('route','loop')">Loop back</button></div>
 <button class="btn-primary cp-go" id="cpGo" onclick="goCrawl()">Build my crawl</button></div>
 <div id="crawlRes" style="display:none"><div id="crawlList"></div><div class="share-btns" id="crawlBtns"><button class="btn-primary" onclick="walkCrawl()">Walk it</button><button class="btn-secondary" onclick="shareCrawl()">Share crawl</button></div>
 <div class="share-btns" id="crawlShuffle"><button class="btn-secondary" onclick="buildCrawl(true)">Shuffle</button><button class="btn-secondary" onclick="crawlView('prefs')">Change picks</button></div></div>
@@ -424,13 +425,14 @@ function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchPa
  else if(MUSIC.length){DLdone=true;toast("That spot isn't showing with your current filters")}}
 /* ---------- bar crawl (with preferences) ---------- */
 let CRAWL=null,LASTCRAWL=new Set();
-const CP_DEF={into:['drinks','music'],stops:4,dur:1};
-function cpGet(){try{const c=JSON.parse(localStorage.getItem('kw2_crawl')||'null');if(c&&c.into&&c.into.length)return c}catch(e){}return {...CP_DEF,into:[...CP_DEF.into]}}
+const CP_DEF={into:['drinks','music'],stops:4,dur:1,route:'oneway'};
+function cpGet(){try{const c=JSON.parse(localStorage.getItem('kw2_crawl')||'null');if(c&&c.into&&c.into.length){if(!c.route)c.route='oneway';return c}}catch(e){}return {...CP_DEF,into:[...CP_DEF.into]}}
 let CP=cpGet();
 function cpSave(){try{localStorage.setItem('kw2_crawl',JSON.stringify(CP))}catch(e){}}
 function cpRender(){document.querySelectorAll('#cpInto .copt').forEach(b=>b.classList.toggle('on',CP.into.includes(b.dataset.v)));
  document.querySelectorAll('#cpStops .cseg').forEach(b=>b.classList.toggle('on',+b.dataset.v===CP.stops));
  document.querySelectorAll('#cpDur .cseg').forEach(b=>b.classList.toggle('on',+b.dataset.v===CP.dur));
+ document.querySelectorAll('#cpRoute .cseg').forEach(b=>b.classList.toggle('on',b.dataset.v===CP.route));
  document.getElementById('cpGo').disabled=!CP.into.length}
 function cpInto(v){const i=CP.into.indexOf(v);i<0?CP.into.push(v):CP.into.splice(i,1);cpRender()}
 function cpSet(k,v){CP[k]=v;cpRender()}
@@ -446,19 +448,41 @@ function whyLines(act,into){const out=[];const has=v=>into.includes(v);
   else if(i.ty==='mu'&&has('music'))out.push({c:'music',t:'\uD83C\uDFB5 '+tStr(i.s)+' '+i.txt});
   else if(i.ty==='dj'&&has('dj'))out.push({c:'dj',t:'\uD83C\uDFA7 '+tStr(i.s)+' '+i.txt});
   else if(i.ty==='ff'&&has('fest'))out.push({c:'fest',t:'\uD83C\uDFAD '+tStr(i.s)+' '+i.txt})});return out}
-function buildCrawl(shuffle){const dv=document.getElementById('dayFilter').value,isT=dv==='all'||parseInt(dv)===appNow().getDay();
- const date=isT?todayStr():viewDate(),wd=new Date(date+'T12:00').getDay(),dur=CP.dur;let T=isT?Math.max(hourNow(),12):17;T=Math.ceil(T*4)/4;
- const pls=crawlCandidates(date,wd),rnd=()=>shuffle?Math.random()*3:Math.random()*0.3;
- const near=nearbyActive&&userLat!=null&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;let prev=near?{lat:userLat,lng:userLng}:null;const stops=[],used=new Set();
- for(let n=0;n<CP.stops;n++){let best=null;
-  for(const rad of [0.3,0.5]){for(const p of pls){if(used.has(p.k)||stops.some(s=>distMi(s.p.lat,s.p.lng,p.lat,p.lng)<0.02))continue;const act=p.items.filter(i=>i.s<T+dur*0.75&&i.e>T+dur*0.25);if(!act.length)continue;
+let CRAWL_CANDS=[],CRAWL_IDX=0;
+function crawlCtx(){const dv=document.getElementById('dayFilter').value,isT=dv==='all'||parseInt(dv)===appNow().getDay();
+ const date=isT?todayStr():viewDate(),wd=new Date(date+'T12:00').getDay();let T0=isT?Math.max(hourNow(),12):17;T0=Math.ceil(T0*4)/4;
+ const near=nearbyActive&&userLat!=null&&distMi(userLat,userLng,KW_CENTER[0],KW_CENTER[1])<=10;
+ return {date,dur:CP.dur,T0,pls:crawlCandidates(date,wd),near,start:near?{lat:userLat,lng:userLng}:null}}
+function cosTurn(a,b,c){const u=[b.lng-a.lng,b.lat-a.lat],v=[c.lng-b.lng,c.lat-b.lat];const m=Math.hypot(...u)*Math.hypot(...v);return m?(u[0]*v[0]+u[1]*v[1])/m:1}
+function genStops(C,noise){const loop=CP.route==='loop';let T=C.T0,prev=C.start,prev2=null;const stops=[],used=new Set();
+ for(let n=0;n<CP.stops;n++){let best=null;const last=n===CP.stops-1;
+  for(const rad of [0.3,0.5]){for(const p of C.pls){if(used.has(p.k)||stops.some(s=>distMi(s.p.lat,s.p.lng,p.lat,p.lng)<0.02))continue;
+    const act=p.items.filter(i=>i.s<T+C.dur*0.75&&i.e>T+C.dur*0.25);if(!act.length)continue;
     const why=whyLines(act,CP.into);const cats=new Set(why.map(w=>w.c));if(!CP.into.every(c=>cats.has(c)))continue;
     const d=prev?distMi(prev.lat,prev.lng,p.lat,p.lng):0;if(prev&&d>rad)continue;
-    const sc=why.length*0.5-d*4+rnd()-(shuffle&&LASTCRAWL.has(p.k)?2:0);if(!best||sc>best.sc)best={p,act,why,d,sc}}if(best)break}
-  if(!best)break;used.add(best.p.k);stops.push({...best,T});prev=best.p;T+=dur}
- CRAWL={stops,date,start:near?{lat:userLat,lng:userLng}:null};LASTCRAWL=new Set(stops.map(s=>s.p.k));
+    let sc=why.length*0.5-d*3+Math.random()*noise;
+    if(!loop){if(prev&&prev2)sc+=cosTurn(prev2,prev,p)*0.8;
+      for(const s of stops.slice(0,-1)){if(distMi(s.p.lat,s.p.lng,p.lat,p.lng)<distMi(s.p.lat,s.p.lng,prev.lat,prev.lng)-0.02){sc-=1;break}}}
+    else{const anchor=C.start||(stops[0]&&stops[0].p);if(anchor&&n>=Math.floor(CP.stops/2))sc-=distMi(anchor.lat,anchor.lng,p.lat,p.lng)*(last?8:3)}
+    if(!best||sc>best.sc)best={p,act,why,d,sc}}if(best)break}
+  if(!best)break;used.add(best.p.k);stops.push({...best,T});prev2=prev;prev=best.p;T+=C.dur}
+ return stops}
+function routeStats(stops,C){const P=stops.map(s=>s.p),pts=(C.start?[C.start]:[]).concat(P);let L=0,u=0,b=0;
+ for(let i=1;i<pts.length;i++)L+=distMi(pts[i-1].lat,pts[i-1].lng,pts[i].lat,pts[i].lng);
+ for(let i=1;i<pts.length-1;i++)if(cosTurn(pts[i-1],pts[i],pts[i+1])<-0.5)u++;
+ for(let i=2;i<P.length;i++){for(let j=0;j<i-1;j++){if(distMi(P[i].lat,P[i].lng,P[j].lat,P[j].lng)<distMi(P[i-1].lat,P[i-1].lng,P[j].lat,P[j].lng)-0.02){b++;break}}}
+ const anchor=C.start||P[0],endGap=P.length?distMi(anchor.lat,anchor.lng,P[P.length-1].lat,P[P.length-1].lng):0;return {L,u,b,endGap}}
+function routeCost(stops,C){const r=routeStats(stops,C),n=stops.length;return CP.route==='loop'?r.L*0.5+r.endGap*4+r.u*0.15-n*0.6:r.L+r.b*0.25+r.u*0.2-n*0.6}
+function buildCrawl(shuffle){
+ if(!shuffle||!CRAWL_CANDS.length){const C=crawlCtx(),seen=new Set(),out=[];
+  for(let i=0;i<40;i++){const s=genStops(C,i===0?0.2:2.5);const key=s.map(x=>x.p.k).join('>');if(!s.length||seen.has(key))continue;seen.add(key);out.push({stops:s,cost:routeCost(s,C),C})}
+  out.sort((a,b)=>a.cost-b.cost);const good=out.filter(o=>{const r=routeStats(o.stops,o.C);return o.stops.length>=Math.min(CP.stops,out[0].stops.length)&&(CP.route==='loop'?r.endGap<=0.15:(r.b===0&&r.u===0))});CRAWL_CANDS=good.length?good:out.slice(0,5);CRAWL_IDX=0}
+ else{if(CRAWL_CANDS.length<2)toast('That\u2019s the only route that fits right now');CRAWL_IDX=(CRAWL_IDX+1)%CRAWL_CANDS.length}
+ const cand=CRAWL_CANDS[CRAWL_IDX]||{stops:[],C:crawlCtx()},stops=cand.stops,C=cand.C,date=C.date,near=C.near;
+ CRAWL={stops,date,start:C.start};
  const L=document.getElementById('crawlList'),B=document.getElementById('crawlBtns'),S=document.getElementById('crawlShuffle');
- document.getElementById('crawlSub').textContent=new Date(date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})+(near?' \u00B7 starting near you':'');
+ const st=stops.length?routeStats(stops,C):null;
+ document.getElementById('crawlSub').textContent=new Date(date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})+(near?' \u00B7 starting near you':'')+(CP.route==='loop'&&st&&stops.length>1?' \u00B7 ends '+(st.endGap<0.1?'< 0.1':st.endGap.toFixed(1))+' mi from start':'');
  if(stops.length<2){L.innerHTML='<div class="detail-text" style="margin-bottom:12px">Couldn\u2019t find enough walkable stops with all your must-haves right now. Try fewer must-haves, a later time, or another day.</div>';B.style.display='none';S.style.display='';S.firstElementChild.style.display='none';return}
  B.style.display='';S.style.display='';S.firstElementChild.style.display='';L.innerHTML=(stops.length<CP.stops?`<div class="cs-short">Only ${stops.length} walkable stops have all your must-haves right now.</div>`:'')+stops.map((s,i)=>`<div class="crawl-stop"><div class="cs-num">${i+1}</div><div class="cs-body"><div class="cs-head"><b>${tStr(s.T)}</b> \u00B7 ${esc(s.p.name)}${s.d&&i?`<span class="cs-walk">${s.d<0.1?'< 0.1':s.d.toFixed(1)} mi walk</span>`:''}</div>${s.why.slice(0,2).map(w=>`<div class="cs-line">${esc(w.t)}</div>`).join('')}</div></div>`).join('')}
 function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';

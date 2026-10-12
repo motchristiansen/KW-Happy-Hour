@@ -187,6 +187,12 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .leg-walknote{font-size:11px;color:var(--text-light);text-align:center;margin:-6px 0 8px}
 #legWalk:disabled{opacity:.4}
 .leg-hrs{font-size:11px;font-weight:700;margin-top:2px}.leg-hrs.op{color:#2d8659}.leg-hrs.sn{color:#c47f1a}.leg-hrs.cl{color:#b03a2e}
+.cp-sec{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin:2px 0 6px}
+.cp-div{display:flex;align-items:center;gap:10px;margin:14px 0 10px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light)}
+.cp-div:before,.cp-div:after{content:"";flex:1;height:1px;background:var(--border)}
+.cp-panel{border:1.5px solid var(--border);border-radius:12px;padding:12px;background:#f8fafb}
+.cp-panel .cp-q:first-child{margin-top:0}.cp-panel .cp-go{margin-top:8px}
+.cp-hint{font-size:11px;color:var(--text-light);margin:-4px 0 8px}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -237,14 +243,14 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <button class="modal-close" onclick="closeShare()">Close</button></div></div>
 <div class="toast" id="toast"></div>
 <div class="modal-overlay" id="crawlModal" onclick="closeCrawl(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
-<div class="modal-header"><h2 id="crawlTitle">Build your crawl</h2><div class="modal-days" id="crawlSub"></div></div>
+<div class="modal-header"><h2 id="crawlTitle">Bar Crawl</h2><div class="modal-days" id="crawlSub"></div></div>
 <div class="modal-body">
-<div id="crawlPrefs"><button class="leg-btn" onclick="openLegend()"><span class="leg-btn-t">🏆 Legends Crawl</span><span class="leg-btn-s" id="legBtnSub"></span></button><div class="cp-or">or build your own</div><div class="cp-q">Must-haves</div><div class="cp-opts" id="cpInto">
+<div id="crawlPrefs"><div class="cp-sec">The classics</div><button class="leg-btn" onclick="openLegend()"><span class="leg-btn-t">🏆 Legends Crawl</span><span class="leg-btn-s" id="legBtnSub"></span></button><div class="cp-div">or</div><div class="cp-sec">Build your own</div><div class="cp-panel"><div class="cp-q">Must-haves</div><div class="cp-hint">Every stop will have all of these</div><div class="cp-opts" id="cpInto">
 <button class="copt" data-v="drinks" onclick="cpInto('drinks')">Drink deals</button><button class="copt" data-v="food" onclick="cpInto('food')">Food deals</button><button class="copt" data-v="music" onclick="cpInto('music')">Live bands</button><button class="copt" data-v="dj" onclick="cpInto('dj')">DJs / dancing</button><button class="copt" data-v="fest" onclick="cpInto('fest')">Fest events</button></div>
 <div class="cp-q">Stops</div><div class="cp-seg" id="cpStops"><button class="cseg" data-v="3" onclick="cpSet('stops',3)">3</button><button class="cseg" data-v="4" onclick="cpSet('stops',4)">4</button><button class="cseg" data-v="5" onclick="cpSet('stops',5)">5</button></div>
 <div class="cp-q">Time at each stop</div><div class="cp-seg" id="cpDur"><button class="cseg" data-v="0.75" onclick="cpSet('dur',0.75)">45 min</button><button class="cseg" data-v="1" onclick="cpSet('dur',1)">1 hr</button><button class="cseg" data-v="1.5" onclick="cpSet('dur',1.5)">1.5 hrs</button></div>
 <div class="cp-q">Route</div><div class="cp-seg" id="cpRoute"><button class="cseg" data-v="oneway" onclick="cpSet('route','oneway')">One way</button><button class="cseg" data-v="loop" onclick="cpSet('route','loop')">Loop back</button></div>
-<button class="btn-primary cp-go" id="cpGo" onclick="goCrawl()">Build my crawl</button></div>
+<button class="btn-primary cp-go" id="cpGo" onclick="goCrawl()">Build my crawl</button></div></div>
 <div id="crawlLegend" style="display:none"><div class="pb leg-pb"><div class="pf" id="legPf"></div></div><div class="leg-pt" id="legPt"></div><div id="legNudge"></div><div id="legList"></div><div class="share-btns" style="margin-top:12px"><button class="btn-primary" id="legWalk" onclick="legWalk()">Walk it</button><button class="btn-secondary" onclick="legShare()">Share progress</button></div><div class="leg-walknote" id="legWalkNote"></div><div class="share-btns"><button class="btn-secondary" onclick="crawlView('prefs')">← Build your own crawl</button></div></div>
 <div id="crawlRes" style="display:none"><div id="crawlList"></div><div class="share-btns" id="crawlBtns"><button class="btn-primary" onclick="walkCrawl()">Walk it</button><button class="btn-secondary" onclick="shareCrawl()">Share crawl</button></div>
 <div class="share-btns" id="crawlShuffle"><button class="btn-secondary" onclick="shuffleCrawl()">Shuffle</button><button class="btn-secondary" onclick="crawlView('prefs')">Create new</button></div></div>
@@ -556,7 +562,7 @@ function legShare(){const n=legHit(),tot=LEGENDS.length;const txt=(n===tot?'\uD8
  if(navigator.share)navigator.share({title:'Legends Crawl',text:txt,url:pageURL()}).catch(()=>{});else{try{navigator.clipboard.writeText(txt+'\n'+pageURL()).then(()=>toast('Copied, paste it in a text'))}catch(e){}}}
 
 function crawlView(v){document.getElementById('crawlPrefs').style.display=v==='prefs'?'':'none';document.getElementById('crawlRes').style.display=v==='res'?'':'none';document.getElementById('crawlLegend').style.display=v==='legend'?'':'none';if(v==='legend'){document.getElementById('crawlTitle').textContent='Legends Crawl';document.getElementById('crawlSub').textContent='The bucket-list bars of Key West';return}if(v==='prefs'){const lb=document.getElementById('legBtnSub');if(lb)lb.textContent=LEGENDS.length+' bucket-list bars \u00B7 you\u2019ve hit '+legHit()}
- document.getElementById('crawlTitle').textContent=v==='prefs'?'Build your crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Every stop will have all of these'}
+ document.getElementById('crawlTitle').textContent=v==='prefs'?'Bar Crawl':'Your bar crawl';if(v==='prefs')document.getElementById('crawlSub').textContent='Pick a classic or build your own'}
 function openCrawl(){CP=cpGet();cpRender();const last=loadCrawl();if(last){CRAWL=last;CRAWL_CANDS=[];renderCrawl();crawlView('res')}else crawlView('prefs');document.getElementById('crawlModal').classList.add('active');document.body.style.overflow='hidden'}
 function goCrawl(){if(!CP.into.length)return;cpSave();LASTCRAWL=new Set();buildCrawl(false);crawlView('res')}
 function closeCrawl(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('crawlModal').classList.remove('active');document.body.style.overflow=''}

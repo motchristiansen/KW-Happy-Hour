@@ -620,6 +620,20 @@ function closeShare(e){if(e&&e.target!==e.currentTarget)return;document.getEleme
 function copyLink(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied'),()=>toast(SHARE_URL))}catch(e){toast(SHARE_URL)}}
 function sendLink(){if(navigator.share){navigator.share({title:'KW Happy Hour',text:'Key West happy hours, Fantasy Fest events & live music, all by time and place:',url:SHARE_URL}).catch(()=>{})}else copyLink()}
 if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});if(window.caches)caches.keys().then(k=>k.forEach(n=>caches.delete(n))).catch(()=>{});
+
+/* ---------- back button closes popups ---------- */
+const NAV=[];let CUR_VIEW=null;
+try{history.replaceState({kw:0},'')}catch(e){}
+function navPush(entry){NAV.push(entry);try{history.pushState({kw:NAV.length},'')}catch(e){}}
+window.addEventListener('popstate',ev=>{const target=(ev.state&&ev.state.kw)||0;while(NAV.length>target){const e=NAV.pop();try{e.undo()}catch(x){}}});
+function hideModal(id){document.getElementById(id).classList.remove('active');document.body.style.overflow=''}
+function navOpen(id){if(NAV.length&&NAV[NAV.length-1].m===id&&NAV[NAV.length-1].modal)return;navPush({m:id,modal:true,undo:()=>{hideModal(id);if(id==='crawlModal')CUR_VIEW=null}})}
+function navClose(id){let n=0;for(let i=NAV.length-1;i>=0&&NAV[i].m===id;i--)n++;if(n)history.go(-n);else{hideModal(id);if(id==='crawlModal')CUR_VIEW=null}}
+(function(){
+ [['openDetail','detailModal'],['openFF','detailModal'],['openMusic','detailModal'],['openShare','shareModal'],['openPlacesFilter','placesModal'],['openCrawl','crawlModal']].forEach(([fn,id])=>{const o=window[fn];window[fn]=function(...a){const r=o.apply(this,a);if(document.getElementById(id).classList.contains('active'))navOpen(id);return r}});
+ [['closeDetail','detailModal'],['closeShare','shareModal'],['closePlaces','placesModal'],['closeCrawl','crawlModal']].forEach(([fn,id])=>{window[fn]=function(e){if(e&&e.target!==e.currentTarget)return;navClose(id)}});
+ const ocv=window.crawlView;window.crawlView=function(v,fromNav){const m=document.getElementById('crawlModal'),prev=CUR_VIEW;ocv(v);CUR_VIEW=v;if(!fromNav&&m.classList.contains('active')&&prev&&prev!==v)navPush({m:'crawlModal',undo:()=>{window.crawlView(prev,true);if(prev==='legend')renderLegend()}})};
+})();
 setInterval(()=>{render();favUI()},60000);init();favUI();handleDeepLink();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>

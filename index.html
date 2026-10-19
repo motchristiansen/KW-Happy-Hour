@@ -193,6 +193,11 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .cp-panel{border:1.5px solid var(--border);border-radius:12px;padding:12px;background:#f8fafb}
 .cp-panel .cp-q:first-child{margin-top:0}.cp-panel .cp-go{margin-top:8px}
 .cp-hint{font-size:11px;color:var(--text-light);margin:-4px 0 8px}
+.pcard{cursor:pointer}
+.plr{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}.plr:active{background:#f5f8f9}
+.plr-h{display:flex;align-items:center;gap:6px;font-size:15px}.plr-h b{color:var(--ocean);font-size:14px;white-space:nowrap}.plr-t{font-weight:600;flex:1;min-width:0}
+.plr-d{font-size:13px;color:var(--text-light);margin:3px 0 0 24px;line-height:1.4}.plr-more{font-size:12px;color:var(--ocean);font-weight:600;margin:4px 0 0 24px}
+#plHeader .pc-addr{margin-top:4px}
 /* layout overrides (must stay last) */
 .filters{display:flex;gap:6px;flex-wrap:nowrap;align-items:stretch}
 .filter-select{flex:1 1 0;min-width:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 24px 10px 10px;border-radius:10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer}
@@ -229,6 +234,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 <div class="ffcard"><div class="ffl"><div class="fft">Fantasy Fest Oct 16–25</div><div class="ffs">Musical Icons &amp; Iconic Musicals</div><div class="chips"><button class="chip" id="chipFF" onclick="toggleFocus('ff')">Fest</button><button class="chip" id="chipAdult" onclick="toggleFocus('adult')">Adult</button><button class="chip" id="chipMen" onclick="toggleFocus('men')">Wo/Men</button></div></div><button class="ffr ffav" id="favZone" onclick="toggleFavFilter()" aria-label="Show favorites"><span class="ffr-t">Favorites</span><span class="ffr-ic"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path id="favPath" d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg></span><span class="fav-cnt" id="favCnt">0 saved</span></button><button class="ffr" onclick="openCrawl()" aria-label="Build a bar crawl"><span class="ffr-t">Bar Crawl</span><span class="ffr-ic"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"/><path d="M19 18v.01"/></svg></span></button></div>
 <div class="content" id="content"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="modal-overlay" id="placeModal" onclick="closePlace(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="plHeader"></div><div class="modal-body" id="plBody"></div><button class="modal-close" onclick="closePlace()">Close</button></div></div>
 <div class="modal-overlay" id="detailModal" onclick="closeDetail(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-header" id="modalHeader"></div><div class="modal-body" id="modalBody"></div><button class="modal-close" onclick="closeDetail()">Close</button></div></div>
 <div class="modal-overlay" id="shareModal" onclick="closeShare(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div>
 <div class="modal-header"><h2>Share KW Happy Hour</h2></div>
@@ -328,11 +334,11 @@ norm4(FF);
 const TRIP={2:"2026-10-20",3:"2026-10-21",4:"2026-10-22",5:"2026-10-23",6:"2026-10-24",0:"2026-10-25",1:"2026-10-19"};
 function lsOn(k){try{return localStorage.getItem(k)!=='0'}catch(e){return true}}
 function lsSet(k,v){try{localStorage.setItem(k,v?'1':'0')}catch(e){}}
-let showHH=lsOn('kw2_hh'),FOCUS={ff:false,adult:false,men:false};
-function anyFocus(){return FOCUS.ff||FOCUS.adult||FOCUS.men}
+let showHH=lsOn('kw2_hh');const lsFlag=k=>{try{return localStorage.getItem(k)==='1'}catch(e){return false}},lsFlagSet=(k,v)=>{try{localStorage.setItem(k,v?'1':'0')}catch(e){}};let FOCUS={ff:lsFlag('kw3_ff'),adult:lsFlag('kw3_adult'),men:lsFlag('kw3_men')};
+function anyFocus(){return false}
 function wantHH(){return showHH&&!anyFocus()}function wantMU(){return showMusic&&!anyFocus()}
-function wantFF(x){return anyFocus()?((FOCUS.ff&&!x.ad)||(FOCUS.adult&&x.ad===1)||(FOCUS.men&&x.ad===2)):true}
-function toggleFocus(k){FOCUS[k]=!FOCUS[k];syncAll();render()}
+function wantFF(x){if(!FOCUS.ff)return false;if(x.ad===1)return FOCUS.adult;if(x.ad===2)return FOCUS.men;return true}
+function toggleFocus(k){FOCUS[k]=!FOCUS[k];lsFlagSet('kw3_'+k,FOCUS[k]);syncAll();render()}
 let showMusic=lsOn('kw2_music'),MUSIC=[],MUP='';try{const c=JSON.parse(localStorage.getItem('kw_music_data')||'null');if(c){MUSIC=norm4(c.items);MUP=c.updated}}catch(e){}
 function syncAll(){[['hhTrack',showHH],['musicTrack',showMusic]].forEach(([i,v])=>document.getElementById(i).classList.toggle('on',!!v));['hhLabel','musicLabel'].forEach((i,k)=>document.getElementById(i).classList.toggle('on',k?showMusic:showHH));[['chipFF','ff'],['chipAdult','adult'],['chipMen','men']].forEach(([i,k])=>document.getElementById(i).classList.toggle('on',FOCUS[k]))}
 function toggleHH(){showHH=!showHH;lsSet('kw2_hh',showHH);syncAll();render()}
@@ -381,7 +387,7 @@ function distMi(a,b,c,d){const R=3959,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180;
 
 function init(){const df=document.getElementById('dayFilter');df.innerHTML='<option value="all">All Days</option>';DN.forEach((n,i)=>{df.innerHTML+=`<option value="${i}">${n}</option>`});try{const s=localStorage.getItem('kw2_hidden');if(s)hiddenPlaces=new Set(JSON.parse(s))}catch(e){}df.value=appNow().getDay();syncAll();render();updatePlacesBtn()}
 
-function toggleNow(){nowActive=!nowActive;document.getElementById('nowTrack').classList.toggle('on',nowActive);document.getElementById('nowLabel').classList.toggle('on',nowActive);if(nowActive){savedDay=document.getElementById('dayFilter').value;savedTime=document.getElementById('timeFilter').value;document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}else{document.getElementById('dayFilter').value=savedDay;document.getElementById('timeFilter').value=savedTime}render()}
+function toggleNow(){nowActive=!nowActive;lsFlagSet('kw3_now',nowActive);document.getElementById('nowTrack').classList.toggle('on',nowActive);document.getElementById('nowLabel').classList.toggle('on',nowActive);if(nowActive){savedDay=document.getElementById('dayFilter').value;savedTime=document.getElementById('timeFilter').value;document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}else{document.getElementById('dayFilter').value=savedDay;document.getElementById('timeFilter').value=savedTime}render()}
 
 let geoWatch=null;
 function toggleNearby(){const wrap=document.getElementById('nearWrap'),track=document.getElementById('nearTrack'),label=document.getElementById('nearLabel');
@@ -407,7 +413,7 @@ function favUpcoming(f){const i=favInfo(f);if(!i.once)return true;const td=today
 function favPrune(){const td=todayStr();let ch=false;[...FAVS].forEach(f=>{const i=favInfo(f);if(i.once&&i.dt<td){FAVS.delete(f);ch=true}});if(ch)favSave()}
 function favUI(){const z=document.getElementById('favZone');if(!z)return;favPrune();document.getElementById('favCnt').textContent=[...FAVS].filter(favUpcoming).length+' saved';z.classList.toggle('on',FAVONLY);document.getElementById('favPath').setAttribute('fill',FAVONLY?'currentColor':'none')}
 function favPop(){const z=document.getElementById('favZone');z.classList.remove('pop');void z.offsetWidth;z.classList.add('pop');setTimeout(()=>z.classList.remove('pop'),300)}
-function toggleFavFilter(){favPrune();if(!FAVONLY&&!FAVS.size){toast('Tap \u2661 on any line to save it');favPop();return}FAVONLY=!FAVONLY;favUI();favPop();render()}
+function toggleFavFilter(){favPrune();if(!FAVONLY&&!FAVS.size){toast('Tap \u2661 on any line to save it');favPop();return}FAVONLY=!FAVONLY;lsFlagSet('kw3_favonly',FAVONLY);favUI();favPop();render()}
 function toggleFav(btn){const f=btn.dataset.f;if(FAVS.has(f))FAVS.delete(f);else FAVS.add(f);favSave();btn.classList.toggle('on',FAVS.has(f));btn.textContent=FAVS.has(f)?'\u2665':'\u2661';favUI();favPop();if(FAVONLY&&!FAVS.size){FAVONLY=false;favUI()}if(FAVONLY)render()}
 const KW_CENTER=[24.5551,-81.7800];
 function render(){if(nowActive){document.getElementById('dayFilter').value=appNow().getDay();document.getElementById('timeFilter').value=autoSlot()}if(typeof fitSels==='function')try{fitSels()}catch(e){}updateInfo();
@@ -415,9 +421,9 @@ const dayVal=document.getElementById('dayFilter').value,timeVal=document.getElem
 function collect(dv,dt,hhToday){const items=[];
 if(wantHH()||FAVONLY)V.forEach((v,vi)=>{if(isHidden(v.n))return;v.h.forEach(hh=>{if(!(dv==='all'||matchDay(hh.d,parseInt(dv))))return;if(!nowActive&&timeVal!=='all'&&!matchTime(hh.s,hh.e,timeVal))return;
  const st=hhToday?getStatus(hh.s,hh.e):'later';if(st==='ended')return;if(nowActive&&st!=='now'&&st!=='soon')return;
- items.push({fid:'hh|'+v.n+'|'+hh.d+'|'+hh.s,k:placeKey(v.n),a:v.a,fa:v.fa,lat:v.lat,lng:v.lng,ty:'hh',s:hh.s,e:hh.e,st,txt:v.fo||v.dr,open:`openDetail(${vi},${hh.s},${hh.e},'${hh.d}')`})})});
-if(dt){prep(FF,dt,FAVONLY?()=>true:wantFF).forEach(x=>items.push({fid:'ff|'+x.dt+'|'+x.n,k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
- if(wantMU()||FAVONLY)prep(MUSIC,dt,()=>true).forEach(x=>items.push({fid:'mu|'+x.dt+'|'+x.v+'|'+x.s+'|'+x.n,k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
+ items.push({dr:v.dr,fo:v.fo,fid:'hh|'+v.n+'|'+hh.d+'|'+hh.s,k:placeKey(v.n),a:v.a,fa:v.fa,lat:v.lat,lng:v.lng,ty:'hh',s:hh.s,e:hh.e,st,txt:v.fo||v.dr,open:`openDetail(${vi},${hh.s},${hh.e},'${hh.d}')`})})});
+if(dt){prep(FF,dt,FAVONLY?()=>true:wantFF).forEach(x=>items.push({desc:x.x,pr:x.p,fid:'ff|'+x.dt+'|'+x.n,k:placeKey(x.l),a:x.a,fa:x.fa,lat:x.lat,lng:x.lng,ty:'ff',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.ad===1?'18+':x.ad===2?(x.w?'WOMEN':'MEN'):'',open:`openFF(${x.i})`}));
+ if(wantMU()||FAVONLY)prep(MUSIC,dt,()=>true).forEach(x=>items.push({g:(artOf(x.n)||{}).g,fid:'mu|'+x.dt+'|'+x.v+'|'+x.s+'|'+x.n,k:placeKey(x.v),a:x.a,fa:(x.a?x.a+', ':x.v+', ')+'Key West, FL',lat:x.lat,lng:x.lng,ty:'mu',s:x.s,e:x.e,st:x.st,txt:x.n,badge:x.t!=='LIVE'?x.t:'',open:`openMusic(${x.i})`}))}
 return FAVONLY?items.filter(i=>FAVS.has(i.fid)):items}
 const allWeek=dayVal==='all'&&!nowActive,hhToday=dayVal!=='all'&&parseInt(dayVal)===appNow().getDay();const dt=allWeek?null:ffDate();const items=allWeek?[]:collect(dayVal,dt,hhToday);
 const P=buildPlaces(),nameOf={};P.ent.forEach(e=>nameOf[e.k]=e.n);const pri={hh:0,ff:1,mu:2};
@@ -440,7 +446,7 @@ function shareCard(k){const c=CARDS[k];if(!c)return;const now=c.items.filter(i=>
  const where=c.name+(c.a?' ('+c.a+')':'');let msg;
  if(now.length)msg="I'm here now: "+where+'\n'+now.slice(0,3).map(i=>lineTxt(i,false)).join('\n');
  else msg="I'm thinking about going here later: "+where+'\n'+next.slice(0,3).map(i=>lineTxt(i,true)).join('\n');
- const url=pageURL()+'?p='+encodeURIComponent(k)+'&d='+(c.dt||viewDate());
+ const url=pageURL()+'?p='+encodeURIComponent(c.k)+'&d='+(c.dt||viewDate());
  if(navigator.share)navigator.share({title:'KW Happy Hour',text:msg,url}).catch(()=>{});else{try{navigator.clipboard.writeText(msg+'\n'+url).then(()=>toast('Copied, paste it in a text'))}catch(e){toast('Sharing not supported here')}}}
 let DL=null,DLdone=false;
 function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchParams(location.search);DL=q.get('p')?{k:q.get('p'),d:q.get('d')}:false;
@@ -574,9 +580,17 @@ function walkCrawl(){if(CRAWL&&CRAWL.stops.length)window.open(crawlMapURL(),'_bl
 function shareCrawl(){if(!CRAWL||!CRAWL.stops.length)return;const txt='\uD83D\uDDFA\uFE0F Bar crawl:\n'+CRAWL.stops.map((s,i)=>(i+1)+'. '+tStr(s.T)+' '+s.p.name+(s.why[0]?' \u2013 '+s.why[0].t:'')).join('\n')+'\n\nRoute: '+crawlMapURL();
  if(navigator.share)navigator.share({title:'Bar crawl',text:txt,url:pageURL()}).catch(()=>{});else{try{navigator.clipboard.writeText(txt+'\n'+pageURL()).then(()=>toast('Crawl copied'))}catch(e){}}}
 
+function openPlace(ck){const c=CARDS[ck];if(!c)return;const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'};
+ const day=new Date((c.dt||viewDate())+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+ const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.fa||c.name+', Key West, FL')}`;
+ document.getElementById('plHeader').innerHTML=`<h2>${esc(c.name)}</h2><div class="modal-days">${esc(day)}${c.dist!=null?' \u00B7 '+(c.dist<0.1?'< 0.1':c.dist.toFixed(1))+' mi':''}</div><a class="pc-addr" href="${mu}" target="_blank">\uD83D\uDCCD ${esc(c.a||'Map')}</a>`;
+ document.getElementById('plBody').innerHTML=c.items.map(i=>{const det=i.ty==='hh'?[i.dr&&'\uD83E\uDD43 '+i.dr,i.fo&&'\uD83C\uDF7D\uFE0F '+i.fo]:i.ty==='mu'?[i.g&&i.g]:[i.desc,i.pr];
+  return `<div class="plr" onclick="${i.open}"><div class="plr-h"><span>${ic[i.ty]}</span><b>${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</b>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="plr-t">${i.ty==='hh'?'Happy hour':esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}</div>${det.filter(Boolean).map(d=>`<div class="plr-d">${esc(d)}</div>`).join('')}<div class="plr-more">More details \u203A</div></div>`}).join('')+(c.items.some(i=>i.ty==='hh')&&inFest(c.dt||viewDate())?'<div class="pc-note">Fest week: happy hour deals may change, confirm before you go.</div>':'');
+ document.getElementById('placeModal').classList.add('active');document.body.style.overflow='hidden'}
+function closePlace(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('placeModal').classList.remove('active');document.body.style.overflow=''}
 function placeCard(c){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'};const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.fa||c.name+', Key West, FL')}`;
-const lines=c.items.map(i=>`<div class="pline" onclick="${i.open}"><span class="pl-ic">${ic[i.ty]}</span><span class="pl-t">${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</span>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="pl-x">${esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}<button class="pl-fav${FAVS.has(i.fid)?' on':''}" data-f="${esc(i.fid)}" aria-label="Favorite" onclick="event.stopPropagation();toggleFav(this)">${FAVS.has(i.fid)?'\u2665':'\u2661'}</button></div>`).join('');
-CARDS[c.k]=c;return `<div class="pcard ${c.hot===2?'hot':c.hot===1?'warm':''}" data-k="${c.k}"><div class="pc-head"><div class="pc-name">${esc(c.name)}</div><button class="pc-share" aria-label="Share this spot" onclick="event.stopPropagation();shareCard(\'${c.k}\')"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"/></svg></button>${c.dist!=null?`<span class="pc-dist">${c.dist<0.1?'< 0.1':c.dist.toFixed(1)} mi</span>`:''}</div><a class="pc-addr" href="${mu}" target="_blank">\uD83D\uDCCD ${esc(c.a||'Map')}</a><div class="pc-lines">${lines}</div>${c.items.some(i=>i.ty==='hh')&&inFest(c.dt||viewDate())?'<div class="pc-note">Fest week: happy hour deals may change, confirm before you go.</div>':''}</div>`}
+const lines=c.items.map(i=>`<div class="pline" onclick="event.stopPropagation();${i.open}"><span class="pl-ic">${ic[i.ty]}</span><span class="pl-t">${tStr(i.s)}${i.e!=null?'\u2013'+tStr(i.e):''}</span>${i.st==='now'?'<span class="pl-now">NOW</span>':''}<span class="pl-x">${esc(i.txt)}</span>${i.badge?`<span class="day-badge">${esc(i.badge)}</span>`:''}<button class="pl-fav${FAVS.has(i.fid)?' on':''}" data-f="${esc(i.fid)}" aria-label="Favorite" onclick="event.stopPropagation();toggleFav(this)">${FAVS.has(i.fid)?'\u2665':'\u2661'}</button></div>`).join('');
+const ck=c.k+'|'+(c.dt||'');CARDS[ck]=c;return `<div class="pcard ${c.hot===2?'hot':c.hot===1?'warm':''}" data-k="${c.k}" onclick="openPlace('${ck}')"><div class="pc-head"><div class="pc-name">${esc(c.name)}</div><button class="pc-share" aria-label="Share this spot" onclick="event.stopPropagation();shareCard(\'${ck}\')"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"/></svg></button>${c.dist!=null?`<span class="pc-dist">${c.dist<0.1?'< 0.1':c.dist.toFixed(1)} mi</span>`:''}</div><a class="pc-addr" href="${mu}" target="_blank" onclick="event.stopPropagation()">\uD83D\uDCCD ${esc(c.a||'Map')}</a><div class="pc-lines">${lines}</div>${c.items.some(i=>i.ty==='hh')&&inFest(c.dt||viewDate())?'<div class="pc-note">Fest week: happy hour deals may change, confirm before you go.</div>':''}</div>`}
 
 
 function openDetail(vi,start,end,days){const v=V[vi],mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.fa)}`,dd=days==='daily'?'Every Day':days.toUpperCase();
@@ -632,11 +646,11 @@ function hideModal(id){document.getElementById(id).classList.remove('active');do
 function navOpen(id){if(NAV.length&&NAV[NAV.length-1].m===id&&NAV[NAV.length-1].modal)return;navPush({m:id,modal:true,undo:()=>{hideModal(id);if(id==='crawlModal')CUR_VIEW=null}})}
 function navClose(id){let n=0;for(let i=NAV.length-1;i>=0&&NAV[i].m===id;i--)n++;if(n)history.go(-n);else{hideModal(id);if(id==='crawlModal')CUR_VIEW=null}}
 (function(){
- [['openDetail','detailModal'],['openFF','detailModal'],['openMusic','detailModal'],['openShare','shareModal'],['openPlacesFilter','placesModal'],['openCrawl','crawlModal']].forEach(([fn,id])=>{const o=window[fn];window[fn]=function(...a){const r=o.apply(this,a);if(document.getElementById(id).classList.contains('active'))navOpen(id);return r}});
- [['closeDetail','detailModal'],['closeShare','shareModal'],['closePlaces','placesModal'],['closeCrawl','crawlModal']].forEach(([fn,id])=>{window[fn]=function(e){if(e&&e.target!==e.currentTarget)return;navClose(id)}});
+ [['openPlace','placeModal'],['openDetail','detailModal'],['openFF','detailModal'],['openMusic','detailModal'],['openShare','shareModal'],['openPlacesFilter','placesModal'],['openCrawl','crawlModal']].forEach(([fn,id])=>{const o=window[fn];window[fn]=function(...a){const r=o.apply(this,a);if(document.getElementById(id).classList.contains('active'))navOpen(id);return r}});
+ [['closePlace','placeModal'],['closeDetail','detailModal'],['closeShare','shareModal'],['closePlaces','placesModal'],['closeCrawl','crawlModal']].forEach(([fn,id])=>{window[fn]=function(e){if(e&&e.target!==e.currentTarget)return;navClose(id)}});
  const ocv=window.crawlView;window.crawlView=function(v,fromNav){const m=document.getElementById('crawlModal'),prev=CUR_VIEW;ocv(v);CUR_VIEW=v;if(!fromNav&&m.classList.contains('active')&&prev&&prev!==v)navPush({m:'crawlModal',undo:()=>{window.crawlView(prev,true);if(prev==='legend')renderLegend()}})};
 })();
-setInterval(()=>{render();favUI()},60000);init();favUI();handleDeepLink();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
+setInterval(()=>{render();favUI()},60000);init();if(lsFlag('kw3_favonly')&&FAVS.size){FAVONLY=true}favUI();if(lsFlag('kw3_now'))toggleNow();else render();handleDeepLink();shortTime();shortSel('dayFilter',x=>x==='All Days'?'All':x.slice(0,3))();document.getElementById('dayFilter').addEventListener('change',fitSels);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSels);loadMusic();setInterval(loadMusic,3600000);
 </script>
 </body>
 </html>

@@ -268,6 +268,8 @@ for e in final:
             if la is not None: e["lat"],e["lng"]=la,lo
             else: unplaced.add(e["v"])
 if unplaced: print("UNPLACED venues (no coordinates):",sorted(unplaced),file=sys.stderr)
+UPKEYS=re.compile(r"(?i)boondocks|mangrove mama|ramrod|sugarloaf|cudjoe|summerland|big pine|marathon|islamorada|key largo|bent prop|geiger")
+final=[e for e in final if not UPKEYS.search(e["v"]+" "+(e.get("a") or ""))]
 if len(final)<20:
     print("Too few results (",len(final),") - keeping previous music.json",file=sys.stderr); sys.exit(0)
 json.dump(GEO,open("geocache.json","w"),indent=0)

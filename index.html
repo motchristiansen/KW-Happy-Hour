@@ -120,13 +120,13 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--sand);color
 .pcard.hot{border-left-color:var(--coral)}
 .pcard.warm{border-left-color:var(--sunset)}
 .pc-head{display:flex;align-items:baseline;gap:8px}
-.pc-name{font-size:16px;font-weight:700;flex:1;min-width:0}
+.pc-name{font-size:17px;font-weight:700;flex:1;min-width:0}
 .pc-dist{font-size:11px;font-weight:700;color:var(--nearby);background:#f0e6f6;border-radius:8px;padding:1px 7px;white-space:nowrap}
-.pc-addr{display:inline-block;font-size:12px;color:var(--ocean);text-decoration:none;font-weight:500;margin:2px 0 6px}
-.pline{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #eef2f3;cursor:pointer;font-size:13px;min-width:0}
+.pc-addr{display:inline-block;font-size:13px;color:var(--ocean);text-decoration:none;font-weight:500;margin:2px 0 6px}
+.pline{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #eef2f3;cursor:pointer;font-size:14px;min-width:0}
 .pline:active{background:#f5f8f9}
 .pl-ic{flex:0 0 auto;font-size:14px}
-.pl-t{flex:0 0 auto;font-weight:700;color:var(--ocean);font-size:12px}
+.pl-t{flex:0 0 auto;font-weight:700;color:var(--ocean);font-size:13px}
 .pl-now{flex:0 0 auto;font-size:9px;font-weight:800;letter-spacing:.6px;color:#fff;background:var(--coral);border-radius:4px;padding:1px 5px}
 .pl-x{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .ffsub{font-size:12px;opacity:.9;margin-top:1px}.cb-ic{font-size:26px;line-height:1}
@@ -347,7 +347,9 @@ document.getElementById('modalHeader').innerHTML=`<h2>${esc(x.n)}</h2><div class
 const ar=artOf(x.n);document.getElementById('modalBody').innerHTML=(ar?`<div class="modal-section"><h3>\uD83C\uDFB5 Style</h3><div class="detail-text"><b>${esc(ar.g)}</b><br>${esc(ar.b)}</div></div>`:'')+((x.t==='LIVE'||x.t==='DJ')?`<div class="modal-section"><h3>${ar&&(ar.yt||ar.fb||ar.ig)?'Their pages':'Look them up'}</h3>${linkRow(x.n)}</div>`:'')+`<div class="modal-section"><h3>Type</h3><div class="detail-text">${esc(x.t)}</div></div><div class="modal-section"><h3>Source</h3><div class="detail-text" style="font-size:13px">${x.src==='LME'?'livemusiceveryday.com':'keywestconcierge.com'} (auto-updated). Lineups can change last minute.</div></div>`;
 document.getElementById('detailModal').classList.add('active');document.body.style.overflow='hidden'}
 function todayStr(){const d=appNow();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;if(dv==='all')return null;const td=todayStr();return parseInt(dv)===appNow().getDay()&&td>='2026-10-16'&&td<='2026-10-26'?td:TRIP[dv]}
+function addDays(ds,n){const d=new Date(ds+'T12:00');d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function nextDateFor(wd){const td=todayStr();return addDays(td,(wd-appNow().getDay()+7)%7)}
+function ffDate(){if(nowActive)return todayStr();const dv=document.getElementById('dayFilter').value;if(dv==='all')return null;return nextDateFor(parseInt(dv))}
 function ffTime(x){return tStr(x.s)+(x.e!==null?'<br>\u2013<br>'+tStr(x.e):'')}
 function endOf(x){return x.e!==null?x.e:x.s+(x.s>=17?4:3)}
 function evStatus(x){if(x.dt!==todayStr())return'later';return getStatus(x.s,endOf(x))}
@@ -424,13 +426,13 @@ function mk(its){const cards={};its.forEach(it=>{const c=cards[it.k]||(cards[it.
  let l=Object.values(cards);l.forEach(c=>{c.items.sort((a,b)=>a.s-b.s);c.first=Math.min(...c.items.map(i=>i.s));c.hot=c.items.some(i=>i.st==='now')?2:c.items.some(i=>i.st==='soon')?1:0;c.dist=near&&c.lat!=null?distMi(userLat,userLng,c.lat,c.lng):null});
  if(onIsland)l=l.filter(c=>c.dist!=null&&c.dist<=NEARBY_MI);return l}
 const byDist=(a,b)=>(a.dist==null?1e9:a.dist)-(b.dist==null?1e9:b.dist)||a.first-b.first,byTime=(a,b)=>a.first-b.first||a.name.localeCompare(b.name);
-const WEEK=['2026-10-19','2026-10-20','2026-10-21','2026-10-22','2026-10-23','2026-10-24','2026-10-25','2026-10-26'];
+const WEEK=[0,1,2,3,4,5,6].map(i=>addDays(todayStr(),i));
 const groups=allWeek?WEEK.map(d=>{const g=mk(collect(String(new Date(d+'T12:00').getDay()),d,d===todayStr()));g.forEach(c=>c.dt=d);return [new Date(d+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}),g]}):isToday?[['Happening Now \u00B7 next 2 hrs',mk(items.filter(i=>i.st==='now'||i.st==='soon'))],['Rest of today',mk(items.filter(i=>i.st!=='now'&&i.st!=='soon'))]]:[[(dayVal==='all'?'All days':DN[parseInt(dayVal)]),mk(items)]];
 const nearNote=onIsland?' \u00B7 within 5 blocks':'';let html='';
 groups.forEach(([lbl,g])=>{if(!g.length)return;g.sort(near?byDist:byTime);html+=`<div class="section-label">${lbl}${nearNote} <span class="count">${g.length}</span></div>`;g.forEach(c=>html+=placeCard(c))});
 C.innerHTML=html||`<div class="no-results"><div class="emoji">\uD83C\uDF19</div><p>${onIsland?'Nothing within 5 blocks right now.<br>Turn off Nearby to see everything.':(FAVONLY?'None of your favorites for this day/time.<br>Try All Days, or tap Favorites to see everything.':'Nothing matches your filters.<br>Try a different time or day!')}</p></div>`}
 let CARDS={};
-function viewDate(){const d=ffDate();if(d)return d;const dv=document.getElementById('dayFilter').value;return dv==='all'?todayStr():(parseInt(dv)===appNow().getDay()?todayStr():TRIP[dv])}
+function viewDate(){const d=ffDate();if(d)return d;const dv=document.getElementById('dayFilter').value;return dv==='all'?todayStr():nextDateFor(parseInt(dv))}
 function inFest(d){return !!d&&d>='2026-10-16'&&d<='2026-10-25'}
 function pageURL(){return location.origin+location.pathname}
 function lineTxt(i,withTime){const ic={hh:'\uD83C\uDF78',mu:'\uD83C\uDFB5',ff:'\uD83C\uDFAD'}[i.ty];const tx=i.ty==='hh'?'Happy hour '+tStr(i.s)+'\u2013'+tStr(i.e):(withTime?tStr(i.s)+' ':'')+i.txt;return ic+' '+tx}
@@ -442,7 +444,7 @@ function shareCard(k){const c=CARDS[k];if(!c)return;const now=c.items.filter(i=>
  if(navigator.share)navigator.share({title:'KW Happy Hour',text:msg,url}).catch(()=>{});else{try{navigator.clipboard.writeText(msg+'\n'+url).then(()=>toast('Copied, paste it in a text'))}catch(e){toast('Sharing not supported here')}}}
 let DL=null,DLdone=false;
 function handleDeepLink(){if(DLdone)return;if(DL===null){const q=new URLSearchParams(location.search);DL=q.get('p')?{k:q.get('p'),d:q.get('d')}:false;
-  if(DL&&DL.d&&DL.d!==todayStr()){const w=new Date(DL.d+'T12:00').getDay();if(TRIP[w]===DL.d){document.getElementById('dayFilter').value=String(w);render()}}}
+  if(DL&&DL.d&&DL.d!==todayStr()){const w=new Date(DL.d+'T12:00').getDay();if(nextDateFor(w)===DL.d){document.getElementById('dayFilter').value=String(w);render()}}}
  if(!DL)return;const el=document.querySelector('.pcard[data-k="'+CSS.escape(DL.k)+'"]');
  if(el){DLdone=true;const go=()=>{const e=document.querySelector('.pcard[data-k="'+CSS.escape(DL.k)+'"]');if(e){e.scrollIntoView({block:'center'});e.classList.add('flash');setTimeout(()=>e.classList.remove('flash'),2600)}};go();setTimeout(go,700);setTimeout(go,1600)}
  else if(MUSIC.length){DLdone=true;toast("That spot isn't showing with your current filters")}}
